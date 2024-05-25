@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-const headerTextColors = [Color(0xFFFFFFFF), Color(0xFF3C5FA4)];
-
 const headerTextStyle = TextStyle(
   fontSize: 25,
   fontFamily: 'Inter',
@@ -15,8 +13,6 @@ const whiteButtonTextStyle = TextStyle(
   fontWeight: FontWeight.w500,
   height: 0.09,
 );
-
-const accentColor = Color(0xFF857189);
 
 const announcementTextStyle = TextStyle(
   color: Colors.black,
@@ -41,4 +37,12 @@ const bodyTextStyle = TextStyle(
   fontFamily: 'Questral',
   fontWeight: FontWeight.w400,
   height: 0.5,
+);
+
+const buttonTextStyle = TextStyle(
+  color: Colors.white,
+  fontSize: 25,
+  fontFamily: 'Inter',
+  fontWeight: FontWeight.w500,
+  height: 0.06,
 );

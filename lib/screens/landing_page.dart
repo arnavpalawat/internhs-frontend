@@ -23,7 +23,7 @@ class _LandingPageState extends State<LandingPage> {
         height: height(context) * 0.06,
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
         decoration: ShapeDecoration(
-          color: accentColor,
+          color: accentColor2,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           shadows: const [
             BoxShadow(
@@ -49,6 +49,7 @@ class _LandingPageState extends State<LandingPage> {
     );
   }
 
+  // TODO: Universal Header
   // Header widget
   Widget buildHeader() {
     return Center(
@@ -126,37 +127,37 @@ class _LandingPageState extends State<LandingPage> {
   Widget buildAnnouncement() {
     return SizedBox(
       width: width(context) * 0.88,
-      height: height(context) * 0.73,
-      child: const Text.rich(
+      height: height(context) * 0.59,
+      child: Text.rich(
         TextSpan(
           children: [
-            TextSpan(
+            const TextSpan(
               text: 'Establishing teens with\n',
               style: announcementTextStyle,
             ),
 
             /// Italic
-            TextSpan(
+            const TextSpan(
               text: 'initiative ',
               style: italicAnnouncementTextStyle,
             ),
-            TextSpan(
+            const TextSpan(
               text: 'into competitive \n',
               style: announcementTextStyle,
             ),
-            TextSpan(
+            const TextSpan(
               text: 'workplaces, one',
               style: announcementTextStyle,
             ),
 
             /// Italic
-            TextSpan(
+            const TextSpan(
               text: ' internship\n',
               style: italicAnnouncementTextStyle,
             ),
             TextSpan(
               text: 'at a time',
-              style: announcementTextStyle,
+              style: announcementTextStyle.copyWith(height: 0),
             ),
           ],
         ),
@@ -164,12 +165,12 @@ class _LandingPageState extends State<LandingPage> {
     );
   }
 
+  // Body text
   Widget buildBodyText() {
     return SizedBox(
       width: width(context) * 0.88,
-      height: height(context) * 0.14,
+      height: height(context) * 0.1,
       child: const Column(
-        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
@@ -192,10 +193,45 @@ class _LandingPageState extends State<LandingPage> {
     );
   }
 
+  // Button Template
+  Widget buildButton(Color color, String text) {
+    return Column(
+      children: [
+        Container(
+          width: width(context) * 0.16,
+          height: height(context) * 0.089,
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+          decoration: ShapeDecoration(
+            color: color,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            shadows: [
+              const BoxShadow(
+                color: Color(0x0C000000),
+                blurRadius: 2,
+                offset: Offset(0, 1),
+                spreadRadius: 0,
+              )
+            ],
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(text, style: buttonTextStyle),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        height: double.infinity,
         decoration: backgroundColor,
         child: SingleChildScrollView(
           child: Column(
@@ -211,6 +247,20 @@ class _LandingPageState extends State<LandingPage> {
               ),
               buildAnnouncement(),
               buildBodyText(),
+
+              // Build Buttons
+              Container(
+                width: width(context) * 0.88,
+                child: Row(
+                  children: [
+                    buildButton(accentColor, "Get Started"),
+                    SizedBox(
+                      width: width(context) * 0.01,
+                    ),
+                    buildButton(headerColor, "Our Story")
+                  ],
+                ),
+              )
             ],
           ),
         ),

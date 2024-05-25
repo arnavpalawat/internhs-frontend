@@ -16,3 +16,9 @@ const backgroundColor = BoxDecoration(
 
 // Header
 const Color headerColor = Color(0xFF6C8DCC);
+
+const Color accentColor = Color(0xFF184753);
+
+const headerTextColors = [Color(0xFFFFFFFF), Color(0xFF3C5FA4)];
+
+const accentColor2 = Color(0xFF857189);
