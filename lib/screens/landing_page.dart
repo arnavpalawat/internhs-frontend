@@ -14,32 +14,37 @@ class LandingPage extends StatefulWidget {
 class _LandingPageState extends State<LandingPage> {
   // Login Button
   Widget buildLoginButton() {
-    return Container(
-      width: width(context) * 0.09,
-      height: height(context) * 0.06,
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-      decoration: ShapeDecoration(
-        color: accentColor,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        shadows: const [
-          BoxShadow(
-            color: Color(0x0C000000),
-            blurRadius: 2,
-            offset: Offset(0, 1),
-            spreadRadius: 0,
-          )
-        ],
-      ),
-      child: const Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            'Login',
-            style: whiteButtonTextStyle,
-          ),
-        ],
+    return GestureDetector(
+      onTap: () {
+        // TODO: Go to Login Screen
+      },
+      child: Container(
+        width: width(context) * 0.09,
+        height: height(context) * 0.06,
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+        decoration: ShapeDecoration(
+          color: accentColor,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          shadows: const [
+            BoxShadow(
+              color: Color(0x0C000000),
+              blurRadius: 2,
+              offset: Offset(0, 1),
+              spreadRadius: 0,
+            )
+          ],
+        ),
+        child: const Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              'Login',
+              style: whiteButtonTextStyle,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -49,8 +54,8 @@ class _LandingPageState extends State<LandingPage> {
     return Center(
       child: Row(
         children: [
-          const SizedBox(
-            width: 35,
+          SizedBox(
+            width: width(context) * 0.05,
           ),
           Container(
             height: height(context) * 0.1322,
@@ -117,19 +122,97 @@ class _LandingPageState extends State<LandingPage> {
     );
   }
 
+  // Announcement Widget
+  Widget buildAnnouncement() {
+    return SizedBox(
+      width: width(context) * 0.88,
+      height: height(context) * 0.73,
+      child: const Text.rich(
+        TextSpan(
+          children: [
+            TextSpan(
+              text: 'Establishing teens with\n',
+              style: announcementTextStyle,
+            ),
+
+            /// Italic
+            TextSpan(
+              text: 'initiative ',
+              style: italicAnnouncementTextStyle,
+            ),
+            TextSpan(
+              text: 'into competitive \n',
+              style: announcementTextStyle,
+            ),
+            TextSpan(
+              text: 'workplaces, one',
+              style: announcementTextStyle,
+            ),
+
+            /// Italic
+            TextSpan(
+              text: ' internship\n',
+              style: italicAnnouncementTextStyle,
+            ),
+            TextSpan(
+              text: 'at a time',
+              style: announcementTextStyle,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildBodyText() {
+    return SizedBox(
+      width: width(context) * 0.88,
+      height: height(context) * 0.14,
+      child: const Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Through robust AI recommendation algorithms, and \n',
+            style: bodyTextStyle,
+            textAlign: TextAlign.left,
+          ),
+          Text(
+            'tailored recommendations. We guide the next generation \n',
+            style: bodyTextStyle,
+            textAlign: TextAlign.left,
+          ),
+          Text(
+            'of employees as early as high school.',
+            style: bodyTextStyle,
+            textAlign: TextAlign.left,
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
         decoration: backgroundColor,
-        child: Column(
-          children: [
-            // Space Above Header
-            SizedBox(
-              height: height(context) * 0.015,
-            ),
-            buildHeader(),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              // Space Above Header
+              SizedBox(
+                height: height(context) * 0.015,
+              ),
+              buildHeader(),
+              // Space Below Header
+              SizedBox(
+                height: height(context) * 0.015,
+              ),
+              buildAnnouncement(),
+              buildBodyText(),
+            ],
+          ),
         ),
       ),
     );

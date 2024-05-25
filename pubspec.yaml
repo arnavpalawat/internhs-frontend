@@ -32,3 +32,6 @@ flutter:
     - family: Inter
       fonts:
         - asset: lib/assets/fonts/Inter/Inter-SemiBold.otf
+    - family: Questral
+      fonts:
+        - asset: lib/assets/fonts/Questrial/Questrial-Regular.ttf

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-const announcementTextStyle = TextStyle();
-
 const headerTextColors = [Color(0xFFFFFFFF), Color(0xFF3C5FA4)];
 
 const headerTextStyle = TextStyle(
@@ -19,3 +17,28 @@ const whiteButtonTextStyle = TextStyle(
 );
 
 const accentColor = Color(0xFF857189);
+
+const announcementTextStyle = TextStyle(
+  color: Colors.black,
+  fontSize: 80,
+  fontFamily: 'Poppins',
+  fontWeight: FontWeight.w700,
+  height: 1.5,
+);
+
+const italicAnnouncementTextStyle = TextStyle(
+  color: Colors.black,
+  fontSize: 80,
+  fontStyle: FontStyle.italic,
+  fontFamily: 'Lora',
+  fontWeight: FontWeight.w400,
+  height: 1.5,
+);
+
+const bodyTextStyle = TextStyle(
+  color: Colors.black,
+  fontSize: 24,
+  fontFamily: 'Questral',
+  fontWeight: FontWeight.w400,
+  height: 0.5,
+);
