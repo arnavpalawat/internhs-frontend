@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:internhs/constants/colors.dart';
 import 'package:internhs/constants/device.dart';
 import 'package:internhs/constants/text.dart';
-import 'package:simple_gradient_text/simple_gradient_text.dart';
+
+import '../header.dart';
 
 class LandingPage extends StatefulWidget {
   const LandingPage({super.key});
@@ -49,80 +50,6 @@ class _LandingPageState extends State<LandingPage> {
     );
   }
 
-  // TODO: Universal Header
-  // Header widget
-  Widget buildHeader() {
-    return Center(
-      child: Row(
-        children: [
-          SizedBox(
-            width: width(context) * 0.05,
-          ),
-          Container(
-            height: height(context) * 0.1322,
-            width: width(context) * 0.9375,
-            decoration: ShapeDecoration(
-              color: headerColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(29),
-              ),
-            ),
-
-            /// Header items
-            child: Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Image.asset(
-                    'lib/assets/images/internhs-header.png',
-                    height: height(context) * 0.1322,
-                  ),
-                ),
-                const Spacer(),
-                GradientText(
-                  "Home",
-                  colors: headerTextColors,
-                  style: headerTextStyle,
-                ),
-                SizedBox(
-                  width: width(context) * 0.05,
-                ),
-                GradientText(
-                  "Our Story",
-                  colors: headerTextColors,
-                  style: headerTextStyle,
-                ),
-                SizedBox(
-                  width: width(context) * 0.05,
-                ),
-                GradientText(
-                  "Opportunities",
-                  colors: headerTextColors,
-                  style: headerTextStyle,
-                ),
-                SizedBox(
-                  width: width(context) * 0.05,
-                ),
-                GradientText(
-                  "Pricing",
-                  colors: headerTextColors,
-                  style: headerTextStyle,
-                ),
-                SizedBox(
-                  width: width(context) * 0.05,
-                ),
-                buildLoginButton(),
-                SizedBox(
-                  width: width(context) * 0.05,
-                )
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   // Announcement Widget
   Widget buildAnnouncement() {
     return SizedBox(
@@ -131,33 +58,39 @@ class _LandingPageState extends State<LandingPage> {
       child: Text.rich(
         TextSpan(
           children: [
-            const TextSpan(
+            TextSpan(
               text: 'Establishing teens with\n',
-              style: announcementTextStyle,
+              style: announcementTextStyle.copyWith(
+                  fontSize: height(context) * 0.095),
             ),
 
             /// Italic
-            const TextSpan(
+            TextSpan(
               text: 'initiative ',
-              style: italicAnnouncementTextStyle,
+              style: italicAnnouncementTextStyle.copyWith(
+                  fontSize: height(context) * 0.095),
             ),
-            const TextSpan(
+            TextSpan(
               text: 'into competitive \n',
-              style: announcementTextStyle,
+              style: announcementTextStyle.copyWith(
+                  fontSize: height(context) * 0.095),
             ),
-            const TextSpan(
+            TextSpan(
               text: 'workplaces, one',
-              style: announcementTextStyle,
+              style: announcementTextStyle.copyWith(
+                  fontSize: height(context) * 0.095),
             ),
 
             /// Italic
-            const TextSpan(
+            TextSpan(
               text: ' internship\n',
-              style: italicAnnouncementTextStyle,
+              style: italicAnnouncementTextStyle.copyWith(
+                  fontSize: height(context) * 0.095),
             ),
             TextSpan(
               text: 'at a time',
-              style: announcementTextStyle.copyWith(height: 0),
+              style: announcementTextStyle.copyWith(
+                  fontSize: height(context) * 0.095),
             ),
           ],
         ),
@@ -234,33 +167,53 @@ class _LandingPageState extends State<LandingPage> {
         height: double.infinity,
         decoration: backgroundColor,
         child: SingleChildScrollView(
-          child: Column(
+          child: Stack(
             children: [
-              // Space Above Header
-              SizedBox(
-                height: height(context) * 0.015,
-              ),
-              buildHeader(),
-              // Space Below Header
-              SizedBox(
-                height: height(context) * 0.015,
-              ),
-              buildAnnouncement(),
-              buildBodyText(),
-
-              // Build Buttons
-              Container(
-                width: width(context) * 0.88,
-                child: Row(
-                  children: [
-                    buildButton(accentColor, "Get Started"),
-                    SizedBox(
-                      width: width(context) * 0.01,
-                    ),
-                    buildButton(headerColor, "Our Story")
-                  ],
+              Positioned(
+                left: width(context) * 0.45,
+                top: height(context) * 0.3,
+                child: Image.asset(
+                  "lib/assets/images/landing-vector.png",
+                  scale: 0.75,
                 ),
-              )
+              ),
+              Column(
+                children: [
+                  // Space Above Header
+                  SizedBox(
+                    height: height(context) * 0.015,
+                  ),
+                  BuildHeader(
+                    button: buildLoginButton(),
+                  ),
+                  // Space Below Header
+                  SizedBox(
+                    height: height(context) * 0.015,
+                  ),
+                  buildAnnouncement(),
+                  buildBodyText(),
+                  SizedBox(
+                    height: height(context) * 0.015,
+                  ),
+                  // Build Buttons
+                  SizedBox(
+                    width: width(context) * 0.88,
+                    child: Row(
+                      children: [
+                        // TODO: Go to sign up
+                        GestureDetector(
+                            child: buildButton(accentColor, "Get Started")),
+                        SizedBox(
+                          width: width(context) * 0.01,
+                        ),
+                        // TODO: Go to our story
+                        GestureDetector(
+                            child: buildButton(headerColor, "Our Story"))
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ],
           ),
         ),
