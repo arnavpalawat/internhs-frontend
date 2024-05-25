@@ -29,3 +29,6 @@ flutter:
     - family: Poppins
       fonts:
         - asset: lib/assets/fonts/Poppins/Poppins-Bold.ttf
+    - family: Inter
+      fonts:
+        - asset: lib/assets/fonts/Inter/Inter-SemiBold.otf

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:internhs/constants/colors.dart';
 import 'package:internhs/constants/device.dart';
+import 'package:internhs/constants/text.dart';
+import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 class LandingPage extends StatefulWidget {
   const LandingPage({super.key});
@@ -10,6 +12,38 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends State<LandingPage> {
+  // Login Button
+  Widget buildLoginButton() {
+    return Container(
+      width: width(context) * 0.09,
+      height: height(context) * 0.06,
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+      decoration: ShapeDecoration(
+        color: accentColor,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        shadows: const [
+          BoxShadow(
+            color: Color(0x0C000000),
+            blurRadius: 2,
+            offset: Offset(0, 1),
+            spreadRadius: 0,
+          )
+        ],
+      ),
+      child: const Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            'Login',
+            style: whiteButtonTextStyle,
+          ),
+        ],
+      ),
+    );
+  }
+
   // Header widget
   Widget buildHeader() {
     return Center(
@@ -39,11 +73,44 @@ class _LandingPageState extends State<LandingPage> {
                   ),
                 ),
                 const Spacer(),
+                GradientText(
+                  "Home",
+                  colors: headerTextColors,
+                  style: headerTextStyle,
+                ),
+                SizedBox(
+                  width: width(context) * 0.05,
+                ),
+                GradientText(
+                  "Our Story",
+                  colors: headerTextColors,
+                  style: headerTextStyle,
+                ),
+                SizedBox(
+                  width: width(context) * 0.05,
+                ),
+                GradientText(
+                  "Opportunities",
+                  colors: headerTextColors,
+                  style: headerTextStyle,
+                ),
+                SizedBox(
+                  width: width(context) * 0.05,
+                ),
+                GradientText(
+                  "Pricing",
+                  colors: headerTextColors,
+                  style: headerTextStyle,
+                ),
+                SizedBox(
+                  width: width(context) * 0.05,
+                ),
+                buildLoginButton(),
+                SizedBox(
+                  width: width(context) * 0.05,
+                )
               ],
             ),
-          ),
-          const SizedBox(
-            width: 35,
           ),
         ],
       ),
@@ -58,8 +125,8 @@ class _LandingPageState extends State<LandingPage> {
         child: Column(
           children: [
             // Space Above Header
-            const SizedBox(
-              height: 19,
+            SizedBox(
+              height: height(context) * 0.015,
             ),
             buildHeader(),
           ],
