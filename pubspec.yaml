@@ -10,6 +10,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   simple_gradient_text: 1.3.0
   animated_text_kit: ^4.2.2
+  flutter_animate: ^4.5.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -19,6 +20,7 @@ flutter:
   assets:
     - lib/assets/images/internhs-header.png
     - lib/assets/images/landing-vector.png
+    - lib/assets/images/auth_background.png
   fonts:
     - family: Lora
       fonts:

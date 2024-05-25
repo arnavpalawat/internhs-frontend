@@ -5,12 +5,25 @@ import 'constants/colors.dart';
 import 'constants/device.dart';
 import 'constants/text.dart';
 
-class BuildHeader extends StatelessWidget {
+class BuildHeader extends StatefulWidget {
   final Widget button;
   const BuildHeader({super.key, required this.button});
 
   @override
+  State<BuildHeader> createState() => _BuildHeaderState();
+}
+
+class _BuildHeaderState extends State<BuildHeader> {
+  @override
   Widget build(BuildContext context) {
+    Widget text(String text) {
+      return GradientText(
+        text,
+        colors: headerTextColors,
+        style: headerTextStyle.copyWith(fontSize: height(context) * 0.03),
+      );
+    }
+
     return Center(
       child: Row(
         children: [
@@ -38,43 +51,23 @@ class BuildHeader extends StatelessWidget {
                   ),
                 ),
                 const Spacer(),
-                GradientText(
-                  "Home",
-                  colors: headerTextColors,
-                  style: headerTextStyle.copyWith(
-                      fontSize: height(context) * 0.03),
-                ),
+                text("Home"),
                 SizedBox(
                   width: width(context) * 0.05,
                 ),
-                GradientText(
-                  "Our Story",
-                  colors: headerTextColors,
-                  style: headerTextStyle.copyWith(
-                      fontSize: height(context) * 0.03),
-                ),
+                text("Our Story"),
                 SizedBox(
                   width: width(context) * 0.05,
                 ),
-                GradientText(
-                  "Opportunities",
-                  colors: headerTextColors,
-                  style: headerTextStyle.copyWith(
-                      fontSize: height(context) * 0.03),
-                ),
+                text("Opportunities"),
                 SizedBox(
                   width: width(context) * 0.05,
                 ),
-                GradientText(
-                  "Pricing",
-                  colors: headerTextColors,
-                  style: headerTextStyle.copyWith(
-                      fontSize: height(context) * 0.03),
-                ),
+                text("Pricing"),
                 SizedBox(
                   width: width(context) * 0.05,
                 ),
-                button,
+                widget.button,
                 SizedBox(
                   width: width(context) * 0.05,
                 )

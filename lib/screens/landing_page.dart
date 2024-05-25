@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:internhs/constants/colors.dart';
 import 'package:internhs/constants/device.dart';
 import 'package:internhs/constants/text.dart';
@@ -138,8 +139,8 @@ class _LandingPageState extends State<LandingPage> {
             color: color,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            shadows: [
-              const BoxShadow(
+            shadows: const [
+              BoxShadow(
                 color: Color(0x0C000000),
                 blurRadius: 2,
                 offset: Offset(0, 1),
@@ -190,28 +191,39 @@ class _LandingPageState extends State<LandingPage> {
                   SizedBox(
                     height: height(context) * 0.015,
                   ),
-                  buildAnnouncement(),
-                  buildBodyText(),
-                  SizedBox(
-                    height: height(context) * 0.015,
-                  ),
-                  // Build Buttons
-                  SizedBox(
-                    width: width(context) * 0.88,
-                    child: Row(
-                      children: [
-                        // TODO: Go to sign up
-                        GestureDetector(
-                            child: buildButton(accentColor, "Get Started")),
-                        SizedBox(
-                          width: width(context) * 0.01,
+                  Column(
+                    children: [
+                      buildAnnouncement(),
+                      buildBodyText(),
+                      SizedBox(
+                        height: height(context) * 0.015,
+                      ),
+                      // Build Buttons
+                      SizedBox(
+                        width: width(context) * 0.88,
+                        child: Row(
+                          children: [
+                            // TODO: Go to sign up
+                            GestureDetector(
+                                child: buildButton(accentColor, "Get Started")),
+                            SizedBox(
+                              width: width(context) * 0.01,
+                            ),
+                            // TODO: Go to our story
+                            GestureDetector(
+                                child: buildButton(headerColor, "Our Story"))
+                          ],
                         ),
-                        // TODO: Go to our story
-                        GestureDetector(
-                            child: buildButton(headerColor, "Our Story"))
-                      ],
-                    ),
+                      )
+                    ],
                   )
+                      .animate()
+                      .fade(duration: Duration(milliseconds: 800))
+                      .slideY(
+                          begin: 0.5,
+                          end: 0,
+                          duration: Duration(milliseconds: 400),
+                          curve: Curves.ease),
                 ],
               ),
             ],
