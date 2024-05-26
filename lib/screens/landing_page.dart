@@ -15,7 +15,47 @@ class LandingPage extends StatefulWidget {
   State<LandingPage> createState() => _LandingPageState();
 }
 
-class _LandingPageState extends State<LandingPage> {
+class _LandingPageState extends State<LandingPage>
+    with SingleTickerProviderStateMixin {
+  bool hovering = false;
+  late AnimationController _controllerGS;
+  late Animation<double> _animationGS;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize Animate controller
+    _controllerGS = AnimationController(
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    );
+
+    _animationGS = CurvedAnimation(
+      parent: _controllerGS,
+      curve: Curves.easeInOut,
+    ).drive(Tween<double>(begin: 0, end: 45));
+
+    _controllerGS.addListener(() {
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    _controllerGS.dispose();
+    super.dispose();
+  }
+
+  void _onGSHover(PointerEvent details) {
+    _controllerGS.forward();
+    hovering = true;
+  }
+
+  void _onGSExit(PointerEvent details) {
+    hovering = false;
+    _controllerGS.reverse();
+  }
+
   // Login Button
   Widget buildLoginButton() {
     return GestureDetector(
@@ -138,35 +178,78 @@ class _LandingPageState extends State<LandingPage> {
 
   // Button Template
   Widget buildButton(Color color, String text) {
-    return Column(
-      children: [
-        Container(
-          width: width(context) * 0.16,
-          height: height(context) * 0.089,
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-          decoration: ShapeDecoration(
-            color: color,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            shadows: const [
-              BoxShadow(
-                color: Color(0x0C000000),
-                blurRadius: 2,
-                offset: Offset(0, 1),
-                spreadRadius: 0,
-              )
-            ],
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(text, style: buttonTextStyle),
-            ],
+    // Post animation Icon
+    Widget buildIcon({required double size}) {
+      return SizedBox(
+        width: size, // Adjust the width to accommodate the icon
+        child: Align(
+          alignment: Alignment.centerRight,
+          child: Icon(
+            Icons.arrow_forward_ios_rounded,
+            color: Colors.white,
+            size: size,
           ),
         ),
-      ],
+      );
+    }
+
+    return MouseRegion(
+      onEnter: text == "Get Started" ? _onGSHover : null,
+      onExit: text == "Get Started" ? _onGSExit : null,
+      child: Column(
+        children: [
+          Container(
+            width: width(context) * 0.144 +
+                (text == "Get Started" ? _animationGS.value : 0),
+            height: height(context) * 0.089,
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+            decoration: ShapeDecoration(
+              color: color,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8)),
+              shadows: const [
+                BoxShadow(
+                  color: Color(0x0C000000),
+                  blurRadius: 2,
+                  offset: Offset(0, 1),
+                  spreadRadius: 0,
+                )
+              ],
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Center(
+                  child: Text(
+                    text,
+                    style: buttonTextStyle,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                Spacer(), // Adjust the space between text and icon
+                text == "Get Started"
+                    ? AnimatedOpacity(
+                        opacity: hovering ? 1 : 0,
+                        duration: 200.ms,
+                        child: _animationGS.value > 0
+                            ? buildIcon(
+                                    size: _animationGS.value > 10 ? 25.0 : 0.0)
+                                .animate()
+                                .fadeIn()
+                            : Container(
+                                width: 0,
+                              ),
+                      )
+                    : Container(
+                        width: 0,
+                      ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -212,7 +295,6 @@ class _LandingPageState extends State<LandingPage> {
                         width: width(context) * 0.88,
                         child: Row(
                           children: [
-                            // TODO: Go to sign up
                             GestureDetector(
                               child: buildButton(accentColor, "Get Started"),
                               onTap: () {

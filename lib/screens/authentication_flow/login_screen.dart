@@ -394,6 +394,9 @@ class _LoginPageState extends State<LoginPage> {
                           controller: _passwordController,
                           decoration: textFieldDecoration.copyWith(
                             suffixIcon: IconButton(
+                              focusColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              hoverColor: Colors.transparent,
                               icon: Icon(
                                 obscure
                                     ? Icons.visibility_off
