@@ -17,6 +17,7 @@ class _SignInPageState extends State<SignInPage> {
 
   // Outside Build to update the state
   bool fieldFilled = false;
+  bool obscure = true;
   @override
   void initState() {
     _emailController = TextEditingController();
@@ -291,7 +292,21 @@ class _SignInPageState extends State<SignInPage> {
                             }
                           },
                           controller: _passwordController,
-                          decoration: textFieldDecoration,
+                          decoration: textFieldDecoration.copyWith(
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                obscure
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  obscure = !obscure;
+                                });
+                              },
+                            ),
+                          ),
+                          obscureText: obscure,
                         ),
                       ),
                     ],
