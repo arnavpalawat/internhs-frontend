@@ -26,6 +26,22 @@ class _LoginPageState extends State<LoginPage> {
   bool fieldFilled = false;
   bool obscure = true;
 
+  Future<void> _signInWithGoogle() async {
+    GoogleAuthProvider authProvider = GoogleAuthProvider();
+
+    try {
+      UserCredential userCredential =
+          await _authInstance.signInWithPopup(authProvider);
+
+      // Add user details to Firestore
+      User? currentUser = userCredential.user;
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  }
+
   Future<void> _loginUser(String email, String password) async {
     try {
       await _authInstance.signInWithEmailAndPassword(
@@ -241,7 +257,11 @@ class _LoginPageState extends State<LoginPage> {
                   ),
 
                   /// Build Login with
-                  buildLoginPlatforms(),
+                  GestureDetector(
+                      onTap: () {
+                        _signInWithGoogle();
+                      },
+                      child: buildLoginPlatforms()),
                   SizedBox(
                     height: height(context) * 55 / 840,
                   ),

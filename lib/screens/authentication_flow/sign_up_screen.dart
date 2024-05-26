@@ -27,7 +27,39 @@ class _SignUpPageState extends State<SignUpPage> {
   // Outside Build to update the state
   bool fieldFilled = false;
   bool obscure = true;
+  late User currentUser;
 
+  /// Sign in Methods
+
+  // Google
+  Future<void> _signInWithGoogle() async {
+    GoogleAuthProvider authProvider = GoogleAuthProvider();
+
+    try {
+      UserCredential userCredential =
+          await _authInstance.signInWithPopup(authProvider);
+
+      // Add user details to Firestore
+      User? currentUser = userCredential.user;
+      if (currentUser != null) {
+        db.User user = db.User(
+          email: currentUser.email!,
+          uid: currentUser.uid,
+        );
+        await user.addToFirestore();
+      } else {
+        if (kDebugMode) {
+          print("No user is signed in.");
+        }
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  }
+
+  // Email and Password
   Future<void> _createUser(String email, String password) async {
     try {
       // Check if a user with the given email already exists
@@ -41,18 +73,19 @@ class _SignUpPageState extends State<SignUpPage> {
       }
 
       // Create user with email and password
-      UserCredential userCredential =
-          await _authInstance.createUserWithEmailAndPassword(
+      UserCredential userCredential = await _authInstance
+          .createUserWithEmailAndPassword(
         email: email,
         password: password,
-      );
-
-      // Add user details to Firestore
-      db.User user = db.User(
-        email: email,
-        uid: _authInstance.currentUser!.uid,
-      );
-      user.addToFirestore();
+      )
+          .whenComplete(() {
+        // Add user details to Firestore
+        db.User user = db.User(
+          email: email,
+          uid: _authInstance.currentUser!.uid,
+        );
+        user.addToFirestore();
+      });
 
       if (kDebugMode) {
         print(
@@ -84,31 +117,36 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget build(BuildContext context) {
     /// Social Media Button
     Widget buildLoginPlatforms() {
-      return Container(
-        width: width(context) * 528 / 1250,
-        height: height(context) * 70 / 840,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(
-            color: const Color(0xFF333333),
-          ),
-          borderRadius: const BorderRadius.all(
-            Radius.circular(90),
-          ),
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Image.asset("lib/assets/images/google.png"),
+      return GestureDetector(
+        onTap: () {
+          _signInWithGoogle();
+        },
+        child: Container(
+          width: width(context) * 528 / 1250,
+          height: height(context) * 70 / 840,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(
+              color: const Color(0xFF333333),
             ),
-            const Text(
-              "Sign Up With Google",
-              style: authTextStyle,
-            )
-          ],
+            borderRadius: const BorderRadius.all(
+              Radius.circular(90),
+            ),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Image.asset("lib/assets/images/google.png"),
+              ),
+              const Text(
+                "Sign Up With Google",
+                style: authTextStyle,
+              )
+            ],
+          ),
         ),
       );
     }
