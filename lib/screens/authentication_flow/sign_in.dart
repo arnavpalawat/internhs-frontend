@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:internhs/constants/colors.dart';
@@ -12,12 +14,33 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
+  final FirebaseAuth _authInstance = FirebaseAuth.instance;
+
+  // Controllers
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
 
   // Outside Build to update the state
   bool fieldFilled = false;
   bool obscure = true;
+
+  Future<void> _createUser(String email, String password) async {
+    try {
+      UserCredential userCredential =
+          await _authInstance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      if (kDebugMode) {
+        print("Sign Up Successful: Under $email with the passcode $password");
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print("Error: $e");
+      }
+    }
+  }
+
   @override
   void initState() {
     _emailController = TextEditingController();
@@ -314,7 +337,15 @@ class _SignInPageState extends State<SignInPage> {
                   SizedBox(
                     height: height(context) * 16 / 840,
                   ),
-                  buildCreateAccount(),
+                  GestureDetector(
+                      onTap: () {
+                        _createUser(
+                                _emailController.text, _passwordController.text)
+                            .then((value) {
+                          // TODO: Navigate to Opportunities
+                        });
+                      },
+                      child: buildCreateAccount()),
                 ],
               ),
             ),
