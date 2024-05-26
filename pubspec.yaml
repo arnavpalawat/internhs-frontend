@@ -14,6 +14,7 @@ dependencies:
   flutter_gradient_animation_text: ^1.0.2
   firebase_core: ^2.27.0
   firebase_auth: ^4.17.8
+  cloud_firestore: ^4.15.8
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -24,6 +25,7 @@ flutter:
     - lib/assets/images/internhs-header.png
     - lib/assets/images/landing-vector.png
     - lib/assets/images/auth_background.png
+    - lib/assets/images/google.png
   fonts:
     - family: Lora
       fonts:

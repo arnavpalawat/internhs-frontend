@@ -5,15 +5,17 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:internhs/constants/colors.dart';
 import 'package:internhs/constants/device.dart';
 import 'package:internhs/constants/text.dart';
+import 'package:internhs/firebase/user.dart' as db;
+import 'package:internhs/screens/landing_page.dart';
 
-class SignInPage extends StatefulWidget {
-  const SignInPage({super.key});
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({super.key});
 
   @override
-  State<SignInPage> createState() => _SignInPageState();
+  State<SignUpPage> createState() => _SignUpPageState();
 }
 
-class _SignInPageState extends State<SignInPage> {
+class _SignUpPageState extends State<SignUpPage> {
   final FirebaseAuth _authInstance = FirebaseAuth.instance;
 
   // Controllers
@@ -26,18 +28,39 @@ class _SignInPageState extends State<SignInPage> {
 
   Future<void> _createUser(String email, String password) async {
     try {
+      // Check if a user with the given email already exists
+      var existingUser = await _authInstance.fetchSignInMethodsForEmail(email);
+      if (existingUser.isNotEmpty) {
+        if (kDebugMode) {
+          print("User with email $email already exists.");
+        }
+        // Handle the case where the user already exists
+        return;
+      }
+
+      // Create user with email and password
       UserCredential userCredential =
           await _authInstance.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
+
+      // Add user details to Firestore
+      db.User user = db.User(
+        email: email,
+        uid: _authInstance.currentUser!.uid,
+      );
+      user.addToFirestore();
+
       if (kDebugMode) {
-        print("Sign Up Successful: Under $email with the passcode $password");
+        print(
+            "Sign Up Successful: User created with email $email and password $password");
       }
     } catch (e) {
       if (kDebugMode) {
         print("Error: $e");
       }
+      // Handle any errors that occur during the user creation process
     }
   }
 
@@ -70,6 +93,20 @@ class _SignInPageState extends State<SignInPage> {
           borderRadius: const BorderRadius.all(
             Radius.circular(90),
           ),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Image.asset("lib/assets/images/google.png"),
+            ),
+            const Text(
+              "Login With Google",
+              style: authTextStyle,
+            )
+          ],
         ),
       );
     }
@@ -136,8 +173,35 @@ class _SignInPageState extends State<SignInPage> {
               child: Column(
                 children: [
                   /// Build Header of Signin
-                  SizedBox(
-                    height: height(context) * 38 / 840,
+                  Row(
+                    children: [
+                      SizedBox(
+                        height: height(context) * 38 / 840,
+                      ),
+                      const Spacer(),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: IconButton(
+                            hoverColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                PageRouteBuilder(
+                                  pageBuilder:
+                                      (context, animation1, animation2) =>
+                                          const LandingPage(),
+                                  transitionDuration: Duration.zero,
+                                  reverseTransitionDuration: Duration.zero,
+                                ),
+                              );
+                            },
+                            icon: const Icon(
+                              Icons.close_outlined,
+                              color: accentColor,
+                            )),
+                      )
+                    ],
                   ),
                   Center(
                     child: Container(

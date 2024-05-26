@@ -3,7 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:internhs/constants/colors.dart';
 import 'package:internhs/constants/device.dart';
 import 'package:internhs/constants/text.dart';
-import 'package:internhs/screens/authentication_flow/sign_in.dart';
+import 'package:internhs/screens/authentication_flow/sign_up.dart';
 
 import '../header.dart';
 
@@ -213,7 +213,7 @@ class _LandingPageState extends State<LandingPage> {
                                   PageRouteBuilder(
                                     pageBuilder:
                                         (context, animation1, animation2) =>
-                                            SignInPage(),
+                                            const SignUpPage(),
                                     transitionDuration: Duration.zero,
                                     reverseTransitionDuration: Duration.zero,
                                   ),
@@ -232,11 +232,11 @@ class _LandingPageState extends State<LandingPage> {
                     ],
                   )
                       .animate()
-                      .fade(duration: Duration(milliseconds: 1000))
+                      .fade(duration: const Duration(milliseconds: 1000))
                       .slideY(
                           begin: 0.25,
                           end: 0,
-                          duration: Duration(milliseconds: 600),
+                          duration: const Duration(milliseconds: 600),
                           curve: Curves.ease),
                 ],
               ),
