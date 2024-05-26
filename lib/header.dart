@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:simple_gradient_text/simple_gradient_text.dart';
+import 'package:flutter_gradient_animation_text/flutter_gradient_animation_text.dart';
 
 import 'constants/colors.dart';
 import 'constants/device.dart';
@@ -17,10 +17,13 @@ class _BuildHeaderState extends State<BuildHeader> {
   @override
   Widget build(BuildContext context) {
     Widget text(String text) {
-      return GradientText(
-        text,
+      return GradientAnimationText(
+        text: Text(
+          text,
+          style: headerTextStyle.copyWith(fontSize: height(context) * 0.03),
+        ),
         colors: headerTextColors,
-        style: headerTextStyle.copyWith(fontSize: height(context) * 0.03),
+        duration: const Duration(seconds: 12),
       );
     }
 

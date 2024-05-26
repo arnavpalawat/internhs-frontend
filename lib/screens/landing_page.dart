@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:internhs/constants/colors.dart';
 import 'package:internhs/constants/device.dart';
 import 'package:internhs/constants/text.dart';
+import 'package:internhs/screens/authentication_flow/sign_in.dart';
 
 import '../header.dart';
 
@@ -25,7 +26,7 @@ class _LandingPageState extends State<LandingPage> {
         height: height(context) * 0.06,
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
         decoration: ShapeDecoration(
-          color: accentColor2,
+          color: accentColor,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           shadows: const [
             BoxShadow(
@@ -205,7 +206,20 @@ class _LandingPageState extends State<LandingPage> {
                           children: [
                             // TODO: Go to sign up
                             GestureDetector(
-                                child: buildButton(accentColor, "Get Started")),
+                              child: buildButton(accentColor, "Get Started"),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  PageRouteBuilder(
+                                    pageBuilder:
+                                        (context, animation1, animation2) =>
+                                            SignInPage(),
+                                    transitionDuration: Duration.zero,
+                                    reverseTransitionDuration: Duration.zero,
+                                  ),
+                                );
+                              },
+                            ),
                             SizedBox(
                               width: width(context) * 0.01,
                             ),
@@ -218,11 +232,11 @@ class _LandingPageState extends State<LandingPage> {
                     ],
                   )
                       .animate()
-                      .fade(duration: Duration(milliseconds: 800))
+                      .fade(duration: Duration(milliseconds: 1000))
                       .slideY(
-                          begin: 0.5,
+                          begin: 0.25,
                           end: 0,
-                          duration: Duration(milliseconds: 400),
+                          duration: Duration(milliseconds: 600),
                           curve: Curves.ease),
                 ],
               ),

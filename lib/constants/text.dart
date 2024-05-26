@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'colors.dart';
+
 const headerTextStyle = TextStyle(
   fontSize: 25,
   fontFamily: 'Inter',
@@ -45,4 +47,32 @@ const buttonTextStyle = TextStyle(
   fontFamily: 'Inter',
   fontWeight: FontWeight.w500,
   height: 0.06,
+);
+
+const authTextStyle = TextStyle(
+  color: Color(0xFF333333),
+  fontSize: 16,
+  fontFamily: 'Poppins',
+  fontWeight: FontWeight.w400,
+  height: 0,
+);
+
+const authHeadingStyle = TextStyle(
+  color: Color(0xFF333333),
+  fontSize: 32,
+  fontFamily: 'Poppins',
+  fontWeight: FontWeight.w500,
+  height: 0,
+);
+
+InputDecoration textFieldDecoration = InputDecoration(
+  contentPadding: const EdgeInsets.symmetric(
+    vertical: 16.0,
+    horizontal: 12.0,
+  ),
+  enabledBorder: borderStyle,
+  focusedBorder: borderStyle,
+  border: borderStyle.copyWith(
+    borderRadius: BorderRadius.circular(12),
+  ),
 );

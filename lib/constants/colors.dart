@@ -19,6 +19,20 @@ const Color headerColor = Color(0xFF6C8DCC);
 
 const Color accentColor = Color(0xFF184753);
 
-const headerTextColors = [Color(0xFFFFFFFF), Color(0xFF3C5FA4)];
+const headerTextColors = [Color(0xFFFFFFFF), Color(0xFF3C5FB4)];
 
 const accentColor2 = Color(0xFF857189);
+
+ShapeDecoration authBoxDecorations = ShapeDecoration(
+  color: Colors.white,
+  shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(24),
+  ),
+);
+
+const borderStyle = OutlineInputBorder(
+  borderSide: const BorderSide(
+    width: 1,
+    color: Color(0x59666666),
+  ),
+);
