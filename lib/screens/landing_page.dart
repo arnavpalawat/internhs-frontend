@@ -3,7 +3,8 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:internhs/constants/colors.dart';
 import 'package:internhs/constants/device.dart';
 import 'package:internhs/constants/text.dart';
-import 'package:internhs/screens/authentication_flow/sign_up.dart';
+import 'package:internhs/screens/authentication_flow/login_screen.dart';
+import 'package:internhs/screens/authentication_flow/sign_up_screen.dart';
 
 import '../header.dart';
 
@@ -19,7 +20,14 @@ class _LandingPageState extends State<LandingPage> {
   Widget buildLoginButton() {
     return GestureDetector(
       onTap: () {
-        // TODO: Go to Login Screen
+        Navigator.push(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (context, animation1, animation2) => const LoginPage(),
+            transitionDuration: Duration.zero,
+            reverseTransitionDuration: Duration.zero,
+          ),
+        );
       },
       child: Container(
         width: width(context) * 0.09,

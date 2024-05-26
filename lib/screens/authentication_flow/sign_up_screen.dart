@@ -8,6 +8,8 @@ import 'package:internhs/constants/text.dart';
 import 'package:internhs/firebase/user.dart' as db;
 import 'package:internhs/screens/landing_page.dart';
 
+import 'login_screen.dart';
+
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
 
@@ -103,7 +105,7 @@ class _SignUpPageState extends State<SignUpPage> {
               child: Image.asset("lib/assets/images/google.png"),
             ),
             const Text(
-              "Login With Google",
+              "Sign Up With Google",
               style: authTextStyle,
             )
           ],
@@ -226,18 +228,32 @@ class _SignUpPageState extends State<SignUpPage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text.rich(
-                          TextSpan(
-                            children: [
-                              const TextSpan(
-                                  text: 'Already have an account?  ',
-                                  style: authTextStyle),
-                              TextSpan(
-                                text: 'Log in  ',
-                                style: authTextStyle.copyWith(
-                                    decoration: TextDecoration.underline),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              PageRouteBuilder(
+                                pageBuilder:
+                                    (context, animation1, animation2) =>
+                                        const LoginPage(),
+                                transitionDuration: Duration.zero,
+                                reverseTransitionDuration: Duration.zero,
                               ),
-                            ],
+                            );
+                          },
+                          child: Text.rich(
+                            TextSpan(
+                              children: [
+                                const TextSpan(
+                                    text: 'Already have an account?  ',
+                                    style: authTextStyle),
+                                TextSpan(
+                                  text: 'Log in  ',
+                                  style: authTextStyle.copyWith(
+                                      decoration: TextDecoration.underline),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ],
@@ -292,7 +308,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     TextSpan(
                       children: [
                         const TextSpan(
-                            text: 'Enter your email address to ',
+                            text: 'Enter your credentials to ',
                             style: authTextStyle),
                         TextSpan(
                             text: 'create an account.',
