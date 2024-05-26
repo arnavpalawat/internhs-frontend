@@ -94,12 +94,13 @@ class _LoginPageState extends State<LoginPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
-              padding: const EdgeInsets.all(15.0),
+              padding: EdgeInsets.all(height(context) * 15 / 840),
               child: Image.asset("lib/assets/images/google.png"),
             ),
-            const Text(
+            Text(
               "Login With Google",
-              style: authTextStyle,
+              style:
+                  authTextStyle.copyWith(fontSize: height(context) * 16 / 840),
             )
           ],
         ),
@@ -119,7 +120,7 @@ class _LoginPageState extends State<LoginPage> {
             borderRadius: BorderRadius.circular(40),
           ),
         ),
-        child: const Row(
+        child: Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -134,7 +135,7 @@ class _LoginPageState extends State<LoginPage> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 22,
+                    fontSize: height(context) * 22 / 840,
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w500,
                     height: 0,
@@ -175,7 +176,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       const Spacer(),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: EdgeInsets.all(height(context) * 8 / 840),
                         child: IconButton(
                             hoverColor: Colors.transparent,
                             highlightColor: Colors.transparent,
@@ -200,22 +201,23 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   Center(
                     child: Container(
-                      width: width(context) * 48 / 1240,
-                      height: width(context) * 48 / 1240,
+                      width: height(context) * 48 / 840,
+                      height: height(context) * 48 / 840,
                       decoration: const ShapeDecoration(
                         color: Color(0xFFC4C4C4),
                         shape: OvalBorder(),
                       ),
                     ),
                   ),
-                  const Text(
+                  Text(
                     'Log into an account',
                     textAlign: TextAlign.center,
-                    style: authHeadingStyle,
+                    style: authHeadingStyle.copyWith(
+                        fontSize: height(context) * 32 / 840),
                   ),
-                  const SizedBox(height: 2),
+                  SizedBox(height: height(context) * 2 / 840),
                   Container(
-                    padding: const EdgeInsets.all(2),
+                    padding: EdgeInsets.all(height(context) * 2 / 840),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -237,13 +239,16 @@ class _LoginPageState extends State<LoginPage> {
                           child: Text.rich(
                             TextSpan(
                               children: [
-                                const TextSpan(
-                                    text: 'Need an account?  ',
-                                    style: authTextStyle),
+                                TextSpan(
+                                  text: 'Need an account?  ',
+                                  style: authTextStyle.copyWith(
+                                      fontSize: height(context) * 16 / 840),
+                                ),
                                 TextSpan(
                                   text: 'Sign Up  ',
                                   style: authTextStyle.copyWith(
-                                      decoration: TextDecoration.underline),
+                                      decoration: TextDecoration.underline,
+                                      fontSize: height(context) * 16 / 840),
                                 ),
                               ],
                             ),
@@ -273,24 +278,25 @@ class _LoginPageState extends State<LoginPage> {
                       children: [
                         SizedBox(
                           width: width(context) * 224.5 / 1240,
-                          child: const Divider(
-                            height: 2,
+                          child: Divider(
+                            height: height(context) * 2 / 840,
                           ),
                         ),
                         SizedBox(
                           width: width(context) * 24 / 1240,
                         ),
-                        const Text(
+                        Text(
                           "Or",
-                          style: authTextStyle,
+                          style: authTextStyle.copyWith(
+                              fontSize: height(context) * 16 / 840),
                         ),
                         SizedBox(
                           width: width(context) * 24 / 1240,
                         ),
                         SizedBox(
                           width: width(context) * 224.5 / 1240,
-                          child: const Divider(
-                            height: 2,
+                          child: Divider(
+                            height: height(context) * 2 / 840,
                           ),
                         ),
                       ],
@@ -304,13 +310,16 @@ class _LoginPageState extends State<LoginPage> {
                   Text.rich(
                     TextSpan(
                       children: [
-                        const TextSpan(
-                            text: 'Enter your credentials to ',
-                            style: authTextStyle),
+                        TextSpan(
+                          text: 'Enter your credentials to ',
+                          style: authTextStyle.copyWith(
+                              fontSize: height(context) * 16 / 840),
+                        ),
                         TextSpan(
                             text: 'log into an account.',
                             style: authTextStyle.copyWith(
-                                decoration: TextDecoration.underline)),
+                                decoration: TextDecoration.underline,
+                                fontSize: height(context) * 16 / 840)),
                       ],
                     ),
                     textAlign: TextAlign.center,
@@ -324,9 +333,10 @@ class _LoginPageState extends State<LoginPage> {
                     children: [
                       SizedBox(
                         width: width(context) * 528 / 1240,
-                        child: const Text(
+                        child: Text(
                           "Your Email",
-                          style: authTextStyle,
+                          style: authTextStyle.copyWith(
+                              fontSize: height(context) * 16 / 840),
                           textAlign: TextAlign.start,
                         ),
                       ),
@@ -362,9 +372,10 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       SizedBox(
                         width: width(context) * 528 / 1240,
-                        child: const Text(
+                        child: Text(
                           "Your Password",
-                          style: authTextStyle,
+                          style: authTextStyle.copyWith(
+                              fontSize: height(context) * 16 / 840),
                           textAlign: TextAlign.start,
                         ),
                       ),

@@ -85,14 +85,15 @@ class _LandingPageState extends State<LandingPage>
             )
           ],
         ),
-        child: const Row(
+        child: Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
               'Login',
-              style: whiteButtonTextStyle,
+              style: whiteButtonTextStyle.copyWith(
+                  fontSize: height(context) * 16 / 840),
             ),
           ],
         ),
@@ -153,22 +154,22 @@ class _LandingPageState extends State<LandingPage>
     return SizedBox(
       width: width(context) * 0.88,
       height: height(context) * 0.1,
-      child: const Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             'Through robust AI recommendation algorithms, and \n',
-            style: bodyTextStyle,
+            style: bodyTextStyle.copyWith(fontSize: height(context) * 24 / 840),
             textAlign: TextAlign.left,
           ),
           Text(
             'tailored recommendations. We guide the next generation \n',
-            style: bodyTextStyle,
+            style: bodyTextStyle.copyWith(fontSize: height(context) * 24 / 840),
             textAlign: TextAlign.left,
           ),
           Text(
             'of employees as early as high school.',
-            style: bodyTextStyle,
+            style: bodyTextStyle.copyWith(fontSize: height(context) * 24 / 840),
             textAlign: TextAlign.left,
           ),
         ],
@@ -224,7 +225,8 @@ class _LandingPageState extends State<LandingPage>
                 Center(
                   child: Text(
                     text,
-                    style: buttonTextStyle,
+                    style: buttonTextStyle.copyWith(
+                        fontSize: height(context) * 25 / 840),
                     textAlign: TextAlign.center,
                   ),
                 ),

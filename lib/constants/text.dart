@@ -42,12 +42,12 @@ const bodyTextStyle = TextStyle(
 );
 
 const buttonTextStyle = TextStyle(
-  color: Colors.white,
-  fontSize: 25,
-  fontFamily: 'Inter',
-  fontWeight: FontWeight.w500,
-  height: 0.06,
-);
+    color: Colors.white,
+    fontSize: 25,
+    fontFamily: 'Inter',
+    fontWeight: FontWeight.w500,
+    height: 0.06,
+    overflow: TextOverflow.ellipsis);
 
 const authTextStyle = TextStyle(
   color: Color(0xFF333333),
