@@ -8,6 +8,8 @@ import 'package:internhs/constants/text.dart';
 import 'package:internhs/screens/authentication_flow/sign_up_screen.dart';
 import 'package:internhs/screens/landing_page.dart';
 
+import '../opportunities_page.dart';
+
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -31,7 +33,19 @@ class _LoginPageState extends State<LoginPage> {
 
     try {
       UserCredential userCredential =
-          await _authInstance.signInWithPopup(authProvider);
+          await _authInstance.signInWithPopup(authProvider).whenComplete(() {
+        if (_authInstance.currentUser?.uid != null) {
+          Navigator.push(
+            context,
+            PageRouteBuilder(
+              pageBuilder: (context, animation1, animation2) =>
+                  const OpportunitiesPage(),
+              transitionDuration: Duration.zero,
+              reverseTransitionDuration: Duration.zero,
+            ),
+          );
+        }
+      });
 
       // Add user details to Firestore
       User? currentUser = userCredential.user;
@@ -431,10 +445,18 @@ class _LoginPageState extends State<LoginPage> {
                   GestureDetector(
                       onTap: () {
                         _loginUser(
-                                _emailController.text, _passwordController.text)
-                            .then((value) {
-                          // TODO: Navigate to Opportunities
-                        });
+                            _emailController.text, _passwordController.text);
+                        if (_authInstance.currentUser?.uid != null) {
+                          Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder: (context, animation1, animation2) =>
+                                  const OpportunitiesPage(),
+                              transitionDuration: Duration.zero,
+                              reverseTransitionDuration: Duration.zero,
+                            ),
+                          );
+                        }
                       },
                       child: buildCreateAccount()),
                 ],

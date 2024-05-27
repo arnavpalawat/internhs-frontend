@@ -1,11 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
+import 'package:internhs/screens/authentication_flow/login_screen.dart';
 import 'package:internhs/util/tinder_card.dart';
 
+import '../constants/colors.dart';
 import 'job.dart';
 
 class TinderSwiper extends StatefulWidget {
-  final List<Job> jobs;
+  final List<Job>? jobs;
   const TinderSwiper({super.key, required this.jobs});
 
   @override
@@ -14,11 +18,15 @@ class TinderSwiper extends StatefulWidget {
 
 class _TinderSwiperState extends State<TinderSwiper> {
   final CardSwiperController controller = CardSwiperController();
-  late final cards;
+  bool disable = false;
+  late final List<Widget> cards;
+
   @override
   void initState() {
-    cards = widget.jobs.map(TinderCard.new).toList();
     super.initState();
+    cards = widget.jobs != null
+        ? widget.jobs!.map((job) => TinderCard(job)).toList()
+        : [const TinderCard(null)];
   }
 
   @override
@@ -29,15 +37,46 @@ class _TinderSwiperState extends State<TinderSwiper> {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseAuth auth = FirebaseAuth.instance;
+
+    void _updateUserCollection(int index) async {
+      CollectionReference users = FirebaseFirestore.instance.collection('user');
+      String uid = auth.currentUser!.uid;
+      DocumentReference docRef = users.doc(uid).collection("wishlisted").doc();
+
+      await docRef.set({
+        'jobId': widget.jobs?[index].id,
+      }, SetOptions(merge: true));
+    }
+
     bool onSwipe(
       int previousIndex,
       int? currentIndex,
       CardSwiperDirection direction,
     ) {
+      if (currentIndex == null || currentIndex >= widget.jobs!.length) {
+        setState(() {
+          disable = true;
+        });
+      }
       debugPrint(
         'The card $previousIndex was swiped to the ${direction.name}. Now the card $currentIndex is on top',
       );
-      if (direction.name == "right") {}
+      if (direction.name == "right") {
+        if (auth.currentUser == null) {
+          Navigator.push(
+            context,
+            PageRouteBuilder(
+              pageBuilder: (context, animation1, animation2) =>
+                  const LoginPage(),
+              transitionDuration: Duration.zero,
+              reverseTransitionDuration: Duration.zero,
+            ),
+          );
+        } else {
+          _updateUserCollection(previousIndex);
+        }
+      }
       return true;
     }
 
@@ -47,30 +86,78 @@ class _TinderSwiperState extends State<TinderSwiper> {
       CardSwiperDirection direction,
     ) {
       debugPrint(
-        'The card $currentIndex was undod from the ${direction.name}',
+        'The card $currentIndex was undone from the ${direction.name}',
       );
       return true;
     }
 
-    return Flexible(
-      child: CardSwiper(
-        controller: controller,
-        cardsCount: widget.jobs.length,
-        onSwipe: onSwipe,
-        onUndo: onUndo,
-        numberOfCardsDisplayed: 3,
-        backCardOffset: const Offset(20, 20),
-        padding: const EdgeInsets.all(24.0),
-        cardBuilder: (
-          context,
-          index,
-          horizontalThresholdPercentage,
-          verticalThresholdPercentage,
-        ) =>
-            TinderCard(
-          widget.jobs[index],
-        ),
-      ),
+    return CardSwiper(
+      isLoop: false,
+      controller: controller,
+      cardsCount: widget.jobs != null ? widget.jobs!.length + 1 : 1,
+      onSwipe: onSwipe,
+      onUndo: onUndo,
+      numberOfCardsDisplayed: widget.jobs != null ? 3 : 1,
+      backCardOffset: const Offset(20, 20),
+      padding: const EdgeInsets.all(24.0),
+      isDisabled: disable,
+      cardBuilder: (
+        context,
+        index,
+        horizontalThresholdPercentage,
+        verticalThresholdPercentage,
+      ) {
+        return index < widget.jobs!.length
+            ? TinderCard(widget.jobs?[index])
+            : Container(
+                clipBehavior: Clip.hardEdge,
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.2),
+                      spreadRadius: 3,
+                      blurRadius: 7,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                alignment: Alignment.center,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Flexible(
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: headerTextColors,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "No more available Internships",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+      },
     );
   }
 }

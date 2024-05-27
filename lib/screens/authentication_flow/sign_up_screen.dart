@@ -8,6 +8,7 @@ import 'package:internhs/constants/text.dart';
 import 'package:internhs/firebase/user.dart' as db;
 import 'package:internhs/screens/landing_page.dart';
 
+import '../opportunities_page.dart';
 import 'login_screen.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -46,7 +47,19 @@ class _SignUpPageState extends State<SignUpPage> {
           email: currentUser.email!,
           uid: currentUser.uid,
         );
-        await user.addToFirestore();
+        await user.addToFirestore().whenComplete(() {
+          if (_authInstance.currentUser?.uid != null) {
+            Navigator.push(
+              context,
+              PageRouteBuilder(
+                pageBuilder: (context, animation1, animation2) =>
+                    const OpportunitiesPage(),
+                transitionDuration: Duration.zero,
+                reverseTransitionDuration: Duration.zero,
+              ),
+            );
+          }
+        });
       } else {
         if (kDebugMode) {
           print("No user is signed in.");
@@ -472,10 +485,18 @@ class _SignUpPageState extends State<SignUpPage> {
                   GestureDetector(
                       onTap: () {
                         _createUser(
-                                _emailController.text, _passwordController.text)
-                            .then((value) {
-                          // TODO: Navigate to Opportunities
-                        });
+                            _emailController.text, _passwordController.text);
+                        if (_authInstance.currentUser?.uid != null) {
+                          Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder: (context, animation1, animation2) =>
+                                  const OpportunitiesPage(),
+                              transitionDuration: Duration.zero,
+                              reverseTransitionDuration: Duration.zero,
+                            ),
+                          );
+                        }
                       },
                       child: buildCreateAccount()),
                 ],

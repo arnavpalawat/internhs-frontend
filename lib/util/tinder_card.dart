@@ -5,7 +5,7 @@ import 'package:internhs/constants/device.dart';
 import 'job.dart';
 
 class TinderCard extends StatelessWidget {
-  final Job job;
+  final Job? job;
 
   const TinderCard(
     this.job, {
@@ -15,14 +15,14 @@ class TinderCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Widget> buildPrestige() {
-      int index = 5 - job.prestige;
+      int index = 5 - job!.prestige;
       List<Widget> output = [
         SizedBox(
           width: width(context) * 0.005,
         ),
       ];
 
-      for (int i = 1; i <= job.prestige; i++) {
+      for (int i = 1; i <= job!.prestige; i++) {
         output.add(
           const Icon(Icons.star, size: 10),
         );
@@ -80,7 +80,7 @@ class TinderCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  job.jobTitle,
+                  job?.jobTitle ?? "No Jobs Available",
                   style: const TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
@@ -89,7 +89,7 @@ class TinderCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 5),
                 Text(
-                  job.companyName,
+                  job?.companyName ?? "",
                   style: const TextStyle(
                     color: Colors.grey,
                     fontSize: 15,
