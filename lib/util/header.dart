@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:internhs/screens/opportunities_page.dart';
 
-import 'constants/colors.dart';
-import 'constants/device.dart';
-import 'constants/text.dart';
+import '../constants/colors.dart';
+import '../constants/device.dart';
+import '../constants/text.dart';
 
 class BuildHeader extends StatefulWidget {
   final Widget button;
@@ -57,7 +58,19 @@ class _BuildHeaderState extends State<BuildHeader> {
                 SizedBox(
                   width: width(context) * 0.05,
                 ),
-                text("Opportunities"),
+                GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder: (context, animation1, animation2) =>
+                              const OpportunitiesPage(),
+                          transitionDuration: Duration.zero,
+                          reverseTransitionDuration: Duration.zero,
+                        ),
+                      );
+                    },
+                    child: text("Opportunities")),
                 SizedBox(
                   width: width(context) * 0.05,
                 ),

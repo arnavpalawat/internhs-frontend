@@ -17,6 +17,8 @@ dependencies:
   cloud_firestore: ^4.15.8
   google_sign_in: ^6.2.1
   sizing: ^1.1.2
+  flutter_swipable: ^1.2.1
+  flutter_card_swiper: ^7.0.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

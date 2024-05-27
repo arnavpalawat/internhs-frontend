@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'colors.dart';
 
 const headerTextStyle = TextStyle(
+  color: Colors.white,
   fontSize: 25,
   fontFamily: 'Inter',
   fontWeight: FontWeight.w500,

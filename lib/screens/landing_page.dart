@@ -6,7 +6,7 @@ import 'package:internhs/constants/text.dart';
 import 'package:internhs/screens/authentication_flow/login_screen.dart';
 import 'package:internhs/screens/authentication_flow/sign_up_screen.dart';
 
-import '../header.dart';
+import '../util/header.dart';
 
 class LandingPage extends StatefulWidget {
   const LandingPage({super.key});
@@ -110,7 +110,7 @@ class _LandingPageState extends State<LandingPage>
         TextSpan(
           children: [
             TextSpan(
-              text: 'Establishing teens with\n',
+              text: 'Establishing teens \n',
               style: announcementTextStyle.copyWith(
                   fontSize: height(context) * 0.095),
             ),
