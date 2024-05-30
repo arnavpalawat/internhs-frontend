@@ -14,15 +14,17 @@ class TinderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Builds the stars representing job prestige
     List<Widget> buildPrestige() {
+      // Calculate the number of empty stars
       num index = 5 - int.parse(job!.prestige ?? "0");
-      ;
       List<Widget> output = [
         SizedBox(
           width: width(context) * 0.005,
         ),
       ];
 
+      // Add filled stars
       for (int i = 1; i <= int.parse(job!.prestige ?? "0"); i++) {
         output.add(
           const Icon(Icons.star, size: 10),
@@ -33,6 +35,8 @@ class TinderCard extends StatelessWidget {
           ),
         );
       }
+
+      // Add empty stars
       for (num i = index; i > 0; i -= 1) {
         output.add(
           const Icon(Icons.star_border_outlined, size: 10),
@@ -64,6 +68,7 @@ class TinderCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Stack to overlap gradient and flag icon
           Stack(
             clipBehavior: Clip.none,
             children: [
@@ -76,15 +81,20 @@ class TinderCard extends StatelessWidget {
                   ),
                 ),
               ),
-              job?.flagged == null || job?.flagged == true
-                  ? const Align(
-                      alignment: Alignment.topRight,
-                      child: Icon(
-                        Icons.bookmark,
-                        color: Colors.amber,
-                      ),
-                    )
-                  : Container()
+              // Display bookmark icon if job is flagged
+              if (job?.flagged == null || job?.flagged == true)
+                const Align(
+                  alignment: Alignment.topRight,
+                  child: Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Icon(
+                      Icons.bookmark,
+                      color: Colors.amber,
+                    ),
+                  ),
+                )
+              else
+                Container(),
             ],
           ),
           Padding(
@@ -109,7 +119,7 @@ class TinderCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 5),
-                Row(children: buildPrestige()),
+                Row(children: buildPrestige()), // Display job prestige stars
               ],
             ),
           ),

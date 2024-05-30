@@ -60,6 +60,7 @@ class _LandingPageState extends State<LandingPage>
   Widget buildLoginButton() {
     return GestureDetector(
       onTap: () {
+        // Navigate to login screen
         Navigator.push(
           context,
           PageRouteBuilder(
@@ -114,8 +115,7 @@ class _LandingPageState extends State<LandingPage>
               style: announcementTextStyle.copyWith(
                   fontSize: height(context) * 0.095),
             ),
-
-            /// Italic
+            // Italic
             TextSpan(
               text: 'initiative ',
               style: italicAnnouncementTextStyle.copyWith(
@@ -131,8 +131,7 @@ class _LandingPageState extends State<LandingPage>
               style: announcementTextStyle.copyWith(
                   fontSize: height(context) * 0.095),
             ),
-
-            /// Italic
+            // Italic
             TextSpan(
               text: ' internship\n',
               style: italicAnnouncementTextStyle.copyWith(
@@ -177,7 +176,6 @@ class _LandingPageState extends State<LandingPage>
     );
   }
 
-  // Button Template
   Widget buildButton(Color color, String text) {
     // Post animation Icon
     Widget buildIcon({required double size}) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:internhs/screens/landing_page.dart';
 import 'package:internhs/screens/opportunities_page.dart';
 
 import '../constants/colors.dart';
@@ -7,6 +8,7 @@ import '../constants/text.dart';
 
 class BuildHeader extends StatefulWidget {
   final Widget button;
+
   const BuildHeader({super.key, required this.button});
 
   @override
@@ -16,6 +18,7 @@ class BuildHeader extends StatefulWidget {
 class _BuildHeaderState extends State<BuildHeader> {
   @override
   Widget build(BuildContext context) {
+    // Function to create styled text widgets
     Widget text(String text) {
       return Text(
         text,
@@ -38,8 +41,7 @@ class _BuildHeaderState extends State<BuildHeader> {
                 borderRadius: BorderRadius.circular(29),
               ),
             ),
-
-            /// Header items
+            // Header items
             child: Row(
               children: [
                 Padding(
@@ -50,7 +52,21 @@ class _BuildHeaderState extends State<BuildHeader> {
                   ),
                 ),
                 const Spacer(),
-                text("Home"),
+                GestureDetector(
+                  onTap: () {
+                    // Navigate to LandingPage
+                    Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation1, animation2) =>
+                            const LandingPage(),
+                        transitionDuration: Duration.zero,
+                        reverseTransitionDuration: Duration.zero,
+                      ),
+                    );
+                  },
+                  child: text("Home"),
+                ),
                 SizedBox(
                   width: width(context) * 0.05,
                 ),
@@ -59,18 +75,20 @@ class _BuildHeaderState extends State<BuildHeader> {
                   width: width(context) * 0.05,
                 ),
                 GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        PageRouteBuilder(
-                          pageBuilder: (context, animation1, animation2) =>
-                              const OpportunitiesPage(),
-                          transitionDuration: Duration.zero,
-                          reverseTransitionDuration: Duration.zero,
-                        ),
-                      );
-                    },
-                    child: text("Opportunities")),
+                  onTap: () {
+                    // Navigate to OpportunitiesPage
+                    Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation1, animation2) =>
+                            const OpportunitiesPage(),
+                        transitionDuration: Duration.zero,
+                        reverseTransitionDuration: Duration.zero,
+                      ),
+                    );
+                  },
+                  child: text("Opportunities"),
+                ),
                 SizedBox(
                   width: width(context) * 0.05,
                 ),
