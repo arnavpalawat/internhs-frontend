@@ -15,14 +15,15 @@ class TinderCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Widget> buildPrestige() {
-      int index = 5 - job!.prestige;
+      num index = 5 - int.parse(job!.prestige ?? "0");
+      ;
       List<Widget> output = [
         SizedBox(
           width: width(context) * 0.005,
         ),
       ];
 
-      for (int i = 1; i <= job!.prestige; i++) {
+      for (int i = 1; i <= int.parse(job!.prestige ?? "0"); i++) {
         output.add(
           const Icon(Icons.star, size: 10),
         );
@@ -32,7 +33,7 @@ class TinderCard extends StatelessWidget {
           ),
         );
       }
-      for (int i = index; i > 0; i -= 1) {
+      for (num i = index; i > 0; i -= 1) {
         output.add(
           const Icon(Icons.star_border_outlined, size: 10),
         );
@@ -63,16 +64,28 @@ class TinderCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Flexible(
-            child: Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: headerTextColors,
+          Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: headerTextColors,
+                  ),
                 ),
               ),
-            ),
+              job?.flagged == null || job?.flagged == true
+                  ? const Align(
+                      alignment: Alignment.topRight,
+                      child: Icon(
+                        Icons.bookmark,
+                        color: Colors.amber,
+                      ),
+                    )
+                  : Container()
+            ],
           ),
           Padding(
             padding: const EdgeInsets.all(16),
@@ -80,7 +93,7 @@ class TinderCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  job?.jobTitle ?? "No Jobs Available",
+                  job?.title.toString() ?? "No Jobs Available",
                   style: const TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
@@ -89,7 +102,7 @@ class TinderCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 5),
                 Text(
-                  job?.companyName ?? "",
+                  job?.company.toString() ?? "",
                   style: const TextStyle(
                     color: Colors.grey,
                     fontSize: 15,

@@ -17,37 +17,7 @@ class OpportunitiesPage extends StatefulWidget {
 class _OpportunitiesPageState extends State<OpportunitiesPage> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  // List<Job> jobs = [
-  //   Job(
-  //     null,
-  //     companyName: 'Mckinsey',
-  //     prestige: 5,
-  //     jobTitle: 'Consultant',
-  //     field: 'Business',
-  //   ),
-  //   Job(
-  //     null,
-  //     companyName: 'Google',
-  //     prestige: 5,
-  //     jobTitle: 'Software Engineer',
-  //     field: 'Computer Science',
-  //   ),
-  //   Job(
-  //     null,
-  //     companyName: 'Moody Street Group',
-  //     prestige: 2,
-  //     jobTitle: 'Marketing Intern',
-  //     field: 'Business',
-  //   ),
-  //   Job(
-  //     null,
-  //     companyName: 'Nasa',
-  //     prestige: 1,
-  //     jobTitle: 'Aerospace Engineer',
-  //     field: 'Engineering',
-  //   ),
-  // ];
-  Widget card(text) {
+  Widget card(String text) {
     return Container(
       alignment: Alignment.center,
       color: Colors.blue,
@@ -57,16 +27,19 @@ class _OpportunitiesPageState extends State<OpportunitiesPage> {
 
   /// Get Jobs
   Future<List<Job>> fetchJobs() async {
-    QuerySnapshot querySnapshot = await _firestore.collection('jobs').get();
-    return querySnapshot.docs.map((doc) => Job.fromFirestore(doc)).toList();
+    try {
+      QuerySnapshot querySnapshot = await _firestore.collection('jobs').get();
+      return querySnapshot.docs
+          .map((doc) => Job.fromFirebase(doc.data() as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      print('Error fetching jobs: $e');
+      return [];
+    }
   }
 
   @override
   void initState() {
-    // for (Job job in jobs) {
-    //   job.addJob();
-    // }
-
     super.initState();
   }
 
@@ -86,23 +59,31 @@ class _OpportunitiesPageState extends State<OpportunitiesPage> {
                   height: height(context) * 0.45,
                   width: width(context) * 0.25,
                   child: FutureBuilder<List<Job>>(
-                    builder: (context, jobs) {
-                      if (jobs.connectionState == ConnectionState.waiting) {
+                    future: fetchJobs(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
                         return Center(
                           child: LoadingAnimationWidget.twoRotatingArc(
                             color: Colors.white,
                             size: 20,
                           ),
                         );
+                      } else if (snapshot.hasError) {
+                        return Center(
+                          child: Text('Error: ${snapshot.error}'),
+                        );
+                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        return const Center(
+                          child: Text('No jobs available'),
+                        );
                       } else {
-                        return TinderSwiper(jobs: jobs.data);
+                        return TinderSwiper(jobs: snapshot.data!);
                       }
                     },
-                    future: fetchJobs(),
                   ),
                 ),
               ],
-            )
+            ),
           ],
         ),
       ),

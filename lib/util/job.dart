@@ -1,54 +1,72 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Job {
-  String? id;
-  final String companyName;
-  final String jobTitle;
-  final int prestige;
-  final String field;
+  bool? flagged;
+  dynamic id;
+  dynamic company;
+  dynamic title;
+  dynamic prestige; // Adjusted type to dynamic
+  dynamic field;
+  dynamic description;
+  dynamic link;
 
-  Job(
-    this.id, {
-    required this.companyName,
+  Job({
+    required this.flagged,
+    required this.id,
+    required this.company,
+    required this.title,
     required this.prestige,
-    required this.jobTitle,
     required this.field,
-  });
-  factory Job.fromFirestore(DocumentSnapshot doc) {
-    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+    required this.description,
+    required this.link,
+  }) {
+    // Set defaults if any parameter is null
+    flagged ??= false;
+    id ??= 'N/A';
+    company ??= 'N/A';
+    title ??= 'N/A';
+    prestige ??= 'N/A';
+    field ??= 'N/A';
+    description ??= 'N/A';
+    link ??= 'N/A';
+  }
+
+  factory Job.fromFirebase(Map<String, dynamic> data) {
     return Job(
-      doc.id,
-      companyName: data['companyName'],
-      jobTitle: data['jobTitle'],
-      prestige: data['prestige'],
-      field: data['field'],
+      flagged: data['flagged'] ?? false,
+      company: data['company'] ?? '',
+      description: data['description'] ?? '',
+      field: data['field'] ?? '',
+      id: data['id'] ?? '',
+      link: data['link'] ?? '',
+      prestige: data['prestige'] ?? '',
+      title: data['title'] ?? '',
     );
   }
   // Convert a Job object into a map object
-  // Map<String, dynamic> toMap() {
-  //   return {
-  //     'id': id,
-  //     'companyName': companyName,
-  //     'jobTitle': jobTitle,
-  //     'prestige': prestige,
-  //     'field': field,
-  //   };
-  // }
-  //
-  // Future<void> addJob() async {
-  //   final FirebaseFirestore db = FirebaseFirestore.instance;
-  //   DocumentReference docRef = db.collection("jobs").doc();
-  //   String jobId = docRef.id;
-  //   id = jobId;
-  //   try {
-  //     await docRef.set(toMap());
-  //     if (kDebugMode) {
-  //       print('Job added successfully');
-  //     }
-  //   } catch (e) {
-  //     if (kDebugMode) {
-  //       print('Error adding job: $e');
-  //     }
-  //   }
-  // }
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'flagged': flagged,
+      'company': company,
+      'title': title,
+      'prestige': prestige,
+      'field': field,
+      'description': description,
+      'link': link,
+    };
+  }
+
+  Future<void> addJob() async {
+    final FirebaseFirestore db = FirebaseFirestore.instance;
+    DocumentReference docRef = db.collection("jobs").doc();
+    String jobId = docRef.id;
+    id = jobId;
+    try {
+      await docRef.set(toMap());
+      print('Job added successfully');
+    } catch (e) {
+      print('Error adding job: $e');
+    }
+  }
 }
