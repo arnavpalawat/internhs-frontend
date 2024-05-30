@@ -19,6 +19,10 @@ class OpportunitiesPage extends StatefulWidget {
 
 class _OpportunitiesPageState extends State<OpportunitiesPage> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final TextEditingController _searchController = TextEditingController();
+  List<Job> jobs = [];
+  List<Job> originalJobs = [];
+  bool initialAddition = false;
 
   Widget card(String text) {
     return Container(
@@ -49,7 +53,7 @@ class _OpportunitiesPageState extends State<OpportunitiesPage> {
           context,
           PageRouteBuilder(
             pageBuilder: (context, animation1, animation2) =>
-                Placeholder(//TODO: Add account screen
+                const Placeholder(//TODO: Add account screen
                     ),
             transitionDuration: Duration.zero,
             reverseTransitionDuration: Duration.zero,
@@ -89,18 +93,59 @@ class _OpportunitiesPageState extends State<OpportunitiesPage> {
   }
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    TextFormField buildTextFormField() {
+      return TextFormField(
+        onEditingComplete: () {
+          setState(() {
+            _searchController.text.toString() == ""
+                ? jobs = originalJobs.where((element) {
+                    return element.field == _searchController.text;
+                  }).toList()
+                : jobs = originalJobs;
+          });
+        },
+        controller: _searchController,
+        textAlignVertical: TextAlignVertical.center,
+        textAlign: TextAlign.center,
+        style: authTextStyle.copyWith(
+            fontSize: height(context) * 20 / 840, height: 1.5),
+        decoration: textFieldDecoration.copyWith(
+          filled: true,
+          hintText: "Search for a Field (Exact Field): ",
+          fillColor: Colors.white,
+          suffixIcon: const Icon(
+            Icons.search,
+            color: headerColor,
+          ),
+          border: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(10.0),
+            ),
+            borderSide: BorderSide(
+              width: 0,
+              style: BorderStyle.none,
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.white),
+            borderRadius: BorderRadius.circular(25.7),
+          ),
+          enabledBorder: UnderlineInputBorder(
+            borderSide: const BorderSide(color: Colors.white),
+            borderRadius: BorderRadius.circular(25.7),
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
       body: Container(
         height: double.infinity,
         width: double.infinity,
         decoration: backgroundColor,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
               height: height(context) * 0.015,
@@ -114,6 +159,14 @@ class _OpportunitiesPageState extends State<OpportunitiesPage> {
               height: height(context) * 0.015,
             ),
             // Opportunities section
+            Padding(
+              padding: const EdgeInsets.fromLTRB(30, 30, 30, 0),
+              child: SizedBox(
+                width: width(context) * 0.25,
+                height: height(context) * 56 / 840,
+                child: buildTextFormField(),
+              ),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -142,8 +195,14 @@ class _OpportunitiesPageState extends State<OpportunitiesPage> {
                           child: Text('No jobs available'),
                         );
                       } else {
+                        if (initialAddition == false) {
+                          originalJobs = snapshot.data!;
+                          jobs = originalJobs;
+                          initialAddition = true;
+                        }
+
                         // Display TinderSwiper with fetched jobs
-                        return TinderSwiper(jobs: snapshot.data!);
+                        return TinderSwiper(jobs: jobs);
                       }
                     },
                   ),
