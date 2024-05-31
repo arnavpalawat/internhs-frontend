@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:internhs/constants/colors.dart';
@@ -22,15 +23,10 @@ class _OpportunitiesPageState extends State<OpportunitiesPage> {
   final TextEditingController _searchController = TextEditingController();
   List<Job> jobs = [];
   List<Job> originalJobs = [];
-  bool initialAddition = false;
 
-  Widget card(String text) {
-    return Container(
-      alignment: Alignment.center,
-      color: Colors.blue,
-      child: Text(text),
-    );
-  }
+  List<Job> wishlistedJobs = [];
+  List<Job> originalWishlist = [];
+  bool initialAddition = false;
 
   /// Get Jobs
   Future<List<Job>> fetchJobs() async {
@@ -42,6 +38,121 @@ class _OpportunitiesPageState extends State<OpportunitiesPage> {
     } catch (e) {
       print('Error fetching jobs: $e');
       return [];
+    }
+  }
+
+  Future<List<String>> fetchWishlist() async {
+    List<String> ids = [];
+    try {
+      FirebaseAuth _auth = FirebaseAuth.instance;
+      QuerySnapshot querySnapshot = await _firestore
+          .collection('user')
+          .doc(_auth.currentUser!.uid)
+          .collection("wishlisted")
+          .get();
+
+      querySnapshot.docs.forEach((doc) {
+        ids.add(doc['jobId']);
+      });
+      print(ids.length);
+      return ids;
+    } catch (e) {
+      print('Error fetching jobs: $e');
+      return [];
+    }
+  }
+
+  Widget card(String text) {
+    return Container(
+      alignment: Alignment.center,
+      color: Colors.blue,
+      child: Text(text),
+    );
+  }
+
+  Widget buildWishlist() {
+    FirebaseAuth _auth = FirebaseAuth.instance;
+    if (_auth.currentUser == null) {
+      return Container(
+        child: const Text("Login please first"),
+      );
+    } else {
+      return Container(
+        padding: EdgeInsets.all(8.0),
+        width: width(context) * 0.25,
+        height: height(context) * 0.75,
+        decoration: authBoxDecorations,
+        child: FutureBuilder<List<String>>(
+            future: fetchWishlist(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                // Display loading animation while fetching jobs
+                return Center(
+                  child: LoadingAnimationWidget.twoRotatingArc(
+                    color: Colors.white,
+                    size: 20,
+                  ),
+                );
+              } else if (snapshot.hasError) {
+                // Display error message if fetching fails
+                return Center(
+                  child: Text('Error: ${snapshot.error}'),
+                );
+              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                // Display message if no jobs available
+                return const Center(
+                  child: Text('No jobs available'),
+                );
+              } else {
+                return SingleChildScrollView(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: snapshot.data!.length - 1,
+                    itemBuilder: (context, index) {
+                      print(index);
+                      // Get wishlisted job
+                      Job job = jobs.firstWhere(
+                          (element) => element.id == snapshot.data?[index]);
+                      return Column(
+                        children: [
+                          Container(
+                            height: height(context) * 0.08,
+                            decoration: authBoxDecorations,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(job.title.length > 35
+                                      ? "${job.title.toString().substring(0, 33)}... \n @ ${job.company.length > 35 ? "${job.company.toString().substring(0, 33)}..." : job.company}"
+                                      : job.title + "\n @ ${job.company}"),
+                                ),
+                                const Spacer(),
+                                const Icon(
+                                  Icons.favorite,
+                                  color: Colors.pinkAccent,
+                                ),
+                                const Icon(Icons.arrow_forward_ios_rounded)
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: height(context) * 0.005,
+                          ),
+                          SizedBox(
+                            width: width(context) * 0.225,
+                            child: Divider(
+                              height: height(context) * 0.01,
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                );
+              }
+            }),
+      );
     }
   }
 
@@ -145,7 +256,6 @@ class _OpportunitiesPageState extends State<OpportunitiesPage> {
         width: double.infinity,
         decoration: backgroundColor,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
               height: height(context) * 0.015,
@@ -154,59 +264,80 @@ class _OpportunitiesPageState extends State<OpportunitiesPage> {
             BuildHeader(
               button: buildAccountButton(),
             ),
-            // Space Below Header
-            SizedBox(
-              height: height(context) * 0.015,
-            ),
-            // Opportunities section
-            Padding(
-              padding: const EdgeInsets.fromLTRB(30, 30, 30, 0),
-              child: SizedBox(
-                width: width(context) * 0.25,
-                height: height(context) * 56 / 840,
-                child: buildTextFormField(),
-              ),
-            ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                  height: height(context) * 0.45,
-                  width: width(context) * 0.25,
-                  child: FutureBuilder<List<Job>>(
-                    future: fetchJobs(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        // Display loading animation while fetching jobs
-                        return Center(
-                          child: LoadingAnimationWidget.twoRotatingArc(
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                        );
-                      } else if (snapshot.hasError) {
-                        // Display error message if fetching fails
-                        return Center(
-                          child: Text('Error: ${snapshot.error}'),
-                        );
-                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                        // Display message if no jobs available
-                        return const Center(
-                          child: Text('No jobs available'),
-                        );
-                      } else {
-                        if (initialAddition == false) {
-                          originalJobs = snapshot.data!;
-                          jobs = originalJobs;
-                          initialAddition = true;
-                        }
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Space Below Header
+                    SizedBox(
+                      height: height(context) * 0.015,
+                    ),
+                    // Opportunities section
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(30, 30, 30, 0),
+                      child: SizedBox(
+                        width: width(context) * 0.25,
+                        height: height(context) * 56 / 840,
+                        child: buildTextFormField(),
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: height(context) * 0.45,
+                          width: width(context) * 0.25,
+                          child: FutureBuilder<List<Job>>(
+                            future: fetchJobs(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                // Display loading animation while fetching jobs
+                                return Center(
+                                  child: LoadingAnimationWidget.twoRotatingArc(
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
+                                );
+                              } else if (snapshot.hasError) {
+                                // Display error message if fetching fails
+                                return Center(
+                                  child: Text('Error: ${snapshot.error}'),
+                                );
+                              } else if (!snapshot.hasData ||
+                                  snapshot.data!.isEmpty) {
+                                // Display message if no jobs available
+                                return const Center(
+                                  child: Text('No jobs available'),
+                                );
+                              } else {
+                                if (initialAddition == false) {
+                                  originalJobs = snapshot.data!;
+                                  jobs = originalJobs;
+                                  initialAddition = true;
+                                }
 
-                        // Display TinderSwiper with fetched jobs
-                        return TinderSwiper(jobs: jobs);
-                      }
-                    },
-                  ),
+                                // Display TinderSwiper with fetched jobs
+                                return TinderSwiper(jobs: jobs);
+                              }
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
+                Column(
+                  children: [
+                    SizedBox(
+                      height: height(context) * 0.05,
+                    ),
+                    buildWishlist(),
+                  ],
+                )
               ],
             )
                 .animate()
