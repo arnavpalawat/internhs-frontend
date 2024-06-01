@@ -77,3 +77,9 @@ InputDecoration textFieldDecoration = InputDecoration(
     borderRadius: BorderRadius.circular(12),
   ),
 );
+
+const header2TextStyle = TextStyle(
+  color: Colors.black,
+  fontWeight: FontWeight.bold,
+  fontSize: 20,
+);

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:internhs/constants/colors.dart';
 import 'package:internhs/constants/device.dart';
+import 'package:internhs/constants/text.dart';
 
 import 'job.dart';
 
@@ -102,14 +103,8 @@ class TinderCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  job?.title.toString() ?? "No Jobs Available",
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                  ),
-                ),
+                Text(job?.title.toString() ?? "No Jobs Available",
+                    style: header2TextStyle),
                 const SizedBox(height: 5),
                 Text(
                   job?.company.toString() ?? "",

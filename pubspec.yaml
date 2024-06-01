@@ -32,6 +32,7 @@ flutter:
     - lib/assets/images/landing-vector.png
     - lib/assets/images/auth_background.png
     - lib/assets/images/google.png
+    - lib/assets/images/opportunities.png
   fonts:
     - family: Lora
       fonts:
