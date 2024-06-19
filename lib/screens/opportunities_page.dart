@@ -44,7 +44,9 @@ class _OpportunitiesPageState extends State<OpportunitiesPage> {
 
       // Fetch wishlisted and unliked jobs for the user
       if (_auth.currentUser?.uid == null) {
-        jobFetchComplete = true;
+        setState(() {
+          jobFetchComplete = true;
+        });
 
         return jobs;
       } else {
@@ -59,7 +61,11 @@ class _OpportunitiesPageState extends State<OpportunitiesPage> {
             .doc(_auth.currentUser?.uid)
             .collection('unliked')
             .get()
-            .whenComplete(() => jobFetchComplete = true);
+            .whenComplete(() {
+          setState(() {
+            jobFetchComplete = true;
+          });
+        });
 
         // Get list of job IDs wishlisted by the user
         List<String> wishlistedJobIds =
@@ -67,7 +73,7 @@ class _OpportunitiesPageState extends State<OpportunitiesPage> {
 
         // Get list of job IDs unliked by the user
         List<String> unlikedJobIds =
-            unlikedSnapshot.docs.map((doc) => doc['jobId'] as String).toList();
+            unlikedSnapshot.docs.map((doc) => doc.id).toList();
 
         // Filter out wishlisted and unliked jobs
         List<Job> filteredJobs = jobs.where((job) {
@@ -111,14 +117,16 @@ class _OpportunitiesPageState extends State<OpportunitiesPage> {
     FirebaseAuth _auth = FirebaseAuth.instance;
     if (_auth.currentUser == null) {
       return !jobFetchComplete
-          ? Container(
-              padding: const EdgeInsets.all(8.0),
-              width: width(context) * 0.25,
-              height: height(context) * 0.75,
-              decoration: authBoxDecorations,
-              child: LoadingAnimationWidget.twoRotatingArc(
-                color: Colors.black.withOpacity(0.6),
-                size: 20,
+          ? Center(
+              child: Container(
+                padding: const EdgeInsets.all(8.0),
+                width: width(context) * 0.25,
+                height: height(context) * 0.75,
+                decoration: authBoxDecorations,
+                child: LoadingAnimationWidget.twoRotatingArc(
+                  color: Colors.black.withOpacity(0.6),
+                  size: 20,
+                ),
               ),
             )
           : GestureDetector(
@@ -164,163 +172,139 @@ class _OpportunitiesPageState extends State<OpportunitiesPage> {
               ),
             );
     } else {
-      return Container(
-        padding: const EdgeInsets.all(8.0),
-        width: width(context) * 0.25,
-        height: height(context) * 0.75,
-        decoration: authBoxDecorations,
-        child: StreamBuilder<List<String>>(
-            stream: _wishlistedStream,
-            builder: (context, snapshot) {
-              bool wishlisted = true;
-
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                // Display loading animation while fetching jobs
-                return LoadingAnimationWidget.twoRotatingArc(
+      return !jobFetchComplete
+          ? Center(
+              child: Container(
+                padding: const EdgeInsets.all(8.0),
+                width: width(context) * 0.25,
+                height: height(context) * 0.75,
+                decoration: authBoxDecorations,
+                child: LoadingAnimationWidget.twoRotatingArc(
                   color: Colors.black.withOpacity(0.6),
                   size: 20,
-                );
-              } else if (snapshot.hasError) {
-                // Display error message if fetching fails
-                return Center(
-                  child: Text('Error: ${snapshot.error}'),
-                );
-              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                // Display message if no jobs available
-                return const Center(
-                  child: Text('No Wishlisted Jobs'),
-                );
-              } else {
-                return SingleChildScrollView(
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: snapshot.data!.length,
-                    itemBuilder: (context, index) {
-                      // Get wishlisted job
-                      Job job = originalJobs.firstWhere(
-                          (element) => element.id == snapshot.data?[index]);
-                      return GestureDetector(
-                        onTap: () {
-                          js.context
-                              .callMethod('open', [job.link ?? "indeed.com"]);
-                        },
-                        child: Column(
-                          children: [
-                            Container(
-                              height: height(context) * 0.08,
-                              decoration: authBoxDecorations,
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
+                ),
+              ),
+            )
+          : Container(
+              padding: const EdgeInsets.all(8.0),
+              width: width(context) * 0.25,
+              height: height(context) * 0.75,
+              decoration: authBoxDecorations,
+              child: StreamBuilder<List<String>>(
+                  stream: _wishlistedStream,
+                  builder: (context, snapshot) {
+                    bool wishlisted = true;
+
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      // Display loading animation while fetching jobs
+                      return LoadingAnimationWidget.twoRotatingArc(
+                        color: Colors.black.withOpacity(0.6),
+                        size: 20,
+                      );
+                    } else if (snapshot.hasError) {
+                      // Display error message if fetching fails
+                      return Center(
+                        child: Text('Error: ${snapshot.error}'),
+                      );
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      // Display message if no jobs available
+                      return const Center(
+                        child: Text('No Wishlisted Jobs'),
+                      );
+                    } else {
+                      return SingleChildScrollView(
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) {
+                            // Get wishlisted job
+                            Job job = originalJobs.firstWhere((element) =>
+                                element.id == snapshot.data?[index]);
+                            return GestureDetector(
+                              onTap: () {
+                                js.context.callMethod(
+                                    'open', [job.link ?? "indeed.com"]);
+                              },
+                              child: Column(
                                 children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(job.title.length > 30
-                                        ? "${job.title.toString().substring(0, 26)}... \n @ ${job.company.length > 26 ? "${job.company.toString().substring(0, 22)}..." : job.company}"
-                                        : job.title + "\n @ ${job.company}"),
-                                  ),
-                                  const Spacer(),
-                                  GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        wishlisted = false;
-                                      });
-                                      _firestore
-                                          .collection('user')
-                                          .doc(_auth.currentUser?.uid)
-                                          .collection("wishlisted")
-                                          .doc(job.id)
-                                          .delete();
-                                    },
-                                    child: wishlisted
-                                        ? const Icon(
-                                            Icons.favorite,
-                                            color: Colors.pinkAccent,
-                                          )
-                                        : Icon(
-                                            Icons.favorite_border_outlined,
-                                            color:
-                                                Colors.black.withOpacity(0.6),
-                                          ),
+                                  Container(
+                                    height: height(context) * 0.08,
+                                    decoration: authBoxDecorations,
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(job.title.length > 30
+                                              ? "${job.title.toString().substring(0, 26)}... \n @ ${job.company.length > 26 ? "${job.company.toString().substring(0, 22)}..." : job.company}"
+                                              : job.title +
+                                                  "\n @ ${job.company}"),
+                                        ),
+                                        const Spacer(),
+                                        GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              wishlisted = false;
+                                            });
+                                            _firestore
+                                                .collection('user')
+                                                .doc(_auth.currentUser?.uid)
+                                                .collection("wishlisted")
+                                                .doc(job.id)
+                                                .delete();
+                                            _firestore
+                                                .collection('user')
+                                                .doc(_auth.currentUser?.uid)
+                                                .collection("unliked")
+                                                .add(
+                                              {"jobId": job.id},
+                                            );
+                                          },
+                                          child: wishlisted
+                                              ? const Icon(
+                                                  Icons.favorite,
+                                                  color: Colors.pinkAccent,
+                                                )
+                                              : Icon(
+                                                  Icons
+                                                      .favorite_border_outlined,
+                                                  color: Colors.black
+                                                      .withOpacity(0.6),
+                                                ),
+                                        ),
+                                        SizedBox(
+                                          width: width(context) * 0.005,
+                                        ),
+                                        Icon(
+                                          Icons.arrow_forward_ios_rounded,
+                                          color: Colors.black.withOpacity(0.6),
+                                        ),
+                                        SizedBox(
+                                          width: width(context) * 0.005,
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                   SizedBox(
-                                    width: width(context) * 0.005,
-                                  ),
-                                  Icon(
-                                    Icons.arrow_forward_ios_rounded,
-                                    color: Colors.black.withOpacity(0.6),
+                                    height: height(context) * 0.005,
                                   ),
                                   SizedBox(
-                                    width: width(context) * 0.005,
+                                    width: width(context) * 0.225,
+                                    child: Divider(
+                                      height: height(context) * 0.01,
+                                    ),
                                   ),
                                 ],
                               ),
-                            ),
-                            SizedBox(
-                              height: height(context) * 0.005,
-                            ),
-                            SizedBox(
-                              width: width(context) * 0.225,
-                              child: Divider(
-                                height: height(context) * 0.01,
-                              ),
-                            ),
-                          ],
+                            );
+                          },
                         ),
                       );
-                    },
-                  ),
-                );
-              }
-            }),
-      );
+                    }
+                  }),
+            );
     }
-  }
-
-  Widget buildAccountButton() {
-    return GestureDetector(
-      onTap: () {
-        // Navigate to account screen
-        Navigator.push(
-          context,
-          PageRouteBuilder(
-            pageBuilder: (context, animation1, animation2) =>
-                const Placeholder(//TODO: Add account screen
-                    ),
-            transitionDuration: Duration.zero,
-            reverseTransitionDuration: Duration.zero,
-          ),
-        );
-      },
-      child: Container(
-        width: width(context) * 0.09,
-        height: height(context) * 0.06,
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-        decoration: ShapeDecoration(
-          color: accentColor,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          shadows: const [
-            BoxShadow(
-              color: Color(0x0C000000),
-              blurRadius: 2,
-              offset: Offset(0, 1),
-              spreadRadius: 0,
-            )
-          ],
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              'Account',
-              style: whiteButtonTextStyle.copyWith(
-                  fontSize: height(context) * 16 / 840),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 
   @override
@@ -334,13 +318,17 @@ class _OpportunitiesPageState extends State<OpportunitiesPage> {
     TextFormField buildTextFormField() {
       return TextFormField(
         onEditingComplete: () {
-          setState(() {
-            _searchController.text.toString() == ""
-                ? jobs = originalJobs.where((element) {
-                    return element.field == _searchController.text;
-                  }).toList()
-                : jobs = originalJobs;
-          });
+          setState(
+            () {
+              _searchController.text.toString() == ""
+                  ? jobs = originalJobs.where(
+                      (element) {
+                        return element.field == _searchController.text;
+                      },
+                    ).toList()
+                  : jobs = originalJobs;
+            },
+          );
         },
         controller: _searchController,
         textAlignVertical: TextAlignVertical.center,
@@ -397,9 +385,7 @@ class _OpportunitiesPageState extends State<OpportunitiesPage> {
                   height: height(context) * 0.015,
                 ),
                 // Header section
-                BuildHeader(
-                  button: buildAccountButton(),
-                ),
+                const BuildHeader(),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -424,7 +410,7 @@ class _OpportunitiesPageState extends State<OpportunitiesPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             SizedBox(
-                              height: height(context) * 0.45,
+                              height: height(context) * 0.65,
                               width: width(context) * 0.25,
                               child: FutureBuilder<List<Job>>(
                                 future: fetchJobs(),
@@ -457,7 +443,7 @@ class _OpportunitiesPageState extends State<OpportunitiesPage> {
                                     }
 
                                     // Display TinderSwiper with fetched jobs
-                                    return TinderSwiper(jobs: snapshot.data);
+                                    return TinderSwiper(jobs: jobs);
                                   }
                                 },
                               ),

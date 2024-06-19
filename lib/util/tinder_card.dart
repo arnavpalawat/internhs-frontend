@@ -114,7 +114,18 @@ class TinderCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 5),
-                Row(children: buildPrestige()), // Display job prestige stars
+                Row(children: buildPrestige()),
+                // Display job prestige stars
+                const SizedBox(height: 10),
+                Text(
+                  job!.description.toString() ?? "",
+                  style: const TextStyle(
+                    color: Colors.grey,
+                    fontSize: 15,
+                  ),
+                  maxLines: 6,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ],
             ),
           ),

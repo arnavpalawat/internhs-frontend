@@ -93,7 +93,8 @@ class _TinderSwiperState extends State<TinderSwiper> {
         CollectionReference users =
             FirebaseFirestore.instance.collection('user');
         String uid = auth.currentUser!.uid;
-        DocumentReference docRef = users.doc(uid).collection("unliked").doc();
+        DocumentReference docRef =
+            users.doc(uid).collection("unliked").doc(widget.jobs?[index].id);
 
         await docRef.set({
           'jobId': widget.jobs?[index].id,
