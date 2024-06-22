@@ -4,8 +4,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class User {
   late String email;
   late String uid;
+  String? country;
+  int? searchRadius;
+  bool? remote;
+  int? age;
 
-  User({required this.email, required this.uid});
+  /// Default Constructor
+  User({required this.email, required this.uid}) {
+    country = "United States";
+    searchRadius = 50;
+    remote = false;
+    age = 10000;
+  }
 
   /// Sets the email of the user and updates Firestore.
   Future<void> setEmail(String email) async {

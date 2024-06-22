@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 import '../constants/colors.dart';
 import '../constants/device.dart';
@@ -12,10 +13,10 @@ class AccountPage extends StatefulWidget {
 }
 
 class _AccountPageState extends State<AccountPage> {
-  TextEditingController _countryController = TextEditingController();
-  TextEditingController _remoteController = TextEditingController();
-  TextEditingController _radiusController = TextEditingController();
-  TextEditingController _ageController = TextEditingController();
+  final TextEditingController _countryController = TextEditingController();
+  final TextEditingController _remoteController = TextEditingController();
+  final TextEditingController _radiusController = TextEditingController();
+  final TextEditingController _ageController = TextEditingController();
   late Map<String, TextEditingController> findController = {
     "country": _countryController,
     "Remote": _remoteController,
@@ -45,9 +46,10 @@ class _AccountPageState extends State<AccountPage> {
                 child: TextField(
                   controller: findController[type],
                   cursorColor: Colors.white,
-                  style: const DefaultTextStyle.fallback()
-                      .style
-                      .copyWith(color: Colors.white, height: 1),
+                  style: const DefaultTextStyle.fallback().style.copyWith(
+                        color: Colors.white,
+                        height: 1,
+                      ),
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: headerColor,
@@ -80,7 +82,7 @@ class _AccountPageState extends State<AccountPage> {
   Widget _buildPrefs() {
     return SizedBox(
       height: height(context) * 0.65,
-      width: width(context) * 0.25,
+      width: width(context) * 0.45,
       child: Container(
         width: width(context) * 579 / 1280,
         height: height(context) * 592 / 832,
@@ -126,7 +128,14 @@ class _AccountPageState extends State<AccountPage> {
                 alignment: Alignment.centerLeft,
                 child: _buildPrefs(),
               ),
-            ),
+            )
+                .animate()
+                .fade(duration: const Duration(milliseconds: 1000))
+                .slideY(
+                    begin: 0.25,
+                    end: 0,
+                    duration: const Duration(milliseconds: 600),
+                    curve: Curves.ease),
             Column(
               children: [
                 SizedBox(

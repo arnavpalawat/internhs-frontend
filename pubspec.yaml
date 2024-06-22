@@ -33,6 +33,7 @@ flutter:
     - lib/assets/images/auth_background.png
     - lib/assets/images/google.png
     - lib/assets/images/opportunities.png
+    - lib/assets/arnav_linkedin.png
   fonts:
     - family: Lora
       fonts:

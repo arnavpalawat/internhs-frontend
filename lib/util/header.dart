@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:internhs/screens/account_page.dart';
-import 'package:internhs/screens/landing_page.dart';
+import 'package:internhs/screens/initial_landing_flow/landing_agent.dart';
 import 'package:internhs/screens/opportunities_page.dart';
 
 import '../constants/colors.dart';
@@ -152,7 +152,7 @@ class _BuildHeaderState extends State<BuildHeader> {
                       context,
                       PageRouteBuilder(
                         pageBuilder: (context, animation1, animation2) =>
-                            const LandingPage(),
+                            const LandingAgent(),
                         transitionDuration: Duration.zero,
                         reverseTransitionDuration: Duration.zero,
                       ),

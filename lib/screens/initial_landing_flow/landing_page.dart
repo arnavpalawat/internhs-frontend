@@ -7,10 +7,10 @@ import 'package:internhs/constants/text.dart';
 import 'package:internhs/screens/authentication_flow/sign_up_screen.dart';
 import 'package:internhs/screens/opportunities_page.dart';
 
-import '../util/header.dart';
-
 class LandingPage extends StatefulWidget {
-  const LandingPage({super.key});
+  final PageController pageController;
+
+  LandingPage({Key? key, required this.pageController}) : super(key: key);
 
   @override
   State<LandingPage> createState() => _LandingPageState();
@@ -18,14 +18,13 @@ class LandingPage extends StatefulWidget {
 
 class _LandingPageState extends State<LandingPage>
     with SingleTickerProviderStateMixin {
-  bool hovering = false;
   late AnimationController _controllerGS;
   late Animation<double> _animationGS;
+  bool hovering = false;
 
   @override
   void initState() {
     super.initState();
-    // Initialize Animate controller
     _controllerGS = AnimationController(
       duration: const Duration(milliseconds: 500),
       vsync: this,
@@ -37,7 +36,9 @@ class _LandingPageState extends State<LandingPage>
     ).drive(Tween<double>(begin: 0, end: 45));
 
     _controllerGS.addListener(() {
-      setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
     });
   }
 
@@ -49,55 +50,48 @@ class _LandingPageState extends State<LandingPage>
 
   void _onGSHover(PointerEvent details) {
     _controllerGS.forward();
-    hovering = true;
+    setState(() {
+      hovering = true;
+    });
   }
 
   void _onGSExit(PointerEvent details) {
-    hovering = false;
     _controllerGS.reverse();
+    setState(() {
+      hovering = false;
+    });
   }
 
-  // Login Button
-
-  // Announcement Widget
   Widget buildAnnouncement() {
     return SizedBox(
       width: width(context) * 0.88,
       height: height(context) * 0.59,
-      child: Text.rich(
-        TextSpan(
+      child: RichText(
+        text: TextSpan(
           children: [
             TextSpan(
               text: 'Establishing teens \n',
-              style: announcementTextStyle.copyWith(
-                  fontSize: height(context) * 0.095),
+              style: announcementTextStyle,
             ),
-            // Italic
             TextSpan(
               text: 'initiative ',
-              style: italicAnnouncementTextStyle.copyWith(
-                  fontSize: height(context) * 0.095),
+              style: italicAnnouncementTextStyle,
             ),
             TextSpan(
               text: 'into competitive \n',
-              style: announcementTextStyle.copyWith(
-                  fontSize: height(context) * 0.095),
+              style: announcementTextStyle,
             ),
             TextSpan(
-              text: 'workplaces, one',
-              style: announcementTextStyle.copyWith(
-                  fontSize: height(context) * 0.095),
+              text: 'workplaces, one ',
+              style: announcementTextStyle,
             ),
-            // Italic
             TextSpan(
-              text: ' internship\n',
-              style: italicAnnouncementTextStyle.copyWith(
-                  fontSize: height(context) * 0.095),
+              text: 'internship\n',
+              style: italicAnnouncementTextStyle,
             ),
             TextSpan(
               text: 'at a time',
-              style: announcementTextStyle.copyWith(
-                  fontSize: height(context) * 0.095),
+              style: announcementTextStyle,
             ),
           ],
         ),
@@ -105,7 +99,6 @@ class _LandingPageState extends State<LandingPage>
     );
   }
 
-  // Body text
   Widget buildBodyText() {
     return SizedBox(
       width: width(context) * 0.88,
@@ -115,18 +108,15 @@ class _LandingPageState extends State<LandingPage>
         children: [
           Text(
             'Through robust AI recommendation algorithms, and \n',
-            style: bodyTextStyle.copyWith(fontSize: height(context) * 24 / 840),
-            textAlign: TextAlign.left,
+            style: bodyTextStyle,
           ),
           Text(
             'tailored recommendations. We guide the next generation \n',
-            style: bodyTextStyle.copyWith(fontSize: height(context) * 24 / 840),
-            textAlign: TextAlign.left,
+            style: bodyTextStyle,
           ),
           Text(
             'of employees as early as high school.',
-            style: bodyTextStyle.copyWith(fontSize: height(context) * 24 / 840),
-            textAlign: TextAlign.left,
+            style: bodyTextStyle,
           ),
         ],
       ),
@@ -134,21 +124,6 @@ class _LandingPageState extends State<LandingPage>
   }
 
   Widget buildButton(Color color, String text) {
-    // Post animation Icon
-    Widget buildIcon({required double size}) {
-      return SizedBox(
-        width: size, // Adjust the width to accommodate the icon
-        child: Align(
-          alignment: Alignment.centerRight,
-          child: Icon(
-            Icons.arrow_forward_ios_rounded,
-            color: Colors.white,
-            size: size,
-          ),
-        ),
-      );
-    }
-
     return MouseRegion(
       onEnter: text == "Get Started" ? _onGSHover : null,
       onExit: text == "Get Started" ? _onGSExit : null,
@@ -162,7 +137,8 @@ class _LandingPageState extends State<LandingPage>
             decoration: ShapeDecoration(
               color: color,
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8)),
+                borderRadius: BorderRadius.circular(8),
+              ),
               shadows: const [
                 BoxShadow(
                   color: Color(0x0C000000),
@@ -177,31 +153,25 @@ class _LandingPageState extends State<LandingPage>
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Center(
-                  child: Text(
-                    text,
-                    style: buttonTextStyle.copyWith(
-                        fontSize: height(context) * 25 / 840),
-                    textAlign: TextAlign.center,
-                  ),
+                Text(
+                  text,
+                  style: buttonTextStyle,
                 ),
-                const Spacer(), // Adjust the space between text and icon
-                text == "Get Started"
-                    ? AnimatedOpacity(
-                        opacity: hovering ? 1 : 0,
-                        duration: 200.ms,
-                        child: _animationGS.value > 0
-                            ? buildIcon(
-                                    size: _animationGS.value > 10 ? 25.0 : 0.0)
-                                .animate()
-                                .fadeIn()
-                            : Container(
-                                width: 0,
-                              ),
-                      )
-                    : Container(
-                        width: 0,
-                      ),
+                const Spacer(),
+                if (text == "Get Started")
+                  AnimatedOpacity(
+                    opacity: hovering ? 1 : 0,
+                    duration: const Duration(milliseconds: 200),
+                    child: _animationGS.value > 0
+                        ? Icon(
+                            Icons.arrow_forward_ios_rounded,
+                            color: Colors.white,
+                            size: _animationGS.value > 10 ? 25.0 : 0.0,
+                          )
+                        : Container(width: 0),
+                  )
+                else
+                  Container(width: 0),
               ],
             ),
           ),
@@ -214,44 +184,34 @@ class _LandingPageState extends State<LandingPage>
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        height: double.infinity,
         decoration: backgroundColor,
-        child: SingleChildScrollView(
-          child: Stack(
-            children: [
-              Positioned(
-                left: width(context) * 0.45,
-                top: height(context) * 0.3,
-                child: Image.asset(
-                  "lib/assets/images/landing-vector.png",
-                  scale: 0.75,
-                ),
-              ),
-              Column(
+        width: width(context),
+        height: height(context),
+        child: Column(
+          children: [
+            SizedBox(height: height(context) * 0.115),
+            Padding(
+              padding: const EdgeInsets.all(36.0),
+              child: Stack(
                 children: [
-                  // Space Above Header
-                  SizedBox(
-                    height: height(context) * 0.015,
-                  ),
-                  const BuildHeader(),
-                  // Space Below Header
-                  SizedBox(
-                    height: height(context) * 0.015,
+                  Positioned(
+                    left: width(context) * 0.4,
+                    top: height(context) * 0.15,
+                    child: Image.asset(
+                      "lib/assets/images/landing-vector.png",
+                      scale: 0.75,
+                    ),
                   ),
                   Column(
                     children: [
                       buildAnnouncement(),
                       buildBodyText(),
-                      SizedBox(
-                        height: height(context) * 0.015,
-                      ),
-                      // Build Buttons
+                      SizedBox(height: height(context) * 0.015),
                       SizedBox(
                         width: width(context) * 0.88,
                         child: Row(
                           children: [
                             GestureDetector(
-                              child: buildButton(accentColor, "Get Started"),
                               onTap: () {
                                 Navigator.push(
                                   context,
@@ -269,29 +229,36 @@ class _LandingPageState extends State<LandingPage>
                                   ),
                                 );
                               },
+                              child: buildButton(accentColor, "Get Started"),
                             ),
-                            SizedBox(
-                              width: width(context) * 0.01,
-                            ),
-                            // TODO: Go to our story
+                            SizedBox(width: width(context) * 0.01),
                             GestureDetector(
-                                child: buildButton(headerColor, "Our Story"))
+                              onTap: () {
+                                widget.pageController.animateToPage(
+                                  1,
+                                  duration: Duration(seconds: 1),
+                                  curve: Curves.ease,
+                                );
+                              },
+                              child: buildButton(headerColor, "Our Story"),
+                            ),
                           ],
                         ),
-                      )
+                      ),
                     ],
-                  )
-                      .animate()
-                      .fade(duration: const Duration(milliseconds: 1000))
-                      .slideY(
-                          begin: 0.25,
-                          end: 0,
-                          duration: const Duration(milliseconds: 600),
-                          curve: Curves.ease),
+                  ).animate()
+        .fade(
+      duration: const Duration(milliseconds: 1000),
+    )
+        .slideY(
+        begin: 0.25,
+        end: 0,
+        duration: const Duration(milliseconds: 600),
+        curve: Curves.ease),
                 ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

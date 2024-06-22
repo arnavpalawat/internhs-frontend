@@ -6,7 +6,7 @@ import 'package:internhs/constants/colors.dart';
 import 'package:internhs/constants/device.dart';
 import 'package:internhs/constants/text.dart';
 import 'package:internhs/screens/authentication_flow/sign_up_screen.dart';
-import 'package:internhs/screens/landing_page.dart';
+import 'package:internhs/screens/initial_landing_flow/landing_agent.dart';
 
 import '../opportunities_page.dart';
 
@@ -200,7 +200,7 @@ class _LoginPageState extends State<LoginPage> {
                                 PageRouteBuilder(
                                   pageBuilder:
                                       (context, animation1, animation2) =>
-                                          const LandingPage(),
+                                          const LandingAgent(),
                                   transitionDuration: Duration.zero,
                                   reverseTransitionDuration: Duration.zero,
                                 ),
