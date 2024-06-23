@@ -125,77 +125,98 @@ class _BuildHeaderState extends State<BuildHeader> {
           SizedBox(
             width: width(context) * 0.05,
           ),
-          Container(
-            height: height(context) * 0.1322,
-            width: width(context) * 0.9375,
-            decoration: ShapeDecoration(
-              color: headerColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(29),
+          Material(
+            color: Colors.transparent,
+            elevation: 20,
+            child: Container(
+              height: height(context) * 0.1322,
+              width: width(context) * 0.9375,
+              decoration: ShapeDecoration(
+                color: headerColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(29),
+                ),
               ),
-            ),
-            // Header items
-            child: Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Image.asset(
-                    'lib/assets/images/internhs-header.png',
-                    height: height(context) * 0.1322,
+              // Header items
+              child: Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Image.asset(
+                      'lib/assets/images/internhs-header.png',
+                      height: height(context) * 0.1322,
+                    ),
                   ),
-                ),
-                const Spacer(),
-                GestureDetector(
-                  onTap: () {
-                    // Navigate to LandingPage
-                    Navigator.push(
-                      context,
-                      PageRouteBuilder(
-                        pageBuilder: (context, animation1, animation2) =>
-                            const LandingAgent(),
-                        transitionDuration: Duration.zero,
-                        reverseTransitionDuration: Duration.zero,
-                      ),
-                    );
-                  },
-                  child: text("Home"),
-                ),
-                SizedBox(
-                  width: width(context) * 0.05,
-                ),
-                text("Our Story"),
-                SizedBox(
-                  width: width(context) * 0.05,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    // Navigate to OpportunitiesPage
-                    Navigator.push(
-                      context,
-                      PageRouteBuilder(
-                        pageBuilder: (context, animation1, animation2) =>
-                            const OpportunitiesPage(),
-                        transitionDuration: Duration.zero,
-                        reverseTransitionDuration: Duration.zero,
-                      ),
-                    );
-                  },
-                  child: text("Opportunities"),
-                ),
-                SizedBox(
-                  width: width(context) * 0.05,
-                ),
-                text("Pricing"),
-                SizedBox(
-                  width: width(context) * 0.05,
-                ),
-                _auth.currentUser != null
-                    ? buildAccountButton()
-                    : buildLoginButton(),
-                SizedBox(
-                  width: width(context) * 0.05,
-                )
-              ],
+                  const Spacer(),
+                  GestureDetector(
+                    onTap: () {
+                      // Navigate to LandingPage
+                      Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder: (context, animation1, animation2) =>
+                              LandingAgent(
+                            index: 0,
+                          ),
+                          transitionDuration: Duration.zero,
+                          reverseTransitionDuration: Duration.zero,
+                        ),
+                      );
+                    },
+                    child: text("Home"),
+                  ),
+                  SizedBox(
+                    width: width(context) * 0.05,
+                  ),
+                  GestureDetector(
+                    child: text("Our Story"),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder: (context, animation1, animation2) =>
+                              LandingAgent(
+                            index: 2,
+                          ),
+                          transitionDuration: Duration.zero,
+                          reverseTransitionDuration: Duration.zero,
+                        ),
+                      );
+                    },
+                  ),
+                  SizedBox(
+                    width: width(context) * 0.05,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      // Navigate to OpportunitiesPage
+                      Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder: (context, animation1, animation2) =>
+                              const OpportunitiesPage(),
+                          transitionDuration: Duration.zero,
+                          reverseTransitionDuration: Duration.zero,
+                        ),
+                      );
+                    },
+                    child: text("Opportunities"),
+                  ),
+                  SizedBox(
+                    width: width(context) * 0.05,
+                  ),
+                  text("Pricing"),
+                  SizedBox(
+                    width: width(context) * 0.05,
+                  ),
+                  _auth.currentUser != null
+                      ? buildAccountButton()
+                      : buildLoginButton(),
+                  SizedBox(
+                    width: width(context) * 0.05,
+                  ),
+                ],
+              ),
             ),
           ),
         ],

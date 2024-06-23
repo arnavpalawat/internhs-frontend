@@ -244,7 +244,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                 PageRouteBuilder(
                                   pageBuilder:
                                       (context, animation1, animation2) =>
-                                          const LandingAgent(),
+                                          LandingAgent(),
                                   transitionDuration: Duration.zero,
                                   reverseTransitionDuration: Duration.zero,
                                 ),

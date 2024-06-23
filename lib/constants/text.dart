@@ -34,6 +34,13 @@ const italicAnnouncementTextStyle = TextStyle(
   height: 1.5,
 );
 
+const blackBodyTextStyle = TextStyle(
+  color: Colors.black,
+  fontSize: 20,
+  fontFamily: 'Inter',
+  height: 1,
+);
+
 const bodyTextStyle = TextStyle(
   color: Colors.black,
   fontSize: 24,

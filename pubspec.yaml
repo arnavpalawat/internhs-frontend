@@ -33,7 +33,9 @@ flutter:
     - lib/assets/images/auth_background.png
     - lib/assets/images/google.png
     - lib/assets/images/opportunities.png
-    - lib/assets/arnav_linkedin.png
+    - lib/assets/images/arnav_linkedin.png
+    - lib/assets/images/what-we-do-vector.png
+    - lib/assets/images/db.jpg
   fonts:
     - family: Lora
       fonts:
@@ -49,7 +51,9 @@ flutter:
         - asset: lib/assets/fonts/Poppins/Poppins-Regular.ttf
     - family: Inter
       fonts:
+        - asset: lib/assets/fonts/Inter/Inter-VariableFont_slnt,wght.ttf
         - asset: lib/assets/fonts/Inter/Inter-SemiBold.otf
+          weight: 400
     - family: Questral
       fonts:
         - asset: lib/assets/fonts/Questrial/Questrial-Regular.ttf

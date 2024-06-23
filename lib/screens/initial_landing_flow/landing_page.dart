@@ -67,7 +67,7 @@ class _LandingPageState extends State<LandingPage>
       width: width(context) * 0.88,
       height: height(context) * 0.59,
       child: RichText(
-        text: TextSpan(
+        text: const TextSpan(
           children: [
             TextSpan(
               text: 'Establishing teens \n',
@@ -103,7 +103,7 @@ class _LandingPageState extends State<LandingPage>
     return SizedBox(
       width: width(context) * 0.88,
       height: height(context) * 0.1,
-      child: Column(
+      child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
@@ -236,8 +236,8 @@ class _LandingPageState extends State<LandingPage>
                               onTap: () {
                                 widget.pageController.animateToPage(
                                   1,
-                                  duration: Duration(seconds: 1),
-                                  curve: Curves.ease,
+                                  duration: const Duration(seconds: 1),
+                                  curve: Curves.easeInOutCubicEmphasized,
                                 );
                               },
                               child: buildButton(headerColor, "Our Story"),
@@ -246,15 +246,16 @@ class _LandingPageState extends State<LandingPage>
                         ),
                       ),
                     ],
-                  ).animate()
-        .fade(
-      duration: const Duration(milliseconds: 1000),
-    )
-        .slideY(
-        begin: 0.25,
-        end: 0,
-        duration: const Duration(milliseconds: 600),
-        curve: Curves.ease),
+                  )
+                      .animate()
+                      .fade(
+                        duration: const Duration(milliseconds: 1000),
+                      )
+                      .slideY(
+                          begin: 0.25,
+                          end: 0,
+                          duration: const Duration(milliseconds: 600),
+                          curve: Curves.ease),
                 ],
               ),
             ),

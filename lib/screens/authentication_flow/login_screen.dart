@@ -200,7 +200,7 @@ class _LoginPageState extends State<LoginPage> {
                                 PageRouteBuilder(
                                   pageBuilder:
                                       (context, animation1, animation2) =>
-                                          const LandingAgent(),
+                                          LandingAgent(),
                                   transitionDuration: Duration.zero,
                                   reverseTransitionDuration: Duration.zero,
                                 ),
