@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:internhs/constants/colors.dart';
 import 'package:internhs/constants/text.dart';
 
 import '../../constants/device.dart';
+import '../../util/footer.dart';
 import '../opportunities_page.dart';
 
 class WhatWeDoPage extends StatefulWidget {
@@ -118,29 +120,28 @@ class _WhatWeDoPageState extends State<WhatWeDoPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFbdccea),
+      backgroundColor: whatWeDOBG,
       body: SizedBox(
         height: height(context),
         width: width(context),
         child: Column(
           children: [
-            SizedBox(height: height(context) * 0.15),
             Stack(
               children: [
                 Column(
                   children: [
                     SizedBox(
-                      height: height(context) * 0.1,
+                      height: height(context) * 0.3,
                     ),
                     Row(
                       children: [
                         SizedBox(
-                          width: width(context) * 0.05,
+                          width: width(context) * 0.6,
                         ),
                         SizedBox(
                           child: Image.asset(
                             "lib/assets/images/what-we-do-vector.png",
-                            scale: 0.75,
+                            scale: 1.5,
                           ),
                         ),
                       ],
@@ -156,6 +157,7 @@ class _WhatWeDoPageState extends State<WhatWeDoPage>
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        SizedBox(height: height(context) * 0.15),
                         Container(
                           alignment: Alignment.centerLeft,
                           child: Padding(
@@ -214,9 +216,6 @@ class _WhatWeDoPageState extends State<WhatWeDoPage>
                         ),
                         Row(
                           children: [
-                            SizedBox(
-                              width: width(context) * 0.4,
-                            ),
                             GestureDetector(
                                 onTap: () {
                                   Navigator.push(
@@ -233,6 +232,7 @@ class _WhatWeDoPageState extends State<WhatWeDoPage>
                                 child: buildButton()),
                           ],
                         ),
+                        Footer(),
                       ],
                     ),
                   ],

@@ -14,7 +14,9 @@ const backgroundColor = BoxDecoration(
   ),
 );
 
-const Color whatWeDoBG = Color(0xFF3866BF);
+const Color ourStoryBG = Color(0xFF6b8dcf);
+
+const Color whatWeDOBG = Color(0xFFbdccea);
 // Header
 const Color headerColor = Color(0xFF6C8DCC);
 

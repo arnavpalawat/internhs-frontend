@@ -176,7 +176,7 @@ class _BuildHeaderState extends State<BuildHeader> {
                         PageRouteBuilder(
                           pageBuilder: (context, animation1, animation2) =>
                               LandingAgent(
-                            index: 2,
+                            index: 1,
                           ),
                           transitionDuration: Duration.zero,
                           reverseTransitionDuration: Duration.zero,
