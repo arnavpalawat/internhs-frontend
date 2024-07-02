@@ -133,11 +133,13 @@ class _LandingPageState extends State<LandingPage>
             width: width(context) * 0.144 +
                 (text == "Get Started" ? _animationGS.value : 0),
             height: height(context) * 0.089,
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+            padding: EdgeInsets.symmetric(
+                horizontal: width(context) * 24 / 1440,
+                vertical: height(context) * 14 / 726),
             decoration: ShapeDecoration(
               color: color,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(width(context) * 8),
               ),
               shadows: const [
                 BoxShadow(

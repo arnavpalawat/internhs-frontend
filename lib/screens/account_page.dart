@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -6,6 +7,7 @@ import 'package:internhs/constants/text.dart';
 import '../constants/colors.dart';
 import '../constants/device.dart';
 import '../util/header.dart';
+import 'initial_landing_flow/landing_agent.dart';
 
 class AccountPage extends StatefulWidget {
   const AccountPage({super.key});
@@ -150,14 +152,37 @@ class _AccountPageState extends State<AccountPage>
   }
 
   Future<void> signOut() async {
-    await FirebaseAuth.instance.signOut();
+    await FirebaseAuth.instance.signOut().whenComplete(
+          () => Navigator.push(
+            context,
+            PageRouteBuilder(
+              pageBuilder: (context, animation1, animation2) => LandingAgent(
+                index: 0,
+              ),
+              transitionDuration: Duration.zero,
+              reverseTransitionDuration: Duration.zero,
+            ),
+          ),
+        );
   }
 
   Future<void> deleteAccount() async {
     User? user = FirebaseAuth.instance.currentUser;
 
     try {
-      await user?.delete();
+      FirebaseFirestore.instance.collection("user").doc(user?.uid).delete();
+      await user?.delete().whenComplete(
+            () => Navigator.push(
+              context,
+              PageRouteBuilder(
+                pageBuilder: (context, animation1, animation2) => LandingAgent(
+                  index: 0,
+                ),
+                transitionDuration: Duration.zero,
+                reverseTransitionDuration: Duration.zero,
+              ),
+            ),
+          );
     } catch (e) {
       print("Failed to delete account: $e");
       // Handle the exception here
