@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:internhs/screens/initial_landing_flow/landing_page.dart';
 import 'package:internhs/screens/initial_landing_flow/our_story_page.dart';
+import 'package:internhs/screens/initial_landing_flow/pricing.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../../constants/device.dart';
@@ -55,7 +56,7 @@ class _LandingAgentState extends State<LandingAgent> {
       child: PageView.builder(
         scrollDirection: Axis.vertical,
         controller: _pageController,
-        itemCount: 3,
+        itemCount: 4,
         pageSnapping: false,
         scrollBehavior:
             const CupertinoScrollBehavior().copyWith(overscroll: true),
@@ -72,9 +73,11 @@ class _LandingAgentState extends State<LandingAgent> {
                 pageController: _pageController,
               );
             case 1:
-              return const OurStoryPage();
+              return const PricingPage();
             case 2:
-              return const WhatWeDoPage();
+              return const OurStoryPage();
+            case 3:
+              return WhatWeDoPage();
             default:
               return LoadingAnimationWidget.twoRotatingArc(
                 color: Colors.white,

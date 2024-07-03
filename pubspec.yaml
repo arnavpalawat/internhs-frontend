@@ -36,6 +36,8 @@ flutter:
     - lib/assets/images/arnav_linkedin.png
     - lib/assets/images/what-we-do-vector.png
     - lib/assets/images/db.jpg
+    - lib/assets/images/cashapp.png
+    - lib/assets/images/venmo.png
   fonts:
     - family: Lora
       fonts:

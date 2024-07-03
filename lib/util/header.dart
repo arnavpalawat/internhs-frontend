@@ -176,7 +176,7 @@ class _BuildHeaderState extends State<BuildHeader> {
                         PageRouteBuilder(
                           pageBuilder: (context, animation1, animation2) =>
                               LandingAgent(
-                            index: 1,
+                            index: 2,
                           ),
                           transitionDuration: Duration.zero,
                           reverseTransitionDuration: Duration.zero,
@@ -205,7 +205,22 @@ class _BuildHeaderState extends State<BuildHeader> {
                   SizedBox(
                     width: width(context) * 0.05,
                   ),
-                  text("Pricing"),
+                  GestureDetector(
+                    child: text("Pricing"),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder: (context, animation1, animation2) =>
+                              LandingAgent(
+                            index: 1,
+                          ),
+                          transitionDuration: Duration.zero,
+                          reverseTransitionDuration: Duration.zero,
+                        ),
+                      );
+                    },
+                  ),
                   SizedBox(
                     width: width(context) * 0.05,
                   ),
@@ -217,7 +232,7 @@ class _BuildHeaderState extends State<BuildHeader> {
                         PageRouteBuilder(
                           pageBuilder: (context, animation1, animation2) =>
                               LandingAgent(
-                            index: 2,
+                            index: 3,
                           ),
                           transitionDuration: Duration.zero,
                           reverseTransitionDuration: Duration.zero,
