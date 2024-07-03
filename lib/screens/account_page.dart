@@ -32,10 +32,11 @@ class _AccountPageState extends State<AccountPage>
   late AnimationController _controllerGS;
   late Animation<double> _animationGS;
   bool hovering = false;
-
+  bool google = false;
   @override
   void initState() {
     super.initState();
+    signedInWithGoogle();
     _controllerGS = AnimationController(
       duration: const Duration(milliseconds: 500),
       vsync: this,
@@ -73,6 +74,26 @@ class _AccountPageState extends State<AccountPage>
     });
   }
 
+  Future<void> resetPassword(String? email) async {
+    try {
+      email != null
+          ? FirebaseAuth.instance.sendPasswordResetEmail(email: email ?? "")
+          : null;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> signedInWithGoogle() async {
+    var methods = await FirebaseAuth.instance.fetchSignInMethodsForEmail(
+        FirebaseAuth.instance.currentUser?.email ?? "");
+    if (methods.contains('google.com')) {
+      setState(() {
+        google = true;
+      });
+    }
+  }
+
   Widget buildButton(Color color, String text) {
     return MouseRegion(
       onEnter: text == "Sign Out" ? _onGSHover : null,
@@ -80,7 +101,7 @@ class _AccountPageState extends State<AccountPage>
       child: Column(
         children: [
           Container(
-            width: width(context) * 0.081 +
+            width: width(context) * 0.2 +
                 (text == "Sign Out" ? _animationGS.value : 0),
             height: height(context) * 0.04,
             padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -190,13 +211,13 @@ class _AccountPageState extends State<AccountPage>
     }
   }
 
-  Widget _buildOperations() {
+  Widget _buildOperations(BuildContext context) {
     return SizedBox(
-      height: height(context) * 0.65,
-      width: width(context) * 0.4,
+      height: MediaQuery.of(context).size.height * 0.65,
+      width: MediaQuery.of(context).size.width * 0.4,
       child: Container(
-        width: width(context) * 579 / 1280,
-        height: height(context) * 592 / 832,
+        width: MediaQuery.of(context).size.width * 579 / 1280,
+        height: MediaQuery.of(context).size.height * 592 / 832,
         decoration: ShapeDecoration(
           color: Colors.white,
           shape: RoundedRectangleBorder(
@@ -209,27 +230,130 @@ class _AccountPageState extends State<AccountPage>
               "Operations and Preferences",
               style: announcementTextStyle.copyWith(fontSize: 36),
             ),
-            GestureDetector(
-              onTap: () {
-                signOut();
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: buildButton(headerColor, "Sign Out"),
-              ),
+            SizedBox(
+              height: height(context) * 0.02,
             ),
-            GestureDetector(
-              onTap: () {
-                deleteAccount();
-              },
+            Align(
+              alignment: Alignment.centerLeft,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: buildButton(Colors.black, "Delete"),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    google
+                        ? GestureDetector(
+                            onTap: () {
+                              changeEmail(context);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: buildButton(headerColor, "Change Email"),
+                            ),
+                          )
+                        : Container(),
+                    GestureDetector(
+                      onTap: () {
+                        resetPassword(FirebaseAuth.instance.currentUser?.email);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: buildButton(accentColor, "Change Password"),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        signOut();
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: buildButton(Colors.blueGrey, "Sign Out"),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        deleteAccount();
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: buildButton(Colors.black, "Delete"),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  void changeEmail(BuildContext context) {
+    TextEditingController emailController = TextEditingController();
+    TextEditingController passwordController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Change Email"),
+          content: Container(
+            height: height(context) * 0.2,
+            child: Column(
+              children: [
+                TextField(
+                  controller: emailController,
+                  decoration:
+                      const InputDecoration(hintText: "Enter new email"),
+                ),
+                TextField(
+                  obscureText: true,
+                  controller: passwordController,
+                  decoration: const InputDecoration(
+                    hintText: "Enter current password",
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () async {
+                final user = FirebaseAuth.instance.currentUser;
+                final cred = EmailAuthProvider.credential(
+                    email: user?.email ?? "",
+                    password: passwordController.text);
+
+                try {
+                  await user!.reauthenticateWithCredential(cred);
+                  await user.verifyBeforeUpdateEmail(emailController.text);
+                  await FirebaseFirestore.instance
+                      .collection('user')
+                      .doc(user.uid)
+                      .update({'email': emailController.text});
+                } catch (e) {
+                  print('Error updating email: $e');
+                }
+              },
+              child: const Text("Change"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void sendPasswordChangeEmail(BuildContext context) {
+    // Implement your send password change email logic here
+    print("Password change email sent");
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Password change email sent")),
     );
   }
 
@@ -267,7 +391,7 @@ class _AccountPageState extends State<AccountPage>
                       right: MediaQuery.of(context).size.width * 0.05),
                   child: Align(
                     alignment: Alignment.centerLeft,
-                    child: _buildOperations(),
+                    child: _buildOperations(context),
                   ),
                 ),
               ],

@@ -209,6 +209,25 @@ class _BuildHeaderState extends State<BuildHeader> {
                   SizedBox(
                     width: width(context) * 0.05,
                   ),
+                  GestureDetector(
+                    child: text("Contact Us"),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder: (context, animation1, animation2) =>
+                              LandingAgent(
+                            index: 2,
+                          ),
+                          transitionDuration: Duration.zero,
+                          reverseTransitionDuration: Duration.zero,
+                        ),
+                      );
+                    },
+                  ),
+                  SizedBox(
+                    width: width(context) * 0.05,
+                  ),
                   _auth.currentUser != null
                       ? buildAccountButton()
                       : buildLoginButton(),

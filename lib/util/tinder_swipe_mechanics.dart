@@ -2,7 +2,6 @@ import 'dart:js' as js;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:internhs/screens/authentication_flow/login_screen.dart';
@@ -152,9 +151,6 @@ class _TinderSwiperState extends State<TinderSwiper> {
       return true;
     }
 
-    if (kDebugMode) {
-      print(widget.jobs?.length);
-    }
     return CardSwiper(
       isLoop: false,
       controller: controller,
