@@ -7,6 +7,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:internhs/constants/colors.dart';
 import 'package:internhs/constants/device.dart';
 import 'package:internhs/constants/text.dart';
+import 'package:internhs/util/build_prefs.dart';
 import 'package:internhs/util/header.dart';
 import 'package:internhs/util/job.dart';
 import 'package:internhs/util/tinder_swipe_mechanics.dart';
@@ -133,9 +134,11 @@ class _OpportunitiesPageState extends State<OpportunitiesPage> {
         onChanged: (text) {
           setState(() {
             if (text.isNotEmpty) {
-              jobs = originalJobs
-                  .where((job) => job.title.contains(text))
-                  .toList();
+              setState(() {
+                jobs = originalJobs
+                    .where((job) => job.title.contains(text))
+                    .toList();
+              });
             } else {
               jobs = originalJobs;
             }
@@ -501,13 +504,24 @@ class _OpportunitiesPageState extends State<OpportunitiesPage> {
                                         width: width(context) * 0.25,
                                         child: TinderSwiper(jobs: jobs)),
                                     SizedBox(
-                                      width: width(context) * 0.1,
+                                      width: width(context) * 0.025,
                                     ),
                                     Column(
                                       children: [
                                         SizedBox(
                                             height: height(context) * 0.65,
                                             child: buildWishlist()),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      width: width(context) * 0.025,
+                                    ),
+                                    Column(
+                                      children: [
+                                        SizedBox(
+                                          height: height(context) * 0.65,
+                                          child: buildPrefs(context),
+                                        ),
                                       ],
                                     ),
                                   ],

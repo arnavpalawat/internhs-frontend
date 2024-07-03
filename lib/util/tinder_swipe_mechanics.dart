@@ -158,9 +158,11 @@ class _TinderSwiperState extends State<TinderSwiper> {
     return CardSwiper(
       isLoop: false,
       controller: controller,
-      cardsCount: widget.jobs != null ? widget.jobs!.length + 1 : 1,
+      cardsCount: widget.jobs != null || widget.jobs!.isNotEmpty
+          ? widget.jobs!.length + 1
+          : 1,
       onSwipe: onSwipe,
-      numberOfCardsDisplayed: widget.jobs != null
+      numberOfCardsDisplayed: widget.jobs != null || widget.jobs!.isNotEmpty
           ? widget.jobs!.length > 2
               ? 3
               : widget.jobs!.length > 1
@@ -176,7 +178,10 @@ class _TinderSwiperState extends State<TinderSwiper> {
         horizontalThresholdPercentage,
         verticalThresholdPercentage,
       ) {
-        return index < widget.jobs!.length
+        int cardAmt = widget.jobs != null || widget.jobs!.isNotEmpty
+            ? widget.jobs!.length + 1
+            : 1;
+        return index < cardAmt
             ? TinderCard(widget.jobs?[index])
             : Container(
                 // Placeholder card when no more jobs are available

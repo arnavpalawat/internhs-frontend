@@ -6,6 +6,7 @@ import 'package:internhs/constants/text.dart';
 
 import '../constants/colors.dart';
 import '../constants/device.dart';
+import '../util/build_prefs.dart';
 import '../util/header.dart';
 import 'initial_landing_flow/landing_agent.dart';
 
@@ -189,138 +190,6 @@ class _AccountPageState extends State<AccountPage>
     }
   }
 
-  Widget _buildPref(String type, int length, BuildContext context) {
-    if (type == "Remote") {
-      // If type is "Remote", display a dropdown with yes or no
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.01,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.02,
-                ),
-                Text("$type: "),
-                const Spacer(),
-                DropdownButton<String>(
-                  value: 'Yes', // Example initial value
-                  onChanged: (String? newValue) {
-                    // Handle dropdown value change
-                  },
-                  items: <String>['Yes', 'No']
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.02,
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-            child: Divider(
-              height: 1,
-              color: Colors.grey.withOpacity(0.3),
-            ),
-          ),
-        ],
-      );
-    } else {
-      // For other types, display a text field
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.01,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.02,
-                ),
-                Text("$type: "),
-                const Spacer(),
-                SizedBox(
-                  width: length.toDouble(),
-                  height: 30,
-                  child: TextField(
-                    controller:
-                        TextEditingController(), // Provide your controller here
-                    cursorColor: Colors.white,
-                    style: const TextStyle(color: Colors.white, height: 1),
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.blueGrey,
-                      contentPadding: const EdgeInsets.symmetric(
-                          vertical: 15.0, horizontal: 20.0),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(29.0),
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.02,
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-            child: Divider(
-              height: 1,
-              color: Colors.grey.withOpacity(0.3),
-            ),
-          ),
-        ],
-      );
-    }
-  }
-
-  Widget _buildPrefs() {
-    return SizedBox(
-      height: height(context) * 0.65,
-      width: width(context) * 0.4,
-      child: Container(
-        width: width(context) * 579 / 1280,
-        height: height(context) * 592 / 832,
-        decoration: ShapeDecoration(
-          color: whatWeDOBG,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(25),
-          ),
-        ),
-        child: Column(
-          children: [
-            Text(
-              "Generate New Internships",
-              style: announcementTextStyle.copyWith(fontSize: 36),
-            ),
-            _buildPref("Country", 182, context),
-            _buildPref("Search Radius", 83, context),
-            _buildPref("Remote", 83, context),
-            _buildPref("Age in Hours", 132, context),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget _buildOperations() {
     return SizedBox(
       height: height(context) * 0.65,
@@ -329,7 +198,7 @@ class _AccountPageState extends State<AccountPage>
         width: width(context) * 579 / 1280,
         height: height(context) * 592 / 832,
         decoration: ShapeDecoration(
-          color: whatWeDOBG,
+          color: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(25),
           ),
@@ -390,7 +259,7 @@ class _AccountPageState extends State<AccountPage>
                       left: MediaQuery.of(context).size.width * 0.05),
                   child: Align(
                     alignment: Alignment.centerLeft,
-                    child: _buildPrefs(),
+                    child: buildPrefs(context),
                   ),
                 ),
                 Padding(
