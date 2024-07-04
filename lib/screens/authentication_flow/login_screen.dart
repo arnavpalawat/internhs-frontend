@@ -208,7 +208,7 @@ class _LoginPageState extends State<LoginPage> {
                             },
                             icon: const Icon(
                               Icons.close_outlined,
-                              color: accentColor,
+                              color: darkAccent,
                             )),
                       )
                     ],

@@ -36,7 +36,7 @@ class _BuildHeaderState extends State<BuildHeader> {
         height: height(context) * 0.06,
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
         decoration: ShapeDecoration(
-          color: accentColor,
+          color: darkAccent,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           shadows: const [
             BoxShadow(
@@ -54,7 +54,7 @@ class _BuildHeaderState extends State<BuildHeader> {
           children: [
             Text(
               'Login',
-              style: whiteButtonTextStyle.copyWith(
+              style: lightButtonTextStyle.copyWith(
                   fontSize: height(context) * 16 / 840),
             ),
           ],
@@ -82,7 +82,7 @@ class _BuildHeaderState extends State<BuildHeader> {
         height: height(context) * 0.06,
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
         decoration: ShapeDecoration(
-          color: accentColor,
+          color: darkAccent,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           shadows: const [
             BoxShadow(
@@ -100,7 +100,7 @@ class _BuildHeaderState extends State<BuildHeader> {
           children: [
             Text(
               'Account',
-              style: whiteButtonTextStyle.copyWith(
+              style: lightButtonTextStyle.copyWith(
                   fontSize: height(context) * 16 / 840),
             ),
           ],
@@ -115,7 +115,7 @@ class _BuildHeaderState extends State<BuildHeader> {
     Widget text(String text) {
       return Text(
         text,
-        style: headerTextStyle.copyWith(fontSize: height(context) * 0.03),
+        style: lightHeaderTextStyle.copyWith(fontSize: height(context) * 0.03),
       );
     }
 
@@ -169,25 +169,6 @@ class _BuildHeaderState extends State<BuildHeader> {
                     width: width(context) * 0.05,
                   ),
                   GestureDetector(
-                    child: text("Our Story"),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        PageRouteBuilder(
-                          pageBuilder: (context, animation1, animation2) =>
-                              LandingAgent(
-                            index: 2,
-                          ),
-                          transitionDuration: Duration.zero,
-                          reverseTransitionDuration: Duration.zero,
-                        ),
-                      );
-                    },
-                  ),
-                  SizedBox(
-                    width: width(context) * 0.05,
-                  ),
-                  GestureDetector(
                     onTap: () {
                       // Navigate to OpportunitiesPage
                       Navigator.push(
@@ -214,6 +195,25 @@ class _BuildHeaderState extends State<BuildHeader> {
                           pageBuilder: (context, animation1, animation2) =>
                               LandingAgent(
                             index: 1,
+                          ),
+                          transitionDuration: Duration.zero,
+                          reverseTransitionDuration: Duration.zero,
+                        ),
+                      );
+                    },
+                  ),
+                  SizedBox(
+                    width: width(context) * 0.05,
+                  ),
+                  GestureDetector(
+                    child: text("Our Story"),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder: (context, animation1, animation2) =>
+                              LandingAgent(
+                            index: 2,
                           ),
                           transitionDuration: Duration.zero,
                           reverseTransitionDuration: Duration.zero,

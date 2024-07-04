@@ -138,14 +138,14 @@ Widget _buildButton(Color color, String text, context) {
                 child: Center(
                   child: Text(
                     text,
-                    style: buttonTextStyle.copyWith(fontSize: 15),
+                    style: lightButtonTextStyle.copyWith(fontSize: 15),
                   ),
                 ),
               )
             else
               Text(
                 text,
-                style: buttonTextStyle.copyWith(fontSize: 15),
+                style: lightButtonTextStyle.copyWith(fontSize: 15),
               ),
           ],
         ),
@@ -156,11 +156,11 @@ Widget _buildButton(Color color, String text, context) {
 
 Widget buildPrefs(context) {
   return SizedBox(
-    height: height(context) * 0.65,
+    height: height(context) * 0.8,
     width: width(context) * 0.4,
     child: Container(
       width: width(context) * 579 / 1280,
-      height: height(context) * 592 / 832,
+      height: height(context) * 760 / 832,
       decoration: ShapeDecoration(
         color: Colors.white,
         shape: RoundedRectangleBorder(
@@ -169,9 +169,12 @@ Widget buildPrefs(context) {
       ),
       child: Column(
         children: [
-          Text(
-            "Generate New Internships",
-            style: announcementTextStyle.copyWith(fontSize: 36),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "Generate New Internships",
+              style: announcementTextStyle.copyWith(fontSize: 36),
+            ),
           ),
           _buildPref("Country", 182, context),
           _buildPref("Search Radius", 83, context),

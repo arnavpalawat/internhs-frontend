@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:internhs/constants/text.dart';
-import 'package:internhs/util/footer.dart';
 
 import '../../constants/colors.dart';
 import '../../constants/device.dart';
@@ -17,7 +16,7 @@ class _OurStoryPageState extends State<OurStoryPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: ourStoryBG,
+      color: darkBackgroundColor,
       height: height(context) * 1.33,
       child: Column(
         children: [

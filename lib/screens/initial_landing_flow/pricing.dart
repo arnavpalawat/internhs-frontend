@@ -18,7 +18,7 @@ class _PricingPageState extends State<PricingPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: whatWeDOBG,
+      color: lightBackgroundColor,
       height: height(context) * 1.33,
       child: Column(
         children: [
@@ -119,7 +119,7 @@ class _PricingPageState extends State<PricingPage> {
                                   ),
                                   const Text(
                                     "Cashapp",
-                                    style: header2TextStyle,
+                                    style: darkHeaderTextStyle,
                                   ),
                                 ],
                               ),
@@ -148,7 +148,7 @@ class _PricingPageState extends State<PricingPage> {
                                   ),
                                   const Text(
                                     "Venmo",
-                                    style: header2TextStyle,
+                                    style: darkHeaderTextStyle,
                                   ),
                                 ],
                               ),

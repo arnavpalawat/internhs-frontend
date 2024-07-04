@@ -236,7 +236,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           },
                           icon: const Icon(
                             Icons.close_outlined,
-                            color: accentColor,
+                            color: darkAccent,
                           ),
                         ),
                       )

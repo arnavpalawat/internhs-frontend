@@ -95,81 +95,43 @@ class _AccountPageState extends State<AccountPage>
   }
 
   Widget buildButton(Color color, String text) {
-    return MouseRegion(
-      onEnter: text == "Sign Out" ? _onGSHover : null,
-      onExit: text == "Sign Out" ? _onGSExit : null,
-      child: Column(
-        children: [
-          Container(
-            width: width(context) * 0.2 +
-                (text == "Sign Out" ? _animationGS.value : 0),
-            height: height(context) * 0.04,
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            decoration: ShapeDecoration(
-              color: color,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(36),
-              ),
-              shadows: const [
-                BoxShadow(
-                  color: Color(0x0C000000),
-                  blurRadius: 2,
-                  offset: Offset(0, 1),
-                  spreadRadius: 0,
-                )
-              ],
+    return Column(
+      children: [
+        Container(
+          width: width(context) * 0.5,
+          height: height(context) * 0.06,
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          decoration: ShapeDecoration(
+            color: color,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(36),
             ),
-            child: Row(
-              mainAxisSize:
-                  text != "Delete" ? MainAxisSize.min : MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                if (text == "Delete")
-                  Align(
-                    alignment: Alignment.center,
-                    child: Center(
-                      child: Text(
-                        text,
-                        style: buttonTextStyle.copyWith(fontSize: 15),
-                      ),
-                    ),
-                  )
-                else
-                  Text(
-                    text,
-                    style: buttonTextStyle.copyWith(fontSize: 15),
-                  ),
-                const Spacer(),
-                if (text == "Sign Out")
-                  if (hovering)
-                    Align(
-                      alignment: Alignment.center,
-                      child: AnimatedOpacity(
-                        opacity: hovering ? 1 : 0,
-                        duration: const Duration(milliseconds: 200),
-                        child: _animationGS.value > 0
-                            ? Center(
-                                child: Icon(
-                                  Icons.arrow_forward_ios_rounded,
-                                  color: Colors.white,
-                                  size: _animationGS.value > 10 ? 15.0 : 0.0,
-                                ),
-                              )
-                            : Container(width: 0),
-                      ),
-                    )
-                  else
-                    Container(
-                      width: 0,
-                    )
-                else
-                  Container(width: 0),
-              ],
-            ),
+            shadows: const [
+              BoxShadow(
+                color: Color(0x0C000000),
+                blurRadius: 2,
+                offset: Offset(0, 1),
+                spreadRadius: 0,
+              )
+            ],
           ),
-        ],
-      ),
+          child: Row(
+            mainAxisSize:
+                text != "Delete" ? MainAxisSize.min : MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Center(
+                child: Text(
+                  text,
+                  style: lightButtonTextStyle.copyWith(
+                      fontSize: 21, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
@@ -213,7 +175,7 @@ class _AccountPageState extends State<AccountPage>
 
   Widget _buildOperations(BuildContext context) {
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.65,
+      height: MediaQuery.of(context).size.height * 0.8,
       width: MediaQuery.of(context).size.width * 0.4,
       child: Container(
         width: MediaQuery.of(context).size.width * 579 / 1280,
@@ -226,12 +188,12 @@ class _AccountPageState extends State<AccountPage>
         ),
         child: Column(
           children: [
-            Text(
-              "Operations and Preferences",
-              style: announcementTextStyle.copyWith(fontSize: 36),
-            ),
-            SizedBox(
-              height: height(context) * 0.02,
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                "Operations and Preferences",
+                style: announcementTextStyle.copyWith(fontSize: 36),
+              ),
             ),
             Align(
               alignment: Alignment.centerLeft,
@@ -241,33 +203,143 @@ class _AccountPageState extends State<AccountPage>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     google
-                        ? GestureDetector(
-                            onTap: () {
-                              changeEmail(context);
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(12.0),
-                              child: buildButton(headerColor, "Change Email"),
-                            ),
+                        ? Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.01,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.02,
+                                    ),
+                                    const Text("Change Email"),
+                                    const Spacer(),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: darkAccent,
+                                        borderRadius:
+                                            BorderRadius.circular(180),
+                                      ),
+                                      child: Center(
+                                        child: IconButton(
+                                            padding: const EdgeInsets.all(6),
+                                            onPressed: () =>
+                                                changeEmail(context),
+                                            icon: const Icon(
+                                              Icons.email_outlined,
+                                              color: lightTextColor,
+                                            )),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                child: Divider(
+                                  height: 1,
+                                  color: Colors.grey.withOpacity(0.3),
+                                ),
+                              ),
+                            ],
                           )
                         : Container(),
-                    GestureDetector(
-                      onTap: () {
-                        resetPassword(FirebaseAuth.instance.currentUser?.email);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: buildButton(accentColor, "Change Password"),
-                      ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.01,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.02,
+                              ),
+                              const Text("Change Password"),
+                              const Spacer(),
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: darkAccent,
+                                  borderRadius: BorderRadius.circular(180),
+                                ),
+                                child: Center(
+                                  child: IconButton(
+                                      padding: const EdgeInsets.all(6),
+                                      onPressed: () =>
+                                          sendPasswordChangeEmail(context),
+                                      icon: const Icon(
+                                        Icons.lock_outline,
+                                        color: lightTextColor,
+                                      )),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                          child: Divider(
+                            height: 1,
+                            color: Colors.grey.withOpacity(0.3),
+                          ),
+                        ),
+                      ],
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        signOut();
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: buildButton(Colors.blueGrey, "Sign Out"),
-                      ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.01,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.02,
+                              ),
+                              const Text("Sign Out"),
+                              const Spacer(),
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: darkAccent,
+                                  borderRadius: BorderRadius.circular(180),
+                                ),
+                                child: Center(
+                                  child: IconButton(
+                                      padding: const EdgeInsets.all(6),
+                                      onPressed: () => signOut(),
+                                      icon: const Icon(
+                                        Icons.logout,
+                                        color: lightTextColor,
+                                      )),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                          child: Divider(
+                            height: 1,
+                            color: Colors.grey.withOpacity(0.3),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: height(context) * 0.4,
                     ),
                     GestureDetector(
                       onTap: () {
@@ -275,7 +347,7 @@ class _AccountPageState extends State<AccountPage>
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(12.0),
-                        child: buildButton(Colors.black, "Delete"),
+                        child: buildButton(brightAccent, "Delete"),
                       ),
                     ),
                   ],

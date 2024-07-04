@@ -2,23 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'colors.dart';
 
-const headerTextStyle = TextStyle(
-  color: Colors.white,
-  fontSize: 25,
-  fontFamily: 'Inter',
-  fontWeight: FontWeight.w500,
-);
-
-const whiteButtonTextStyle = TextStyle(
-  color: Colors.white,
-  fontSize: 16,
-  fontFamily: 'Inter',
-  fontWeight: FontWeight.w500,
-  height: 0.09,
-);
-
+/// Announcement Styles
 const announcementTextStyle = TextStyle(
-  color: Colors.black,
+  color: darkTextColor,
   fontSize: 80,
   fontFamily: 'Poppins',
   fontWeight: FontWeight.w700,
@@ -26,39 +12,46 @@ const announcementTextStyle = TextStyle(
 );
 
 const italicAnnouncementTextStyle = TextStyle(
-  color: Colors.black,
+  color: darkTextColor,
   fontSize: 80,
   fontStyle: FontStyle.italic,
   fontFamily: 'Lora',
   fontWeight: FontWeight.w400,
   height: 1.5,
 );
-
-const blackBodyTextStyle = TextStyle(
-  color: Colors.black,
-  fontSize: 20,
-  fontFamily: 'Inter',
-  height: 1,
-);
-
-const bodyTextStyle = TextStyle(
-  color: Colors.black,
+const announcementBodyTextStyle = TextStyle(
+  color: darkTextColor,
   fontSize: 24,
   fontFamily: 'Questral',
   fontWeight: FontWeight.w400,
   height: 0.5,
 );
 
-const buttonTextStyle = TextStyle(
-    color: Colors.white,
-    fontSize: 25,
-    fontFamily: 'Inter',
-    fontWeight: FontWeight.w500,
-    height: 0.06,
-    overflow: TextOverflow.ellipsis);
+const blackBodyTextStyle = TextStyle(
+  color: darkTextColor,
+  fontSize: 20,
+  fontFamily: 'Inter',
+  height: 1,
+);
 
+/// Button Styles
+const lightButtonTextStyle = TextStyle(
+  color: lightTextColor,
+  fontSize: 16,
+  fontFamily: 'Inter',
+  fontWeight: FontWeight.w500,
+);
+
+const darkButtonTextStyle = TextStyle(
+  color: darkTextColor,
+  fontSize: 16,
+  fontFamily: 'Inter',
+  fontWeight: FontWeight.w500,
+);
+
+/// Authentication Styles
 const authTextStyle = TextStyle(
-  color: Color(0xFF333333),
+  color: darkTextColor,
   fontSize: 16,
   fontFamily: 'Poppins',
   fontWeight: FontWeight.w400,
@@ -66,11 +59,41 @@ const authTextStyle = TextStyle(
 );
 
 const authHeadingStyle = TextStyle(
-  color: Color(0xFF333333),
+  color: darkTextColor,
   fontSize: 32,
   fontFamily: 'Poppins',
   fontWeight: FontWeight.w500,
   height: 0,
+);
+
+/// Header Text Styles
+const lightHeaderTextStyle = TextStyle(
+  color: lightTextColor,
+  fontSize: 25,
+  fontFamily: 'Inter',
+  fontWeight: FontWeight.w500,
+);
+const darkHeaderTextStyle = TextStyle(
+  color: darkTextColor,
+  fontSize: 25,
+  fontFamily: 'Inter',
+  fontWeight: FontWeight.bold,
+  overflow: TextOverflow.ellipsis,
+);
+const darkAccentHeaderTextStyle = TextStyle(
+  color: darkTextColor,
+  fontSize: 25,
+  fontStyle: FontStyle.italic,
+  fontFamily: 'Lora',
+  fontWeight: FontWeight.w400,
+);
+
+const lightAccentHeaderTextStyle = TextStyle(
+  color: lightTextColor,
+  fontSize: 25,
+  fontStyle: FontStyle.italic,
+  fontFamily: 'Lora',
+  fontWeight: FontWeight.w400,
 );
 
 InputDecoration textFieldDecoration = InputDecoration(
@@ -83,10 +106,4 @@ InputDecoration textFieldDecoration = InputDecoration(
   border: borderStyle.copyWith(
     borderRadius: BorderRadius.circular(12),
   ),
-);
-
-const header2TextStyle = TextStyle(
-  color: Colors.black,
-  fontWeight: FontWeight.bold,
-  fontSize: 20,
 );

@@ -108,15 +108,15 @@ class _LandingPageState extends State<LandingPage>
         children: [
           Text(
             'Through robust AI recommendation algorithms, and \n',
-            style: bodyTextStyle,
+            style: announcementBodyTextStyle,
           ),
           Text(
             'tailored recommendations. We guide the next generation \n',
-            style: bodyTextStyle,
+            style: announcementBodyTextStyle,
           ),
           Text(
             'of employees as early as high school.',
-            style: bodyTextStyle,
+            style: announcementBodyTextStyle,
           ),
         ],
       ),
@@ -157,7 +157,7 @@ class _LandingPageState extends State<LandingPage>
               children: [
                 Text(
                   text,
-                  style: buttonTextStyle,
+                  style: lightButtonTextStyle.copyWith(fontSize: 24),
                 ),
                 const Spacer(),
                 if (text == "Get Started")
@@ -231,18 +231,18 @@ class _LandingPageState extends State<LandingPage>
                                   ),
                                 );
                               },
-                              child: buildButton(accentColor, "Get Started"),
+                              child: buildButton(brightAccent, "Get Started"),
                             ),
                             SizedBox(width: width(context) * 0.01),
                             GestureDetector(
                               onTap: () {
                                 widget.pageController.animateToPage(
-                                  1,
+                                  2,
                                   duration: const Duration(seconds: 1),
                                   curve: Curves.easeInOutCubicEmphasized,
                                 );
                               },
-                              child: buildButton(headerColor, "Our Story"),
+                              child: buildButton(darkAccent, "Our Story"),
                             ),
                           ],
                         ),

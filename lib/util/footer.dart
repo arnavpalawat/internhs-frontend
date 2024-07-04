@@ -87,7 +87,7 @@ class _FooterState extends State<Footer> with SingleTickerProviderStateMixin {
               children: [
                 Text(
                   "Email Us",
-                  style: buttonTextStyle.copyWith(fontSize: 15),
+                  style: lightButtonTextStyle.copyWith(fontSize: 15),
                 ),
                 const Spacer(),
                 hovering

@@ -55,10 +55,10 @@ class TinderCard extends StatelessWidget {
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(Radius.circular(10)),
-        color: Colors.white,
+        color: lightBackgroundColor,
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
+            color: darkTextColor.withOpacity(0.2),
             spreadRadius: 3,
             blurRadius: 7,
             offset: const Offset(0, 3),
@@ -82,20 +82,6 @@ class TinderCard extends StatelessWidget {
                   ),
                 ),
               ),
-              // Display bookmark icon if job is flagged
-              if (job?.flagged == null || job?.flagged == true)
-                const Align(
-                  alignment: Alignment.topRight,
-                  child: Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Icon(
-                      Icons.bookmark,
-                      color: Colors.amber,
-                    ),
-                  ),
-                )
-              else
-                Container(),
             ],
           ),
           Padding(
@@ -103,27 +89,46 @@ class TinderCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(job?.title.toString() ?? "No Jobs Available",
-                    style: header2TextStyle),
-                const SizedBox(height: 5),
-                Text(
-                  job?.company.toString() ?? "",
-                  style: const TextStyle(
-                    color: Colors.grey,
-                    fontSize: 15,
+                SizedBox(
+                  width: width(context),
+                  child: Row(
+                    children: [
+                      Text(
+                        job!.title.toString().length > 30
+                            ? job?.title.toString().substring(0, 26) ??
+                                "No Jobs Available"
+                            : job?.title.toString() ?? "No Jobs Available",
+                        style: darkHeaderTextStyle.copyWith(color: darkAccent),
+                      ),
+                      // Display bookmark icon if job is flagged
+                      if (job?.flagged == null || job?.flagged == true)
+                        const Align(
+                          alignment: Alignment.topRight,
+                          child: Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Icon(
+                              Icons.bookmark,
+                              color: brightAccent,
+                              size: 36,
+                            ),
+                          ),
+                        )
+                      else
+                        Container(),
+                    ],
                   ),
                 ),
+                const SizedBox(height: 5),
+                Text(job?.company.toString() ?? "",
+                    style: darkAccentHeaderTextStyle),
                 const SizedBox(height: 5),
                 Row(children: buildPrestige()),
                 // Display job prestige stars
                 const SizedBox(height: 10),
                 Text(
                   job!.description.toString() ?? "",
-                  style: const TextStyle(
-                    color: Colors.grey,
-                    fontSize: 15,
-                  ),
-                  maxLines: 6,
+                  style: blackBodyTextStyle,
+                  maxLines: 11,
                   overflow: TextOverflow.ellipsis,
                 ),
               ],

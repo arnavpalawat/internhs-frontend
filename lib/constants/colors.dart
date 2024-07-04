@@ -14,20 +14,26 @@ const backgroundColor = BoxDecoration(
   ),
 );
 
-const Color ourStoryBG = Color(0xFF6b8dcf);
+const Color darkBackgroundColor = Color(0xFF6C8ECC);
 
-const Color whatWeDOBG = Color(0xFFbdccea);
-// Header
+const Color lightBackgroundColor = Color(0xFFE0E7F5);
+
+const Color darkTextColor = Color(0xFF0C0A08);
+
+const Color lightTextColor = Color(0xFFE0E7F5);
+
 const Color headerColor = Color(0xFF6C8DCC);
 
-const Color accentColor = Color(0xFF184753);
+const brightAccent = Color(0xFFDC493A);
 
-const headerTextColors = [Color(0xFFFFFFFF), Color(0xFF3C5FB4)];
+const darkAccent = Color(0xFF012A43);
 
-const accentColor2 = Color(0xFF857189);
+const borderColor = Color(0x59666666);
+
+const headerTextColors = [Color(0xFFFFFFFF), darkBackgroundColor];
 
 ShapeDecoration authBoxDecorations = ShapeDecoration(
-  color: Colors.white,
+  color: lightBackgroundColor,
   shape: RoundedRectangleBorder(
     borderRadius: BorderRadius.circular(24),
   ),
@@ -36,6 +42,6 @@ ShapeDecoration authBoxDecorations = ShapeDecoration(
 const borderStyle = OutlineInputBorder(
   borderSide: const BorderSide(
     width: 1,
-    color: Color(0x59666666),
+    color: borderColor,
   ),
 );

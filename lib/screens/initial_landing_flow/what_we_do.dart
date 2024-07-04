@@ -91,7 +91,7 @@ class _WhatWeDoPageState extends State<WhatWeDoPage>
               children: [
                 const Text(
                   "Get Started",
-                  style: buttonTextStyle,
+                  style: lightButtonTextStyle,
                 ),
                 const Spacer(),
                 hovering
@@ -120,7 +120,7 @@ class _WhatWeDoPageState extends State<WhatWeDoPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: whatWeDOBG,
+      backgroundColor: lightBackgroundColor,
       body: SizedBox(
         height: height(context),
         width: width(context),
@@ -187,27 +187,30 @@ class _WhatWeDoPageState extends State<WhatWeDoPage>
                                 children: [
                                   const TextSpan(
                                     text: "InternHS offers a ",
-                                    style: bodyTextStyle,
+                                    style: announcementBodyTextStyle,
                                   ),
                                   TextSpan(
                                     text: "Completely Free ",
-                                    style: bodyTextStyle.copyWith(
+                                    style: announcementBodyTextStyle.copyWith(
                                         fontWeight: FontWeight.bold),
                                   ),
                                   TextSpan(
                                     text:
-                                        "AI Based Service for High School Students to \n",
-                                    style: bodyTextStyle.copyWith(height: 1.5),
+                                        "AI Based Service for High School \nStudents to ",
+                                    style: announcementBodyTextStyle.copyWith(
+                                        height: 1.5),
                                   ),
                                   TextSpan(
                                     text:
-                                        "experience the workplace by finding and recommending them internships. \n",
-                                    style: bodyTextStyle.copyWith(height: 1.5),
+                                        "experience the workplace by finding and recommending \nthem internships.",
+                                    style: announcementBodyTextStyle.copyWith(
+                                        height: 1.5),
                                   ),
                                   TextSpan(
                                     text:
-                                        "Allowing High School students to gain real world experience in fields that they have interest in \n",
-                                    style: bodyTextStyle.copyWith(height: 1.5),
+                                        "Allowing High School students to gain real world \nexperience in fields that they have interest in",
+                                    style: announcementBodyTextStyle.copyWith(
+                                        height: 1.5),
                                   ),
                                 ],
                               ),
