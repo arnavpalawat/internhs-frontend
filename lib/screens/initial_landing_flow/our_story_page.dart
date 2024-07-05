@@ -1,6 +1,8 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:internhs/constants/text.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../constants/colors.dart';
 import '../../constants/device.dart';
@@ -17,7 +19,7 @@ class _OurStoryPageState extends State<OurStoryPage> {
   Widget build(BuildContext context) {
     return Container(
       color: darkBackgroundColor,
-      height: height(context) * 1.33,
+      height: 100.h,
       child: Column(
         children: [
           Column(
@@ -25,31 +27,37 @@ class _OurStoryPageState extends State<OurStoryPage> {
               Row(
                 children: [
                   SizedBox(
-                    width: width(context) * 0.15,
+                    width: 15.w,
                   ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(
-                        height: height(context) * 0.15,
+                        height: 15.h,
                       ),
                       Container(
                         alignment: Alignment.centerLeft,
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
+                          padding:
+                              EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
+                          child: AutoSizeText(
                             "Our Story",
+                            minFontSize: 0,
+                            maxLines: 1,
                             style: italicAnnouncementTextStyle.copyWith(
-                                fontSize: 36),
+                                fontSize: height(context) * 36 / 814),
                           ),
                         ),
                       ),
                       SizedBox(
-                        width: width(context) * 0.8,
-                        child: Text(
+                        width: 80.w,
+                        child: AutoSizeText(
                           "Why did I Build InternHS",
-                          style: announcementTextStyle.copyWith(fontSize: 48),
+                          minFontSize: 0,
+                          maxLines: 1,
+                          style: announcementTextStyle.copyWith(
+                              fontSize: height(context) * 48 / 814),
                           textAlign: TextAlign.left,
                         ),
                       ),
@@ -58,32 +66,40 @@ class _OurStoryPageState extends State<OurStoryPage> {
                 ],
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 15, 48, 20),
+                padding: EdgeInsets.fromLTRB(0.w, 1.04.h, 5.89.w, 1.38.h),
                 child: Center(
                   child: Column(
                     children: [
                       SizedBox(
-                        height: 200,
+                        height: 24.5.h,
                         child:
                             Image.asset("lib/assets/images/arnav_linkedin.png"),
                       ),
-                      SizedBox(height: height(context) * 0.025),
+                      SizedBox(height: 2.5.h),
                       SizedBox(
-                        width: width(context) * 0.35,
-                        child: Text(
+                        width: 35.w,
+                        child: AutoSizeText(
                           "Arnav Palawat || Founder of InternHS",
+                          minFontSize: 0,
+                          maxLines: 1,
                           style: blackBodyTextStyle.copyWith(
-                              fontSize: 24, fontWeight: FontWeight.bold),
+                              fontSize: height(context) * 24 / 814,
+                              fontWeight: FontWeight.bold),
                           textAlign: TextAlign.center,
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(48, 15, 48, 48),
+                        padding:
+                            EdgeInsets.fromLTRB(5.89.w, 1.04.h, 5.89.w, 3.33.h),
                         child: SizedBox(
-                          width: width(context) * 0.85,
-                          child: Text(
+                          width: 85.w,
+                          child: AutoSizeText(
                             "I founded InternHS upon recalling countless hours spent scouring platforms like Indeed.com and LinkedIn in pursuit of internships tailored for high school students, only to encounter the discouraging phrase \"Currently Enrolled in an Undergraduate Program.\" After investing numerous hours in this quest, I came to the profound realization that this was a pervasive challenge in need of a solution. Motivated by the belief that I could make a meaningful difference, I embarked on creating InternHS. My vision was clear: to empower fellow high schoolers facing similar hurdles, offering them opportunities and support in navigating the professional landscape.",
-                            style: blackBodyTextStyle.copyWith(height: 1.5),
+                            minFontSize: 0,
+                            maxLines: 7,
+                            style: blackBodyTextStyle.copyWith(
+                                height: 1.5,
+                                fontSize: height(context) * 20 / 814),
                             textAlign: TextAlign.center,
                           ),
                         ),

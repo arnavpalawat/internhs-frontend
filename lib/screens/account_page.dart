@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:internhs/constants/text.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../constants/colors.dart';
 import '../constants/device.dart';
@@ -181,7 +182,7 @@ class _AccountPageState extends State<AccountPage>
         width: MediaQuery.of(context).size.width * 579 / 1280,
         height: MediaQuery.of(context).size.height * 592 / 832,
         decoration: ShapeDecoration(
-          color: Colors.white,
+          color: lightTextColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(25),
           ),
@@ -189,7 +190,7 @@ class _AccountPageState extends State<AccountPage>
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
               child: Text(
                 "Operations and Preferences",
                 style: announcementTextStyle.copyWith(fontSize: 36),
@@ -198,7 +199,7 @@ class _AccountPageState extends State<AccountPage>
             Align(
               alignment: Alignment.centerLeft,
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -211,7 +212,8 @@ class _AccountPageState extends State<AccountPage>
                                     MediaQuery.of(context).size.height * 0.01,
                               ),
                               Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: EdgeInsets.fromLTRB(
+                                    1.4.w, 2.25.h, 1.4.w, 2.25.h),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -258,7 +260,8 @@ class _AccountPageState extends State<AccountPage>
                           height: MediaQuery.of(context).size.height * 0.01,
                         ),
                         Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding:
+                              EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -302,7 +305,8 @@ class _AccountPageState extends State<AccountPage>
                           height: MediaQuery.of(context).size.height * 0.01,
                         ),
                         Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding:
+                              EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [

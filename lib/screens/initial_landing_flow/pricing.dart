@@ -1,7 +1,9 @@
 import 'dart:js' as js;
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../constants/colors.dart';
 import '../../constants/device.dart';
@@ -19,7 +21,7 @@ class _PricingPageState extends State<PricingPage> {
   Widget build(BuildContext context) {
     return Container(
       color: lightBackgroundColor,
-      height: height(context) * 1.33,
+      height: 100.h,
       child: Column(
         children: [
           Column(
@@ -27,31 +29,35 @@ class _PricingPageState extends State<PricingPage> {
               Row(
                 children: [
                   SizedBox(
-                    width: width(context) * 0.15,
+                    width: 15.w,
                   ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(
-                        height: height(context) * 0.15,
+                        height: 15.h,
                       ),
                       Container(
                         alignment: Alignment.centerLeft,
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
+                          padding:
+                              EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
+                          child: AutoSizeText(
                             "Pricing",
+                            minFontSize: 0,
                             style: italicAnnouncementTextStyle.copyWith(
-                                fontSize: 36),
+                                fontSize: height(context) * 36 / 814),
                           ),
                         ),
                       ),
                       SizedBox(
-                        width: width(context) * 0.8,
-                        child: Text(
+                        width: 80.w,
+                        child: AutoSizeText(
                           "Donate to InternHS",
-                          style: announcementTextStyle.copyWith(fontSize: 48),
+                          minFontSize: 0,
+                          style: announcementTextStyle.copyWith(
+                              fontSize: height(context) * 48 / 814),
                           textAlign: TextAlign.left,
                         ),
                       ),
@@ -60,36 +66,43 @@ class _PricingPageState extends State<PricingPage> {
                 ],
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 15, 48, 20),
+                padding: EdgeInsets.fromLTRB(0.w, 1.04.h, 5.89.w, 1.38.h),
                 child: Center(
                   child: Column(
                     children: [
-                      SizedBox(height: height(context) * 0.025),
+                      SizedBox(height: 2.5.h),
                       SizedBox(
-                        width: width(context) * 0.35,
-                        child: Text(
+                        width: 35.w,
+                        child: AutoSizeText(
                           "Free Forever!",
+                          minFontSize: 0,
                           style: blackBodyTextStyle.copyWith(
-                              fontSize: 24, fontWeight: FontWeight.bold),
+                              fontSize: height(context) * 24 / 814,
+                              fontWeight: FontWeight.bold),
                           textAlign: TextAlign.center,
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(48, 15, 48, 48),
+                        padding:
+                            EdgeInsets.fromLTRB(5.89.w, 1.04.h, 5.89.w, 3.33.h),
                         child: SizedBox(
-                          width: width(context) * 0.85,
-                          child: Text(
+                          width: 85.w,
+                          child: AutoSizeText(
                             "InternHS runs exclusively on donations from our ecstatic users. \n We urge that if InternHS helped you get the internship of your dream in High school \n that you donate: We accept donations via both Cashapp and Venmo through the below links",
-                            style: blackBodyTextStyle.copyWith(height: 1.5),
+                            maxLines: 3,
+                            minFontSize: 0,
+                            style: blackBodyTextStyle.copyWith(
+                                height: 1.5,
+                                fontSize: height(context) * 20 / 814),
                             textAlign: TextAlign.center,
                           ),
                         ),
                       ),
                       SizedBox(
-                        height: height(context) * 0.025,
+                        height: 2.5.h,
                       ),
                       SizedBox(
-                        width: width(context) * 0.5,
+                        width: 50.w,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
@@ -103,23 +116,26 @@ class _PricingPageState extends State<PricingPage> {
                               child: Column(
                                 children: [
                                   Container(
-                                    height: height(context) * 0.3,
-                                    width: width(context) * 0.175,
+                                    height: 30.h,
+                                    width: 17.5.w,
                                     decoration: const BoxDecoration(
-                                      color: Colors.white,
+                                      color: lightBackgroundColor,
                                       borderRadius: BorderRadius.all(
                                         Radius.circular(16.0),
                                       ),
                                     ),
                                     child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
+                                      padding: EdgeInsets.fromLTRB(
+                                          1.4.w, 2.25.h, 1.4.w, 2.25.h),
                                       child: Image.asset(
                                           "lib/assets/images/cashapp.png"),
                                     ),
                                   ),
-                                  const Text(
+                                  AutoSizeText(
                                     "Cashapp",
-                                    style: darkHeaderTextStyle,
+                                    minFontSize: 0,
+                                    style: darkHeaderTextStyle.copyWith(
+                                        fontSize: height(context) * 25 / 814),
                                   ),
                                 ],
                               ),
@@ -132,23 +148,26 @@ class _PricingPageState extends State<PricingPage> {
                               child: Column(
                                 children: [
                                   Container(
-                                    height: height(context) * 0.3,
-                                    width: width(context) * 0.175,
+                                    height: 30.h,
+                                    width: 17.5.w,
                                     decoration: const BoxDecoration(
-                                      color: Colors.white,
+                                      color: lightBackgroundColor,
                                       borderRadius: BorderRadius.all(
                                         Radius.circular(16.0),
                                       ),
                                     ),
                                     child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
+                                      padding: EdgeInsets.fromLTRB(
+                                          1.4.w, 2.25.h, 1.4.w, 2.25.h),
                                       child: Image.asset(
                                           "lib/assets/images/venmo.png"),
                                     ),
                                   ),
-                                  const Text(
+                                  AutoSizeText(
                                     "Venmo",
-                                    style: darkHeaderTextStyle,
+                                    minFontSize: 0,
+                                    style: darkHeaderTextStyle.copyWith(
+                                        fontSize: height(context) * 25 / 814),
                                   ),
                                 ],
                               ),

@@ -1,11 +1,13 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:internhs/constants/device.dart';
 import 'package:internhs/screens/account_page.dart';
 import 'package:internhs/screens/initial_landing_flow/landing_agent.dart';
 import 'package:internhs/screens/opportunities_page.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../constants/colors.dart';
-import '../constants/device.dart';
 import '../constants/text.dart';
 import '../screens/authentication_flow/login_screen.dart';
 
@@ -18,6 +20,7 @@ class BuildHeader extends StatefulWidget {
 
 class _BuildHeaderState extends State<BuildHeader> {
   FirebaseAuth _auth = FirebaseAuth.instance;
+
   Widget buildLoginButton() {
     return GestureDetector(
       onTap: () {
@@ -32,9 +35,9 @@ class _BuildHeaderState extends State<BuildHeader> {
         );
       },
       child: Container(
-        width: width(context) * 0.09,
-        height: height(context) * 0.06,
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+        width: 9.w,
+        height: 6.h,
+        padding: EdgeInsets.symmetric(horizontal: 1.66.w, vertical: 1.7.h),
         decoration: ShapeDecoration(
           color: darkAccent,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -47,17 +50,15 @@ class _BuildHeaderState extends State<BuildHeader> {
             )
           ],
         ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              'Login',
-              style: lightButtonTextStyle.copyWith(
-                  fontSize: height(context) * 16 / 840),
+        child: Center(
+          child: AutoSizeText(
+            'Login',
+            maxLines: 1,
+            minFontSize: 0,
+            style: lightButtonTextStyle.copyWith(
+              fontSize: height(context) * 12 / 814,
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -78,9 +79,9 @@ class _BuildHeaderState extends State<BuildHeader> {
         );
       },
       child: Container(
-        width: width(context) * 0.09,
-        height: height(context) * 0.06,
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+        width: 9.w,
+        height: 6.h,
+        padding: EdgeInsets.symmetric(horizontal: 1.66.w, vertical: 1.7.h),
         decoration: ShapeDecoration(
           color: darkAccent,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -93,17 +94,15 @@ class _BuildHeaderState extends State<BuildHeader> {
             )
           ],
         ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              'Account',
-              style: lightButtonTextStyle.copyWith(
-                  fontSize: height(context) * 16 / 840),
+        child: Center(
+          child: AutoSizeText(
+            'Account',
+            maxLines: 1,
+            minFontSize: 0,
+            style: lightButtonTextStyle.copyWith(
+              fontSize: height(context) * 12 / 814,
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -113,24 +112,27 @@ class _BuildHeaderState extends State<BuildHeader> {
   Widget build(BuildContext context) {
     // Function to create styled text widgets
     Widget text(String text) {
-      return Text(
+      return AutoSizeText(
         text,
-        style: lightHeaderTextStyle.copyWith(fontSize: height(context) * 0.03),
+        minFontSize: 0,
+        maxLines: 1,
+        style: lightHeaderTextStyle.copyWith(
+            fontSize: height(context) * 18 / 814 > width(context) * 18 / 1440
+                ? width(context) * 18 / 1440
+                : height(context) * 18 / 814),
       );
     }
 
     return Center(
       child: Row(
         children: [
-          SizedBox(
-            width: width(context) * 0.05,
-          ),
+          SizedBox(width: 5.w),
           Material(
             color: Colors.transparent,
             elevation: 20,
             child: Container(
-              height: height(context) * 0.1322,
-              width: width(context) * 0.9375,
+              height: 13.22.h,
+              width: 93.75.w,
               decoration: ShapeDecoration(
                 color: headerColor,
                 shape: RoundedRectangleBorder(
@@ -141,10 +143,10 @@ class _BuildHeaderState extends State<BuildHeader> {
               child: Row(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
                     child: Image.asset(
                       'lib/assets/images/internhs-header.png',
-                      height: height(context) * 0.1322,
+                      height: 13.22.h,
                     ),
                   ),
                   const Spacer(),
@@ -155,9 +157,7 @@ class _BuildHeaderState extends State<BuildHeader> {
                         context,
                         PageRouteBuilder(
                           pageBuilder: (context, animation1, animation2) =>
-                              LandingAgent(
-                            index: 0,
-                          ),
+                              LandingAgent(index: 0),
                           transitionDuration: Duration.zero,
                           reverseTransitionDuration: Duration.zero,
                         ),
@@ -165,9 +165,7 @@ class _BuildHeaderState extends State<BuildHeader> {
                     },
                     child: text("Home"),
                   ),
-                  SizedBox(
-                    width: width(context) * 0.05,
-                  ),
+                  SizedBox(width: 5.w),
                   GestureDetector(
                     onTap: () {
                       // Navigate to OpportunitiesPage
@@ -183,72 +181,56 @@ class _BuildHeaderState extends State<BuildHeader> {
                     },
                     child: text("Opportunities"),
                   ),
-                  SizedBox(
-                    width: width(context) * 0.05,
-                  ),
+                  SizedBox(width: 5.w),
                   GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder: (context, animation1, animation2) =>
+                              LandingAgent(index: 1),
+                          transitionDuration: Duration.zero,
+                          reverseTransitionDuration: Duration.zero,
+                        ),
+                      );
+                    },
                     child: text("Pricing"),
+                  ),
+                  SizedBox(width: 5.w),
+                  GestureDetector(
                     onTap: () {
                       Navigator.push(
                         context,
                         PageRouteBuilder(
                           pageBuilder: (context, animation1, animation2) =>
-                              LandingAgent(
-                            index: 1,
-                          ),
+                              LandingAgent(index: 2),
                           transitionDuration: Duration.zero,
                           reverseTransitionDuration: Duration.zero,
                         ),
                       );
                     },
-                  ),
-                  SizedBox(
-                    width: width(context) * 0.05,
-                  ),
-                  GestureDetector(
                     child: text("Our Story"),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        PageRouteBuilder(
-                          pageBuilder: (context, animation1, animation2) =>
-                              LandingAgent(
-                            index: 2,
-                          ),
-                          transitionDuration: Duration.zero,
-                          reverseTransitionDuration: Duration.zero,
-                        ),
-                      );
-                    },
                   ),
-                  SizedBox(
-                    width: width(context) * 0.05,
-                  ),
+                  SizedBox(width: 5.w),
                   GestureDetector(
-                    child: text("Contact Us"),
                     onTap: () {
                       Navigator.push(
                         context,
                         PageRouteBuilder(
                           pageBuilder: (context, animation1, animation2) =>
-                              LandingAgent(
-                            index: 3,
-                          ),
+                              LandingAgent(index: 3),
                           transitionDuration: Duration.zero,
                           reverseTransitionDuration: Duration.zero,
                         ),
                       );
                     },
+                    child: text("Contact Us"),
                   ),
-                  SizedBox(
-                    width: width(context) * 0.05,
-                  ),
+                  SizedBox(width: 5.w),
                   _auth.currentUser != null
                       ? buildAccountButton()
                       : buildLoginButton(),
-                  SizedBox(
-                    width: width(context) * 0.05,
-                  ),
+                  SizedBox(width: 5.w),
                 ],
               ),
             ),

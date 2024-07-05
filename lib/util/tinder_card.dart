@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:internhs/constants/colors.dart';
 import 'package:internhs/constants/device.dart';
 import 'package:internhs/constants/text.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 import 'job.dart';
 
@@ -102,11 +103,12 @@ class TinderCard extends StatelessWidget {
                       ),
                       // Display bookmark icon if job is flagged
                       if (job?.flagged == null || job?.flagged == true)
-                        const Align(
+                        Align(
                           alignment: Alignment.topRight,
                           child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Icon(
+                            padding: EdgeInsets.fromLTRB(
+                                1.4.w, 2.25.h, 1.4.w, 2.25.h),
+                            child: const Icon(
                               Icons.bookmark,
                               color: brightAccent,
                               size: 36,

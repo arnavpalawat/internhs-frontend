@@ -122,7 +122,7 @@ class _SignUpPageState extends State<SignUpPage> {
           width: MediaQuery.of(context).size.width * 528 / 1250,
           height: MediaQuery.of(context).size.height * 70 / 840,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: lightBackgroundColor,
             border: Border.all(
               color: const Color(0xFF333333),
             ),
@@ -176,7 +176,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 'Create an account',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: Colors.white,
+                  color: lightTextColor,
                   fontSize: MediaQuery.of(context).size.height * 22 / 840,
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w500,

@@ -25,6 +25,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.11.0"
+  auto_size_text:
+    dependency: "direct main"
+    description:
+      name: auto_size_text
+      sha256: "3f5261cd3fb5f2a9ab4e2fc3fba84fd9fcaac8821f20a1d4e71f557521b22599"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -336,6 +344,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.8"
+  responsive_sizer:
+    dependency: "direct main"
+    description:
+      name: responsive_sizer
+      sha256: "6aefee6065c0883681bc7559147a24d8fa1846d296a216abcda25ff349340712"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.3.1"
   simple_gradient_text:
     dependency: "direct main"
     description:

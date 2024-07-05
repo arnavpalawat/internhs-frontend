@@ -1,7 +1,9 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:internhs/constants/colors.dart';
 import 'package:internhs/constants/text.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../constants/device.dart';
 import '../../util/footer.dart';
@@ -31,7 +33,7 @@ class _WhatWeDoPageState extends State<WhatWeDoPage>
     _animationGS = CurvedAnimation(
       parent: _controllerGS,
       curve: Curves.easeInOut,
-    ).drive(Tween<double>(begin: 0, end: 45));
+    ).drive(Tween<double>(begin: 0, end: 3.125.w));
 
     _controllerGS.addListener(() {
       if (mounted) {
@@ -67,11 +69,11 @@ class _WhatWeDoPageState extends State<WhatWeDoPage>
       child: Column(
         children: [
           Container(
-            width: width(context) * 0.142 + _animationGS.value,
-            height: height(context) * 0.065,
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+            width: 9.2.w + _animationGS.value,
+            height: 5.h,
+            padding: EdgeInsets.symmetric(horizontal: .86.w),
             decoration: ShapeDecoration(
-              color: Colors.black87,
+              color: darkTextColor,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(36),
               ),
@@ -85,13 +87,16 @@ class _WhatWeDoPageState extends State<WhatWeDoPage>
               ],
             ),
             child: Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Text(
+                AutoSizeText(
                   "Get Started",
-                  style: lightButtonTextStyle,
+                  minFontSize: 0,
+                  maxLines: 1,
+                  style: lightButtonTextStyle.copyWith(
+                      fontSize: height(context) * 16 / 814),
                 ),
                 const Spacer(),
                 hovering
@@ -101,8 +106,13 @@ class _WhatWeDoPageState extends State<WhatWeDoPage>
                         child: _animationGS.value > 0
                             ? Icon(
                                 Icons.arrow_forward_ios_rounded,
-                                color: Colors.white,
-                                size: _animationGS.value > 10 ? 25.0 : 0.0,
+                                color: lightBackgroundColor,
+                                size: _animationGS.value > 10
+                                    ? height(context) * 24 / 814 >
+                                            width(context) * 24 / 1440
+                                        ? width(context) * 24 / 1440
+                                        : height(context) * 24 / 814
+                                    : 0.0,
                               )
                             : Container(width: 0),
                       )
@@ -131,12 +141,12 @@ class _WhatWeDoPageState extends State<WhatWeDoPage>
                 Column(
                   children: [
                     SizedBox(
-                      height: height(context) * 0.3,
+                      height: 30.h,
                     ),
                     Row(
                       children: [
                         SizedBox(
-                          width: width(context) * 0.6,
+                          width: 60.w,
                         ),
                         SizedBox(
                           child: Image.asset(
@@ -151,65 +161,69 @@ class _WhatWeDoPageState extends State<WhatWeDoPage>
                 Row(
                   children: [
                     SizedBox(
-                      width: width(context) * 0.15,
+                      width: 15.w,
                     ),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: height(context) * 0.15),
+                        SizedBox(height: 15.h),
                         Container(
                           alignment: Alignment.centerLeft,
                           child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
+                            padding: EdgeInsets.fromLTRB(
+                                1.4.w, 2.25.h, 1.4.w, 2.25.h),
+                            child: AutoSizeText(
                               "What We Do",
+                              maxLines: 1,
+                              minFontSize: 0,
                               style: italicAnnouncementTextStyle.copyWith(
-                                  fontSize: 36),
+                                  fontSize: height(context) * 36 / 814),
                             ),
                           ),
                         ),
                         SizedBox(
-                          width: width(context) * 0.8,
-                          child: Text(
+                          width: 80.w,
+                          child: AutoSizeText(
                             "From interest to Innovation",
-                            style: announcementTextStyle.copyWith(fontSize: 48),
+                            minFontSize: 0,
+                            maxLines: 1,
+                            style: announcementTextStyle.copyWith(
+                                fontSize: height(context) * 48 / 814),
                             textAlign: TextAlign.left,
                           ),
                         ),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(0, 15, 48, 20),
                           child: SizedBox(
-                            width: width(context) * 0.8,
+                            width: 80.w,
                             child: RichText(
                               textAlign: TextAlign.left,
                               text: TextSpan(
                                 children: [
-                                  const TextSpan(
+                                  TextSpan(
                                     text: "InternHS offers a ",
-                                    style: announcementBodyTextStyle,
+                                    style: announcementBodyTextStyle.copyWith(
+                                        fontSize: height(context) * 24 / 814),
                                   ),
                                   TextSpan(
                                     text: "Completely Free ",
                                     style: announcementBodyTextStyle.copyWith(
+                                        fontSize: height(context) * 24 / 814,
                                         fontWeight: FontWeight.bold),
                                   ),
                                   TextSpan(
                                     text:
                                         "AI Based Service for High School \nStudents to ",
                                     style: announcementBodyTextStyle.copyWith(
+                                        fontSize: height(context) * 24 / 814,
                                         height: 1.5),
                                   ),
                                   TextSpan(
                                     text:
                                         "experience the workplace by finding and recommending \nthem internships.",
                                     style: announcementBodyTextStyle.copyWith(
-                                        height: 1.5),
-                                  ),
-                                  TextSpan(
-                                    text:
-                                        "Allowing High School students to gain real world \nexperience in fields that they have interest in",
-                                    style: announcementBodyTextStyle.copyWith(
+                                        fontSize: height(context) * 24 / 814,
                                         height: 1.5),
                                   ),
                                 ],
@@ -235,7 +249,7 @@ class _WhatWeDoPageState extends State<WhatWeDoPage>
                                 child: buildButton()),
                           ],
                         ),
-                        Footer(),
+                        const Footer(),
                       ],
                     ),
                   ],

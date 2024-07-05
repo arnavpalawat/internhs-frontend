@@ -5,6 +5,7 @@ import 'package:internhs/screens/initial_landing_flow/our_story_page.dart';
 import 'package:internhs/screens/initial_landing_flow/pricing.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
+import '../../constants/colors.dart';
 import '../../constants/device.dart';
 import '../../util/header.dart';
 import 'what_we_do.dart';
@@ -80,7 +81,7 @@ class _LandingAgentState extends State<LandingAgent> {
               return WhatWeDoPage();
             default:
               return LoadingAnimationWidget.twoRotatingArc(
-                color: Colors.white,
+                color: lightBackgroundColor,
                 size: 15,
               );
           }

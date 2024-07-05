@@ -1,33 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 import 'colors.dart';
 
 /// Announcement Styles
-const announcementTextStyle = TextStyle(
+final announcementTextStyle = TextStyle(
   color: darkTextColor,
-  fontSize: 80,
+  fontSize: Device.height * 80 / 814,
   fontFamily: 'Poppins',
   fontWeight: FontWeight.w700,
   height: 1.5,
 );
 
-const italicAnnouncementTextStyle = TextStyle(
+final italicAnnouncementTextStyle = TextStyle(
   color: darkTextColor,
-  fontSize: 80,
+  fontSize: Device.height * 80 / 814,
   fontStyle: FontStyle.italic,
   fontFamily: 'Lora',
   fontWeight: FontWeight.w400,
   height: 1.5,
 );
-const announcementBodyTextStyle = TextStyle(
+final announcementBodyTextStyle = TextStyle(
   color: darkTextColor,
   fontSize: 24,
   fontFamily: 'Questral',
   fontWeight: FontWeight.w400,
-  height: 0.5,
+  height: 1.5,
 );
 
-const blackBodyTextStyle = TextStyle(
+final blackBodyTextStyle = TextStyle(
   color: darkTextColor,
   fontSize: 20,
   fontFamily: 'Inter',

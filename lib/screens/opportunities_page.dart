@@ -11,6 +11,7 @@ import 'package:internhs/util/header.dart';
 import 'package:internhs/util/job.dart';
 import 'package:internhs/util/tinder_swipe_mechanics.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 import 'authentication_flow/login_screen.dart';
 
@@ -193,7 +194,7 @@ class _OpportunitiesPageState extends State<OpportunitiesPage> {
             );
           },
           child: Container(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
             width: width(context) * 0.35,
             height: height(context) * 0.75,
             decoration: authBoxDecorations,
@@ -222,7 +223,7 @@ class _OpportunitiesPageState extends State<OpportunitiesPage> {
       } else {
         // Convert Future<Stream> to Stream
         return Container(
-          padding: const EdgeInsets.all(8.0),
+          padding: EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
           width: width(context) * 0.35,
           height: height(context) * 0.75,
           decoration: authBoxDecorations,

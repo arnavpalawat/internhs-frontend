@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
+import '../constants/colors.dart';
 import '../constants/device.dart';
 import '../constants/text.dart';
 
@@ -13,7 +15,7 @@ Widget _buildPref(String type, int length, BuildContext context) {
           height: MediaQuery.of(context).size.height * 0.01,
         ),
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -59,7 +61,7 @@ Widget _buildPref(String type, int length, BuildContext context) {
           height: MediaQuery.of(context).size.height * 0.01,
         ),
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -74,11 +76,12 @@ Widget _buildPref(String type, int length, BuildContext context) {
                 child: TextField(
                   controller:
                       TextEditingController(), // Provide your controller here
-                  cursorColor: Colors.white,
-                  style: const TextStyle(color: Colors.white, height: 1),
+                  cursorColor: lightBackgroundColor,
+                  style:
+                      const TextStyle(color: lightBackgroundColor, height: 1),
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: Colors.blueGrey,
+                    fillColor: darkAccent,
                     contentPadding: const EdgeInsets.symmetric(
                         vertical: 15.0, horizontal: 20.0),
                     border: OutlineInputBorder(
@@ -162,7 +165,7 @@ Widget buildPrefs(context) {
       width: width(context) * 579 / 1280,
       height: height(context) * 760 / 832,
       decoration: ShapeDecoration(
-        color: Colors.white,
+        color: lightBackgroundColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(25),
         ),
@@ -170,7 +173,7 @@ Widget buildPrefs(context) {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
             child: Text(
               "Generate New Internships",
               style: announcementTextStyle.copyWith(fontSize: 36),
@@ -183,7 +186,7 @@ Widget buildPrefs(context) {
           SizedBox(
             height: height(context) * 0.15,
           ),
-          _buildButton(Colors.blueGrey, "Go!", context),
+          _buildButton(darkAccent, "Go!", context),
         ],
       ),
     ),

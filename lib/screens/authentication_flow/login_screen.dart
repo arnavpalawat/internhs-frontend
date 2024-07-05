@@ -7,6 +7,7 @@ import 'package:internhs/constants/device.dart';
 import 'package:internhs/constants/text.dart';
 import 'package:internhs/screens/authentication_flow/sign_up_screen.dart';
 import 'package:internhs/screens/initial_landing_flow/landing_agent.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../opportunities_page.dart';
 
@@ -95,7 +96,7 @@ class _LoginPageState extends State<LoginPage> {
         width: width(context) * 528 / 1250,
         height: height(context) * 70 / 840,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: lightTextColor,
           border: Border.all(
             color: const Color(0xFF333333),
           ),
@@ -148,7 +149,7 @@ class _LoginPageState extends State<LoginPage> {
                   'Log into an account',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: Colors.white,
+                    color: lightBackgroundColor,
                     fontSize: height(context) * 22 / 840,
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w500,
@@ -190,7 +191,8 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       const Spacer(),
                       Padding(
-                        padding: EdgeInsets.all(height(context) * 8 / 840),
+                        padding:
+                            EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
                         child: IconButton(
                             hoverColor: Colors.transparent,
                             highlightColor: Colors.transparent,

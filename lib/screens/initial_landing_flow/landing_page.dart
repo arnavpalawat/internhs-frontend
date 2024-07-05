@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -6,6 +7,7 @@ import 'package:internhs/constants/device.dart';
 import 'package:internhs/constants/text.dart';
 import 'package:internhs/screens/authentication_flow/sign_up_screen.dart';
 import 'package:internhs/screens/opportunities_page.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 class LandingPage extends StatefulWidget {
   final PageController pageController;
@@ -33,7 +35,7 @@ class _LandingPageState extends State<LandingPage>
     _animationGS = CurvedAnimation(
       parent: _controllerGS,
       curve: Curves.easeInOut,
-    ).drive(Tween<double>(begin: 0, end: 45));
+    ).drive(Tween<double>(begin: 0.w, end: 1.75.w));
 
     _controllerGS.addListener(() {
       if (mounted) {
@@ -64,34 +66,41 @@ class _LandingPageState extends State<LandingPage>
 
   Widget buildAnnouncement() {
     return SizedBox(
-      width: width(context) * 0.88,
-      height: height(context) * 0.59,
+      width: 88.w,
+      height: 57.h,
       child: RichText(
-        text: const TextSpan(
+        maxLines: 4,
+        text: TextSpan(
           children: [
             TextSpan(
               text: 'Establishing teens \n',
-              style: announcementTextStyle,
+              style: announcementTextStyle.copyWith(
+                  fontSize: height(context) * 80 / 814),
             ),
             TextSpan(
               text: 'initiative ',
-              style: italicAnnouncementTextStyle,
+              style: italicAnnouncementTextStyle.copyWith(
+                  fontSize: height(context) * 80 / 814),
             ),
             TextSpan(
               text: 'into competitive \n',
-              style: announcementTextStyle,
+              style: announcementTextStyle.copyWith(
+                  fontSize: height(context) * 80 / 814),
             ),
             TextSpan(
               text: 'workplaces, one ',
-              style: announcementTextStyle,
+              style: announcementTextStyle.copyWith(
+                  fontSize: height(context) * 80 / 814),
             ),
             TextSpan(
               text: 'internship\n',
-              style: italicAnnouncementTextStyle,
+              style: italicAnnouncementTextStyle.copyWith(
+                  fontSize: height(context) * 80 / 814),
             ),
             TextSpan(
               text: 'at a time',
-              style: announcementTextStyle,
+              style: announcementTextStyle.copyWith(
+                  fontSize: height(context) * 80 / 814),
             ),
           ],
         ),
@@ -101,22 +110,17 @@ class _LandingPageState extends State<LandingPage>
 
   Widget buildBodyText() {
     return SizedBox(
-      width: width(context) * 0.88,
-      height: height(context) * 0.1,
-      child: const Column(
+      width: 88.w,
+      height: 14.h,
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Through robust AI recommendation algorithms, and \n',
-            style: announcementBodyTextStyle,
-          ),
-          Text(
-            'tailored recommendations. We guide the next generation \n',
-            style: announcementBodyTextStyle,
-          ),
-          Text(
-            'of employees as early as high school.',
-            style: announcementBodyTextStyle,
+          AutoSizeText(
+            'Through robust AI recommendation algorithms, and \ntailored recommendations. We guide the next generation \nof employees as early as high school.',
+            minFontSize: 0,
+            style: announcementBodyTextStyle.copyWith(
+                fontSize: height(context) * 24 / 814),
+            maxLines: 3,
           ),
         ],
       ),
@@ -130,16 +134,16 @@ class _LandingPageState extends State<LandingPage>
       child: Column(
         children: [
           Container(
-            width: width(context) * 0.144 +
-                (text == "Get Started" ? _animationGS.value : 0),
-            height: height(context) * 0.089,
+            width: 14.4.w + (text == "Get Started" ? _animationGS.value : 0),
+            height: 8.9.h,
             padding: EdgeInsets.symmetric(
-                horizontal: width(context) * 24 / 1440,
-                vertical: height(context) * 14 / 726),
+              horizontal: 1.66.w,
+              vertical: 1.93.h,
+            ),
             decoration: ShapeDecoration(
               color: color,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(width(context) * 8),
+                borderRadius: BorderRadius.circular(360),
               ),
               shadows: const [
                 BoxShadow(
@@ -155,9 +159,17 @@ class _LandingPageState extends State<LandingPage>
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
+                AutoSizeText(
                   text,
-                  style: lightButtonTextStyle.copyWith(fontSize: 24),
+                  minFontSize: 0,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: lightButtonTextStyle.copyWith(
+                    fontSize:
+                        height(context) * 24 / 814 > width(context) * 24 / 1440
+                            ? width(context) * 24 / 1440
+                            : height(context) * 24 / 814,
+                  ),
                 ),
                 const Spacer(),
                 if (text == "Get Started")
@@ -167,8 +179,13 @@ class _LandingPageState extends State<LandingPage>
                     child: _animationGS.value > 0
                         ? Icon(
                             Icons.arrow_forward_ios_rounded,
-                            color: Colors.white,
-                            size: _animationGS.value > 10 ? 25.0 : 0.0,
+                            color: lightBackgroundColor,
+                            size: _animationGS.value > 10
+                                ? height(context) * 24 / 814 >
+                                        width(context) * 24 / 1440
+                                    ? width(context) * 24 / 1440
+                                    : height(context) * 24 / 814
+                                : 0.0,
                           )
                         : Container(width: 0),
                   )
@@ -187,30 +204,35 @@ class _LandingPageState extends State<LandingPage>
     return Scaffold(
       body: Container(
         decoration: backgroundColor,
-        width: width(context),
-        height: height(context),
+        width: 100.w,
+        height: 100.h,
         child: Column(
           children: [
-            SizedBox(height: height(context) * 0.115),
+            SizedBox(
+              height: 11.5.h,
+            ),
             Padding(
-              padding: const EdgeInsets.all(36.0),
+              padding: EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
               child: Stack(
                 children: [
                   Positioned(
-                    left: width(context) * 0.4,
-                    top: height(context) * 0.15,
+                    left: 35.w,
+                    top: 25.h,
+                    width: 70.w,
+                    height: 60.h,
                     child: Image.asset(
                       "lib/assets/images/landing-vector.png",
-                      scale: 0.75,
+                      scale: 0.5,
                     ),
                   ),
                   Column(
                     children: [
                       buildAnnouncement(),
+                      SizedBox(height: 1.h),
                       buildBodyText(),
-                      SizedBox(height: height(context) * 0.015),
+                      SizedBox(height: 2.h),
                       SizedBox(
-                        width: width(context) * 0.88,
+                        width: 88.w,
                         child: Row(
                           children: [
                             GestureDetector(
@@ -233,7 +255,7 @@ class _LandingPageState extends State<LandingPage>
                               },
                               child: buildButton(brightAccent, "Get Started"),
                             ),
-                            SizedBox(width: width(context) * 0.01),
+                            SizedBox(width: 1.w),
                             GestureDetector(
                               onTap: () {
                                 widget.pageController.animateToPage(

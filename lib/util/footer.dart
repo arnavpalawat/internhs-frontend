@@ -1,5 +1,8 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:internhs/constants/colors.dart';
 import 'package:internhs/constants/device.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../constants/text.dart';
@@ -27,7 +30,7 @@ class _FooterState extends State<Footer> with SingleTickerProviderStateMixin {
     _animationGS = CurvedAnimation(
       parent: _controllerGS,
       curve: Curves.easeInOut,
-    ).drive(Tween<double>(begin: 0, end: 15));
+    ).drive(Tween<double>(begin: 0, end: 1.04.w));
 
     _controllerGS.addListener(() {
       if (mounted) {
@@ -63,11 +66,11 @@ class _FooterState extends State<Footer> with SingleTickerProviderStateMixin {
       child: Column(
         children: [
           Container(
-            width: width(context) * 0.081 + _animationGS.value,
-            height: height(context) * 0.045,
-            padding: const EdgeInsets.symmetric(horizontal: 24),
+            width: 8.1.w + _animationGS.value,
+            height: 4.5.h,
+            padding: EdgeInsets.symmetric(horizontal: 1.66.w),
             decoration: ShapeDecoration(
-              color: Colors.black87,
+              color: darkTextColor,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(36),
               ),
@@ -85,9 +88,12 @@ class _FooterState extends State<Footer> with SingleTickerProviderStateMixin {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
+                AutoSizeText(
                   "Email Us",
-                  style: lightButtonTextStyle.copyWith(fontSize: 15),
+                  maxLines: 1,
+                  minFontSize: 0,
+                  style: lightButtonTextStyle.copyWith(
+                      fontSize: height(context) * 15 / 814),
                 ),
                 const Spacer(),
                 hovering
@@ -97,8 +103,13 @@ class _FooterState extends State<Footer> with SingleTickerProviderStateMixin {
                         child: _animationGS.value > 0
                             ? Icon(
                                 Icons.arrow_forward_ios_rounded,
-                                color: Colors.white,
-                                size: _animationGS.value > 10 ? 15.0 : 0.0,
+                                color: lightTextColor,
+                                size: _animationGS.value > 10
+                                    ? height(context) * 15 / 814 >
+                                            width(context) * 15 / 1440
+                                        ? width(context) * 15 / 1440
+                                        : height(context) * 15 / 814
+                                    : 0.0,
                               )
                             : Container(width: 0),
                       )
@@ -132,98 +143,105 @@ class _FooterState extends State<Footer> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: height(context) * 0.03,
+    return Row(
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: 3.h,
+            ),
+            Center(
+              child: Container(
+                width: 70.w,
+                child: const Divider(
+                  color: darkTextColor,
+                ),
               ),
-              Center(
-                child: Container(
-                  width: width(context) * 0.7,
-                  child: const Divider(
-                    color: Colors.black,
+            ),
+            SizedBox(
+              height: 3.h,
+            ),
+            Container(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(.55.w, 0.h, .55.w, .982.h),
+                child: AutoSizeText(
+                  "Contact",
+                  maxLines: 1,
+                  minFontSize: 0,
+                  style: italicAnnouncementTextStyle.copyWith(
+                      fontSize: height(context) * 36 / 814),
+                ),
+              ),
+            ),
+            SizedBox(
+              width: 80.w,
+              child: AutoSizeText(
+                "Need Help? Contact InternHS @",
+                minFontSize: 0,
+                maxLines: 1,
+                style: announcementTextStyle.copyWith(
+                    fontSize: height(context) * 48 / 814),
+                textAlign: TextAlign.left,
+              ),
+            ),
+            Row(
+              children: [
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
+                    child: AutoSizeText(
+                      "arnavpalawat@gmail.com",
+                      maxLines: 1,
+                      minFontSize: 0,
+                      style: italicAnnouncementTextStyle.copyWith(
+                          fontSize: height(context) * 24 / 814),
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(
-                height: height(context) * 0.03,
-              ),
-              Container(
-                alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
-                  child: Text(
-                    "Contact",
-                    style: italicAnnouncementTextStyle.copyWith(fontSize: 36),
+                GestureDetector(
+                  onTap: () {
+                    sendEmail();
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
+                    child: buildButton(),
                   ),
                 ),
-              ),
-              SizedBox(
-                width: width(context) * 0.8,
-                child: Text(
-                  "Need Help? Contact InternHS @",
-                  style: announcementTextStyle.copyWith(fontSize: 48),
-                  textAlign: TextAlign.left,
-                ),
-              ),
-              Row(
-                children: [
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        "arnavpalawat@gmail.com",
-                        style:
-                            italicAnnouncementTextStyle.copyWith(fontSize: 24),
+              ],
+            ),
+            Row(
+              children: [
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
+                    child: RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: "Based In: ",
+                            style: italicAnnouncementTextStyle.copyWith(
+                                fontSize: height(context) * 24 / 814),
+                          ),
+                          TextSpan(
+                            text: "Westford, MA",
+                            style: italicAnnouncementTextStyle.copyWith(
+                                fontSize: height(context) * 24 / 814,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      sendEmail();
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: buildButton(),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: "Based In: ",
-                              style: italicAnnouncementTextStyle.copyWith(
-                                  fontSize: 24),
-                            ),
-                            TextSpan(
-                              text: "Westford, MA",
-                              style: italicAnnouncementTextStyle.copyWith(
-                                  fontSize: 24, fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          )
-        ],
-      ),
+                ),
+              ],
+            ),
+          ],
+        )
+      ],
     );
   }
 }

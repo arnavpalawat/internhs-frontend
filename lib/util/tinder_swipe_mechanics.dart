@@ -184,7 +184,7 @@ class _TinderSwiperState extends State<TinderSwiper> {
                 clipBehavior: Clip.hardEdge,
                 decoration: BoxDecoration(
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  color: Colors.white,
+                  color: lightBackgroundColor,
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey.withOpacity(0.2),
@@ -217,7 +217,7 @@ class _TinderSwiperState extends State<TinderSwiper> {
                           Text(
                             "No more available Internships",
                             style: TextStyle(
-                              color: Colors.black,
+                              color: darkTextColor,
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
                             ),
