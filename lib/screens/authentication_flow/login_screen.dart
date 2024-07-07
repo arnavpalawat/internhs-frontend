@@ -93,8 +93,8 @@ class _LoginPageState extends State<LoginPage> {
     /// Social Media Button
     Widget buildLoginPlatforms() {
       return Container(
-        width: width(context) * 528 / 1250,
-        height: height(context) * 70 / 840,
+        width: 42.24.w,
+        height: 8.33.h,
         decoration: BoxDecoration(
           color: lightTextColor,
           border: Border.all(
@@ -109,13 +109,17 @@ class _LoginPageState extends State<LoginPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
-              padding: EdgeInsets.all(height(context) * 15 / 840),
+              padding: EdgeInsets.fromLTRB(1.04.w, 1.78.h, 1.04.w, 1.78.h),
               child: Image.asset("lib/assets/images/google.png"),
             ),
             Text(
               "Login With Google",
-              style:
-                  authTextStyle.copyWith(fontSize: height(context) * 16 / 840),
+              style: authTextStyle.copyWith(
+                fontSize:
+                    height(context) * 16 / 814 > width(context) * 16 / 1440
+                        ? width(context) * 16 / 1440
+                        : height(context) * 16 / 814,
+              ),
             )
           ],
         ),
@@ -125,8 +129,8 @@ class _LoginPageState extends State<LoginPage> {
     /// Create Account Button
     Widget buildCreateAccount() {
       return Container(
-        width: width(context) * 528 / 1240,
-        height: height(context) * 64 / 840,
+        width: 42.58.w,
+        height: 7.62.h,
         clipBehavior: Clip.antiAlias,
         decoration: ShapeDecoration(
           color:
@@ -150,7 +154,10 @@ class _LoginPageState extends State<LoginPage> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: lightBackgroundColor,
-                    fontSize: height(context) * 22 / 840,
+                    fontSize:
+                        height(context) * 22 / 814 > width(context) * 22 / 1440
+                            ? width(context) * 22 / 1440
+                            : height(context) * 22 / 814,
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w500,
                     height: 0,
@@ -164,36 +171,37 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                /// Background
-                image: AssetImage("lib/assets/images/auth_background.png"),
-                fit: BoxFit.cover,
+      body: LayoutBuilder(builder: (context, _) {
+        return Stack(
+          children: <Widget>[
+            Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  /// Background
+                  image: AssetImage("lib/assets/images/auth_background.png"),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-          ),
-          Center(
-            child: Container(
-              width: width(context) * 0.56,
-              height: height(context) * 0.95,
-              clipBehavior: Clip.antiAlias,
-              decoration: authBoxDecorations,
-              child: Column(
-                children: [
-                  /// Build Header of Login
-                  Row(
-                    children: [
-                      SizedBox(
-                        height: height(context) * 38 / 840,
-                      ),
-                      const Spacer(),
-                      Padding(
-                        padding:
-                            EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
-                        child: IconButton(
+            Center(
+              child: Container(
+                width: 56.w,
+                height: 95.h,
+                clipBehavior: Clip.antiAlias,
+                decoration: authBoxDecorations,
+                child: Column(
+                  children: [
+                    /// Build Header of Login
+                    Row(
+                      children: [
+                        SizedBox(
+                          height: 5.71.h,
+                        ),
+                        const Spacer(),
+                        Padding(
+                          padding:
+                              EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
+                          child: IconButton(
                             hoverColor: Colors.transparent,
                             highlightColor: Colors.transparent,
                             onPressed: () {
@@ -208,274 +216,297 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               );
                             },
-                            icon: const Icon(
+                            icon: Icon(
                               Icons.close_outlined,
                               color: darkAccent,
-                            )),
-                      )
-                    ],
-                  ),
-                  Center(
-                    child: Container(
-                      width: height(context) * 48 / 840,
-                      height: height(context) * 48 / 840,
-                      decoration: const ShapeDecoration(
-                        color: Color(0xFFC4C4C4),
-                        shape: OvalBorder(),
+                              size: height(context) * 20 / 814 >
+                                      width(context) * 20 / 1440
+                                  ? width(context) * 20 / 1440
+                                  : height(context) * 20 / 814,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                    Center(
+                      child: Container(
+                        width: height(context) * 48 / 814 >
+                                width(context) * 48 / 1440
+                            ? width(context) * 48 / 1440
+                            : height(context) * 48 / 814,
+                        height: height(context) * 48 / 814 >
+                                width(context) * 48 / 1440
+                            ? width(context) * 48 / 1440
+                            : height(context) * 48 / 814,
+                        decoration: const ShapeDecoration(
+                          color: Color(0xFFC4C4C4),
+                          shape: OvalBorder(),
+                        ),
                       ),
                     ),
-                  ),
-                  Text(
-                    'Log into an account',
-                    textAlign: TextAlign.center,
-                    style: authHeadingStyle.copyWith(
-                        fontSize: height(context) * 32 / 840),
-                  ),
-                  SizedBox(height: height(context) * 2 / 840),
-                  Container(
-                    padding: EdgeInsets.all(height(context) * 2 / 840),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    Text(
+                      'Log into an account',
+                      textAlign: TextAlign.center,
+                      style: authHeadingStyle.copyWith(
+                          fontSize: height(context) * 32 / 814 >
+                                  width(context) * 32 / 1440
+                              ? width(context) * 32 / 1440
+                              : height(context) * 32 / 814),
+                    ),
+                    SizedBox(height: .24.h),
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                          vertical: .24.h, horizontal: .139.w),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                PageRouteBuilder(
+                                  pageBuilder:
+                                      (context, animation1, animation2) =>
+                                          const SignUpPage(),
+                                  transitionDuration: Duration.zero,
+                                  reverseTransitionDuration: Duration.zero,
+                                ),
+                              );
+                            },
+                            child: Text.rich(
+                              TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: 'Need an account?  ',
+                                    style: authTextStyle.copyWith(
+                                        fontSize: height(context) * 16 / 814 >
+                                                width(context) * 16 / 1440
+                                            ? width(context) * 16 / 1440
+                                            : height(context) * 16 / 814),
+                                  ),
+                                  TextSpan(
+                                    text: 'Sign Up  ',
+                                    style: authTextStyle.copyWith(
+                                        decoration: TextDecoration.underline,
+                                        fontSize: height(context) * 16 / 814 >
+                                                width(context) * 16 / 1440
+                                            ? width(context) * 16 / 1440
+                                            : height(context) * 16 / 814),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: .47.h,
+                    ),
+
+                    /// Build Login with
+                    GestureDetector(
+                        onTap: () {
+                          _signInWithGoogle();
+                        },
+                        child: buildLoginPlatforms()),
+                    SizedBox(
+                      height: height(context) * 55 / 840,
+                    ),
+
+                    /// Build Divider
+                    Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: width(context) * 224.5 / 1240,
+                            child: Divider(
+                              height: height(context) * 2 / 840,
+                            ),
+                          ),
+                          SizedBox(
+                            width: width(context) * 24 / 1240,
+                          ),
+                          Text(
+                            "Or",
+                            style: authTextStyle.copyWith(
+                                fontSize: height(context) * 16 / 840),
+                          ),
+                          SizedBox(
+                            width: width(context) * 24 / 1240,
+                          ),
+                          SizedBox(
+                            width: width(context) * 224.5 / 1240,
+                            child: Divider(
+                              height: height(context) * 2 / 840,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: height(context) * 40 / 840,
+                    ),
+
+                    /// Build Email Signup Text
+                    Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text: 'Enter your credentials to ',
+                            style: authTextStyle.copyWith(
+                                fontSize: height(context) * 16 / 840),
+                          ),
+                          TextSpan(
+                              text: 'log into an account.',
+                              style: authTextStyle.copyWith(
+                                  decoration: TextDecoration.underline,
+                                  fontSize: height(context) * 16 / 840)),
+                        ],
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(
+                      height: height(context) * 16 / 840,
+                    ),
+
+                    /// Build authentication fields
+                    Column(
                       children: [
-                        GestureDetector(
-                          onTap: () {
+                        SizedBox(
+                          width: width(context) * 528 / 1240,
+                          child: Text(
+                            "Your Email",
+                            style: authTextStyle.copyWith(
+                                fontSize: height(context) * 16 / 840),
+                            textAlign: TextAlign.start,
+                          ),
+                        ),
+                        SizedBox(
+                          height: height(context) * 6 / 840,
+                        ),
+
+                        /// Email Field
+                        SizedBox(
+                          width: width(context) * 528 / 1240,
+                          height: height(context) * 56 / 840,
+                          child: TextFormField(
+                            onChanged: (_) {
+                              if (_emailController.text.isNotEmpty &&
+                                  _passwordController.text.isNotEmpty) {
+                                setState(() {
+                                  fieldFilled = true;
+                                });
+                              }
+                              if (_emailController.text.isEmpty ||
+                                  _passwordController.text.isEmpty) {
+                                setState(() {
+                                  fieldFilled = false;
+                                });
+                              }
+                            },
+                            controller: _emailController,
+                            decoration: textFieldDecoration,
+                          ),
+                        ),
+                        SizedBox(
+                          height: height(context) * 16 / 840,
+                        ),
+                        SizedBox(
+                          width: width(context) * 528 / 1240,
+                          child: Text(
+                            "Your Password",
+                            style: authTextStyle.copyWith(
+                                fontSize: height(context) * 16 / 840),
+                            textAlign: TextAlign.start,
+                          ),
+                        ),
+
+                        /// Password Field
+                        SizedBox(
+                          height: height(context) * 6 / 840,
+                        ),
+                        SizedBox(
+                          width: width(context) * 528 / 1240,
+                          height: height(context) * 56 / 840,
+                          child: TextFormField(
+                            onChanged: (String value) {
+                              if (_emailController.text.isNotEmpty &&
+                                  _passwordController.text.isNotEmpty) {
+                                setState(() {
+                                  fieldFilled = true;
+                                });
+                              }
+                              if (_emailController.text.isEmpty ||
+                                  _passwordController.text.isEmpty) {
+                                setState(() {
+                                  fieldFilled = false;
+                                });
+                              }
+                            },
+                            controller: _passwordController,
+                            decoration: textFieldDecoration.copyWith(
+                              suffixIcon: IconButton(
+                                focusColor: Colors.transparent,
+                                highlightColor: Colors.transparent,
+                                hoverColor: Colors.transparent,
+                                icon: Icon(
+                                  obscure
+                                      ? Icons.visibility_off
+                                      : Icons.visibility,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    obscure = !obscure;
+                                  });
+                                },
+                              ),
+                            ),
+                            obscureText: obscure,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: height(context) * 16 / 840,
+                    ),
+                    GestureDetector(
+                        onTap: () {
+                          _loginUser(
+                              _emailController.text, _passwordController.text);
+                          if (_authInstance.currentUser?.uid != null) {
                             Navigator.push(
                               context,
                               PageRouteBuilder(
                                 pageBuilder:
                                     (context, animation1, animation2) =>
-                                        const SignUpPage(),
+                                        const OpportunitiesPage(),
                                 transitionDuration: Duration.zero,
                                 reverseTransitionDuration: Duration.zero,
                               ),
                             );
-                          },
-                          child: Text.rich(
-                            TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: 'Need an account?  ',
-                                  style: authTextStyle.copyWith(
-                                      fontSize: height(context) * 16 / 840),
-                                ),
-                                TextSpan(
-                                  text: 'Sign Up  ',
-                                  style: authTextStyle.copyWith(
-                                      decoration: TextDecoration.underline,
-                                      fontSize: height(context) * 16 / 840),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: height(context) * 40 / 840,
-                  ),
-
-                  /// Build Login with
-                  GestureDetector(
-                      onTap: () {
-                        _signInWithGoogle();
-                      },
-                      child: buildLoginPlatforms()),
-                  SizedBox(
-                    height: height(context) * 55 / 840,
-                  ),
-
-                  /// Build Divider
-                  Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          width: width(context) * 224.5 / 1240,
-                          child: Divider(
-                            height: height(context) * 2 / 840,
-                          ),
-                        ),
-                        SizedBox(
-                          width: width(context) * 24 / 1240,
-                        ),
-                        Text(
-                          "Or",
-                          style: authTextStyle.copyWith(
-                              fontSize: height(context) * 16 / 840),
-                        ),
-                        SizedBox(
-                          width: width(context) * 24 / 1240,
-                        ),
-                        SizedBox(
-                          width: width(context) * 224.5 / 1240,
-                          child: Divider(
-                            height: height(context) * 2 / 840,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: height(context) * 40 / 840,
-                  ),
-
-                  /// Build Email Signup Text
-                  Text.rich(
-                    TextSpan(
-                      children: [
-                        TextSpan(
-                          text: 'Enter your credentials to ',
-                          style: authTextStyle.copyWith(
-                              fontSize: height(context) * 16 / 840),
-                        ),
-                        TextSpan(
-                            text: 'log into an account.',
-                            style: authTextStyle.copyWith(
-                                decoration: TextDecoration.underline,
-                                fontSize: height(context) * 16 / 840)),
-                      ],
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(
-                    height: height(context) * 16 / 840,
-                  ),
-
-                  /// Build authentication fields
-                  Column(
-                    children: [
-                      SizedBox(
-                        width: width(context) * 528 / 1240,
-                        child: Text(
-                          "Your Email",
-                          style: authTextStyle.copyWith(
-                              fontSize: height(context) * 16 / 840),
-                          textAlign: TextAlign.start,
-                        ),
-                      ),
-                      SizedBox(
-                        height: height(context) * 6 / 840,
-                      ),
-
-                      /// Email Field
-                      SizedBox(
-                        width: width(context) * 528 / 1240,
-                        height: height(context) * 56 / 840,
-                        child: TextFormField(
-                          onChanged: (_) {
-                            if (_emailController.text.isNotEmpty &&
-                                _passwordController.text.isNotEmpty) {
-                              setState(() {
-                                fieldFilled = true;
-                              });
-                            }
-                            if (_emailController.text.isEmpty ||
-                                _passwordController.text.isEmpty) {
-                              setState(() {
-                                fieldFilled = false;
-                              });
-                            }
-                          },
-                          controller: _emailController,
-                          decoration: textFieldDecoration,
-                        ),
-                      ),
-                      SizedBox(
-                        height: height(context) * 16 / 840,
-                      ),
-                      SizedBox(
-                        width: width(context) * 528 / 1240,
-                        child: Text(
-                          "Your Password",
-                          style: authTextStyle.copyWith(
-                              fontSize: height(context) * 16 / 840),
-                          textAlign: TextAlign.start,
-                        ),
-                      ),
-
-                      /// Password Field
-                      SizedBox(
-                        height: height(context) * 6 / 840,
-                      ),
-                      SizedBox(
-                        width: width(context) * 528 / 1240,
-                        height: height(context) * 56 / 840,
-                        child: TextFormField(
-                          onChanged: (String value) {
-                            if (_emailController.text.isNotEmpty &&
-                                _passwordController.text.isNotEmpty) {
-                              setState(() {
-                                fieldFilled = true;
-                              });
-                            }
-                            if (_emailController.text.isEmpty ||
-                                _passwordController.text.isEmpty) {
-                              setState(() {
-                                fieldFilled = false;
-                              });
-                            }
-                          },
-                          controller: _passwordController,
-                          decoration: textFieldDecoration.copyWith(
-                            suffixIcon: IconButton(
-                              focusColor: Colors.transparent,
-                              highlightColor: Colors.transparent,
-                              hoverColor: Colors.transparent,
-                              icon: Icon(
-                                obscure
-                                    ? Icons.visibility_off
-                                    : Icons.visibility,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  obscure = !obscure;
-                                });
-                              },
-                            ),
-                          ),
-                          obscureText: obscure,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: height(context) * 16 / 840,
-                  ),
-                  GestureDetector(
-                      onTap: () {
-                        _loginUser(
-                            _emailController.text, _passwordController.text);
-                        if (_authInstance.currentUser?.uid != null) {
-                          Navigator.push(
-                            context,
-                            PageRouteBuilder(
-                              pageBuilder: (context, animation1, animation2) =>
-                                  const OpportunitiesPage(),
-                              transitionDuration: Duration.zero,
-                              reverseTransitionDuration: Duration.zero,
-                            ),
-                          );
-                        }
-                      },
-                      child: buildCreateAccount()),
-                ],
+                          }
+                        },
+                        child: buildCreateAccount()),
+                  ],
+                ),
               ),
-            ),
-          )
-              .animate()
-              .fade(
-                duration: const Duration(milliseconds: 1000),
-              )
-              .slideY(
-                  begin: 0.25,
-                  end: 0,
-                  duration: const Duration(milliseconds: 600),
-                  curve: Curves.ease),
-        ],
-      ),
+            )
+                .animate()
+                .fade(
+                  duration: const Duration(milliseconds: 1000),
+                )
+                .slideY(
+                    begin: 0.25,
+                    end: 0,
+                    duration: const Duration(milliseconds: 600),
+                    curve: Curves.ease),
+          ],
+        );
+      }),
     );
   }
 }
