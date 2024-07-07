@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -5,14 +6,14 @@ import '../constants/colors.dart';
 import '../constants/device.dart';
 import '../constants/text.dart';
 
-Widget _buildPref(String type, int length, BuildContext context) {
+Widget _buildPref(String type, double length, BuildContext context) {
   if (type == "Remote") {
     // If type is "Remote", display a dropdown with yes or no
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         SizedBox(
-          height: MediaQuery.of(context).size.height * 0.01,
+          height: 1.h,
         ),
         Padding(
           padding: EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
@@ -20,31 +21,53 @@ Widget _buildPref(String type, int length, BuildContext context) {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(
-                width: MediaQuery.of(context).size.width * 0.02,
+                width: 2.w,
               ),
-              Text("$type: "),
+              AutoSizeText(
+                "$type: ",
+                maxLines: 1,
+                minFontSize: 0,
+                style: blackBodyTextStyle.copyWith(
+                    fontSize:
+                        height(context) * 12 / 814 > width(context) * 12 / 1440
+                            ? width(context) * 12 / 1440
+                            : height(context) * 12 / 814),
+              ),
               const Spacer(),
-              DropdownButton<String>(
-                value: 'Yes', // Example initial value
-                onChanged: (String? newValue) {
-                  // Handle dropdown value change
-                },
-                items: <String>['Yes', 'No']
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
+              SizedBox(
+                height: 7.h,
+                width: 8.w,
+                child: DropdownButton<String>(
+                  value: 'Yes', // Example initial value
+                  onChanged: (String? newValue) {
+                    // Handle dropdown value change
+                  },
+                  items: <String>['Yes', 'No']
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: AutoSizeText(
+                        value,
+                        minFontSize: 0,
+                        maxLines: 1,
+                        style: blackBodyTextStyle.copyWith(
+                            fontSize: height(context) * 24 / 814 >
+                                    width(context) * 24 / 1440
+                                ? width(context) * 24 / 1440
+                                : height(context) * 24 / 814),
+                      ),
+                    );
+                  }).toList(),
+                ),
               ),
               SizedBox(
-                width: MediaQuery.of(context).size.width * 0.02,
+                width: 2.w,
               ),
             ],
           ),
         ),
         Padding(
-          padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+          padding: EdgeInsets.fromLTRB(.55.w, 0, .55.w, 0),
           child: Divider(
             height: 1,
             color: Colors.grey.withOpacity(0.3),
@@ -58,7 +81,7 @@ Widget _buildPref(String type, int length, BuildContext context) {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         SizedBox(
-          height: MediaQuery.of(context).size.height * 0.01,
+          height: 1.h,
         ),
         Padding(
           padding: EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
@@ -66,24 +89,37 @@ Widget _buildPref(String type, int length, BuildContext context) {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(
-                width: MediaQuery.of(context).size.width * 0.02,
+                width: 2.w,
               ),
-              Text("$type: "),
+              AutoSizeText(
+                "$type: ",
+                maxLines: 1,
+                minFontSize: 0,
+                style: blackBodyTextStyle.copyWith(
+                  fontSize:
+                      height(context) * 12 / 814 > width(context) * 12 / 1440
+                          ? width(context) * 12 / 1440
+                          : height(context) * 12 / 814,
+                ),
+              ),
               const Spacer(),
               SizedBox(
                 width: length.toDouble(),
-                height: 30,
+                height: 3.65.h,
                 child: TextField(
                   controller:
                       TextEditingController(), // Provide your controller here
                   cursorColor: lightBackgroundColor,
-                  style:
-                      const TextStyle(color: lightBackgroundColor, height: 1),
+                  style: lightButtonTextStyle.copyWith(
+                      fontSize: height(context) * 12 / 814 >
+                              width(context) * 12 / 1440
+                          ? width(context) * 12 / 1440
+                          : height(context) * 12 / 814),
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: darkAccent,
-                    contentPadding: const EdgeInsets.symmetric(
-                        vertical: 15.0, horizontal: 20.0),
+                    contentPadding: EdgeInsets.symmetric(
+                        vertical: 1.8.h, horizontal: 1.38.w),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(29.0),
                       borderSide: BorderSide.none,
@@ -92,13 +128,13 @@ Widget _buildPref(String type, int length, BuildContext context) {
                 ),
               ),
               SizedBox(
-                width: MediaQuery.of(context).size.width * 0.02,
+                width: 2.w,
               ),
             ],
           ),
         ),
         Padding(
-          padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+          padding: EdgeInsets.fromLTRB(.55.w, 0, .55.w, 0),
           child: Divider(
             height: 1,
             color: Colors.grey.withOpacity(0.3),
@@ -113,9 +149,9 @@ Widget _buildButton(Color color, String text, context) {
   return Column(
     children: [
       Container(
-        width: width(context) * 0.081,
-        height: height(context) * 0.04,
-        padding: const EdgeInsets.symmetric(horizontal: 24),
+        width: 8.1.w,
+        height: 4.h,
+        padding: EdgeInsets.symmetric(horizontal: 1.67.w),
         decoration: ShapeDecoration(
           color: color,
           shape: RoundedRectangleBorder(
@@ -139,16 +175,28 @@ Widget _buildButton(Color color, String text, context) {
               Align(
                 alignment: Alignment.center,
                 child: Center(
-                  child: Text(
+                  child: AutoSizeText(
                     text,
-                    style: lightButtonTextStyle.copyWith(fontSize: 15),
+                    minFontSize: 0,
+                    maxLines: 1,
+                    style: lightButtonTextStyle.copyWith(
+                        fontSize: height(context) * 12 / 814 >
+                                width(context) * 12 / 1440
+                            ? width(context) * 12 / 1440
+                            : height(context) * 12 / 814),
                   ),
                 ),
               )
             else
-              Text(
+              AutoSizeText(
                 text,
-                style: lightButtonTextStyle.copyWith(fontSize: 15),
+                minFontSize: 0,
+                maxLines: 1,
+                style: lightButtonTextStyle.copyWith(
+                    fontSize:
+                        height(context) * 12 / 814 > width(context) * 12 / 1440
+                            ? width(context) * 12 / 1440
+                            : height(context) * 12 / 814),
               ),
           ],
         ),
@@ -159,11 +207,11 @@ Widget _buildButton(Color color, String text, context) {
 
 Widget buildPrefs(context) {
   return SizedBox(
-    height: height(context) * 0.8,
-    width: width(context) * 0.4,
+    height: 80.h,
+    width: 40.w,
     child: Container(
-      width: width(context) * 579 / 1280,
-      height: height(context) * 760 / 832,
+      width: 45.23.w,
+      height: 91.3.h,
       decoration: ShapeDecoration(
         color: lightBackgroundColor,
         shape: RoundedRectangleBorder(
@@ -174,17 +222,23 @@ Widget buildPrefs(context) {
         children: [
           Padding(
             padding: EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
-            child: Text(
+            child: AutoSizeText(
               "Generate New Internships",
-              style: announcementTextStyle.copyWith(fontSize: 36),
+              maxLines: 1,
+              minFontSize: 0,
+              style: announcementTextStyle.copyWith(
+                  fontSize:
+                      height(context) * 36 / 814 > width(context) * 36 / 1440
+                          ? width(context) * 36 / 1440
+                          : height(context) * 36 / 814),
             ),
           ),
-          _buildPref("Country", 182, context),
-          _buildPref("Search Radius", 83, context),
-          _buildPref("Remote", 83, context),
-          _buildPref("Age in Hours", 132, context),
+          _buildPref("Country", 22.w, context),
+          _buildPref("Search Radius", 10.1.w, context),
+          _buildPref("Remote", 10.1.w, context),
+          _buildPref("Age in Hours", 22.w, context),
           SizedBox(
-            height: height(context) * 0.15,
+            height: 15.h,
           ),
           _buildButton(darkAccent, "Go!", context),
         ],

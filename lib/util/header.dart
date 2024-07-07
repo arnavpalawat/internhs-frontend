@@ -123,120 +123,123 @@ class _BuildHeaderState extends State<BuildHeader> {
       );
     }
 
-    return Center(
-      child: Row(
-        children: [
-          SizedBox(width: 5.w),
-          Material(
-            color: Colors.transparent,
-            elevation: 20,
-            child: Container(
-              height: 13.22.h,
-              width: 93.75.w,
-              decoration: ShapeDecoration(
-                color: headerColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(29),
+    return LayoutBuilder(builder: (context, _) {
+      return Center(
+        child: Row(
+          children: [
+            SizedBox(width: 5.w),
+            Material(
+              color: Colors.transparent,
+              elevation: 20,
+              child: Container(
+                height: 13.22.h,
+                width: 93.75.w,
+                decoration: ShapeDecoration(
+                  color: headerColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(29),
+                  ),
+                ),
+                // Header items
+                child: Row(
+                  children: [
+                    Padding(
+                      padding:
+                          EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
+                      child: Image.asset(
+                        'lib/assets/images/internhs-header.png',
+                        height: 13.22.h,
+                      ),
+                    ),
+                    const Spacer(),
+                    GestureDetector(
+                      onTap: () {
+                        // Navigate to LandingPage
+                        Navigator.push(
+                          context,
+                          PageRouteBuilder(
+                            pageBuilder: (context, animation1, animation2) =>
+                                LandingAgent(index: 0),
+                            transitionDuration: Duration.zero,
+                            reverseTransitionDuration: Duration.zero,
+                          ),
+                        );
+                      },
+                      child: text("Home"),
+                    ),
+                    SizedBox(width: 5.w),
+                    GestureDetector(
+                      onTap: () {
+                        // Navigate to OpportunitiesPage
+                        Navigator.push(
+                          context,
+                          PageRouteBuilder(
+                            pageBuilder: (context, animation1, animation2) =>
+                                const OpportunitiesPage(),
+                            transitionDuration: Duration.zero,
+                            reverseTransitionDuration: Duration.zero,
+                          ),
+                        );
+                      },
+                      child: text("Opportunities"),
+                    ),
+                    SizedBox(width: 5.w),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          PageRouteBuilder(
+                            pageBuilder: (context, animation1, animation2) =>
+                                LandingAgent(index: 1),
+                            transitionDuration: Duration.zero,
+                            reverseTransitionDuration: Duration.zero,
+                          ),
+                        );
+                      },
+                      child: text("Pricing"),
+                    ),
+                    SizedBox(width: 5.w),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          PageRouteBuilder(
+                            pageBuilder: (context, animation1, animation2) =>
+                                LandingAgent(index: 2),
+                            transitionDuration: Duration.zero,
+                            reverseTransitionDuration: Duration.zero,
+                          ),
+                        );
+                      },
+                      child: text("Our Story"),
+                    ),
+                    SizedBox(width: 5.w),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          PageRouteBuilder(
+                            pageBuilder: (context, animation1, animation2) =>
+                                LandingAgent(index: 3),
+                            transitionDuration: Duration.zero,
+                            reverseTransitionDuration: Duration.zero,
+                          ),
+                        );
+                      },
+                      child: text("Contact Us"),
+                    ),
+                    SizedBox(width: 5.w),
+                    _auth.currentUser != null
+                        ? buildAccountButton()
+                        : buildLoginButton(),
+                    SizedBox(width: 5.w),
+                  ],
                 ),
               ),
-              // Header items
-              child: Row(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
-                    child: Image.asset(
-                      'lib/assets/images/internhs-header.png',
-                      height: 13.22.h,
-                    ),
-                  ),
-                  const Spacer(),
-                  GestureDetector(
-                    onTap: () {
-                      // Navigate to LandingPage
-                      Navigator.push(
-                        context,
-                        PageRouteBuilder(
-                          pageBuilder: (context, animation1, animation2) =>
-                              LandingAgent(index: 0),
-                          transitionDuration: Duration.zero,
-                          reverseTransitionDuration: Duration.zero,
-                        ),
-                      );
-                    },
-                    child: text("Home"),
-                  ),
-                  SizedBox(width: 5.w),
-                  GestureDetector(
-                    onTap: () {
-                      // Navigate to OpportunitiesPage
-                      Navigator.push(
-                        context,
-                        PageRouteBuilder(
-                          pageBuilder: (context, animation1, animation2) =>
-                              const OpportunitiesPage(),
-                          transitionDuration: Duration.zero,
-                          reverseTransitionDuration: Duration.zero,
-                        ),
-                      );
-                    },
-                    child: text("Opportunities"),
-                  ),
-                  SizedBox(width: 5.w),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        PageRouteBuilder(
-                          pageBuilder: (context, animation1, animation2) =>
-                              LandingAgent(index: 1),
-                          transitionDuration: Duration.zero,
-                          reverseTransitionDuration: Duration.zero,
-                        ),
-                      );
-                    },
-                    child: text("Pricing"),
-                  ),
-                  SizedBox(width: 5.w),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        PageRouteBuilder(
-                          pageBuilder: (context, animation1, animation2) =>
-                              LandingAgent(index: 2),
-                          transitionDuration: Duration.zero,
-                          reverseTransitionDuration: Duration.zero,
-                        ),
-                      );
-                    },
-                    child: text("Our Story"),
-                  ),
-                  SizedBox(width: 5.w),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        PageRouteBuilder(
-                          pageBuilder: (context, animation1, animation2) =>
-                              LandingAgent(index: 3),
-                          transitionDuration: Duration.zero,
-                          reverseTransitionDuration: Duration.zero,
-                        ),
-                      );
-                    },
-                    child: text("Contact Us"),
-                  ),
-                  SizedBox(width: 5.w),
-                  _auth.currentUser != null
-                      ? buildAccountButton()
-                      : buildLoginButton(),
-                  SizedBox(width: 5.w),
-                ],
-              ),
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
+    });
   }
 }

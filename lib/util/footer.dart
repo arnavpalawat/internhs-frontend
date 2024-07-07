@@ -143,105 +143,110 @@ class _FooterState extends State<Footer> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: 3.h,
-            ),
-            Center(
-              child: Container(
-                width: 70.w,
-                child: const Divider(
-                  color: darkTextColor,
+    return LayoutBuilder(builder: (context, _) {
+      return Row(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: 3.h,
+              ),
+              Center(
+                child: Container(
+                  width: 70.w,
+                  child: const Divider(
+                    color: darkTextColor,
+                  ),
                 ),
               ),
-            ),
-            SizedBox(
-              height: 3.h,
-            ),
-            Container(
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(.55.w, 0.h, .55.w, .982.h),
+              SizedBox(
+                height: 3.h,
+              ),
+              Container(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(.55.w, 0.h, .55.w, .982.h),
+                  child: AutoSizeText(
+                    "Contact",
+                    maxLines: 1,
+                    minFontSize: 0,
+                    style: italicAnnouncementTextStyle.copyWith(
+                        fontSize: height(context) * 36 / 814),
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 80.w,
                 child: AutoSizeText(
-                  "Contact",
-                  maxLines: 1,
+                  "Need Help? Contact InternHS @",
                   minFontSize: 0,
-                  style: italicAnnouncementTextStyle.copyWith(
-                      fontSize: height(context) * 36 / 814),
+                  maxLines: 1,
+                  style: announcementTextStyle.copyWith(
+                      fontSize: height(context) * 48 / 814),
+                  textAlign: TextAlign.left,
                 ),
               ),
-            ),
-            SizedBox(
-              width: 80.w,
-              child: AutoSizeText(
-                "Need Help? Contact InternHS @",
-                minFontSize: 0,
-                maxLines: 1,
-                style: announcementTextStyle.copyWith(
-                    fontSize: height(context) * 48 / 814),
-                textAlign: TextAlign.left,
-              ),
-            ),
-            Row(
-              children: [
-                Container(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
-                    child: AutoSizeText(
-                      "arnavpalawat@gmail.com",
-                      maxLines: 1,
-                      minFontSize: 0,
-                      style: italicAnnouncementTextStyle.copyWith(
-                          fontSize: height(context) * 24 / 814),
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    sendEmail();
-                  },
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
-                    child: buildButton(),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Container(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
-                    child: RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: "Based In: ",
-                            style: italicAnnouncementTextStyle.copyWith(
-                                fontSize: height(context) * 24 / 814),
-                          ),
-                          TextSpan(
-                            text: "Westford, MA",
-                            style: italicAnnouncementTextStyle.copyWith(
-                                fontSize: height(context) * 24 / 814,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ],
+              Row(
+                children: [
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding:
+                          EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
+                      child: AutoSizeText(
+                        "arnavpalawat@gmail.com",
+                        maxLines: 1,
+                        minFontSize: 0,
+                        style: italicAnnouncementTextStyle.copyWith(
+                            fontSize: height(context) * 24 / 814),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ],
-        )
-      ],
-    );
+                  GestureDetector(
+                    onTap: () {
+                      sendEmail();
+                    },
+                    child: Padding(
+                      padding:
+                          EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
+                      child: buildButton(),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding:
+                          EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
+                      child: RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: "Based In: ",
+                              style: italicAnnouncementTextStyle.copyWith(
+                                  fontSize: height(context) * 24 / 814),
+                            ),
+                            TextSpan(
+                              text: "Westford, MA",
+                              style: italicAnnouncementTextStyle.copyWith(
+                                  fontSize: height(context) * 24 / 814,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          )
+        ],
+      );
+    });
   }
 }

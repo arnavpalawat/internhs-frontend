@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -30,55 +31,18 @@ class _AccountPageState extends State<AccountPage>
     "Search Radius": _radiusController,
     "Age in Hours": _ageController
   };
-  late AnimationController _controllerGS;
-  late Animation<double> _animationGS;
   bool hovering = false;
   bool google = false;
   @override
   void initState() {
     super.initState();
     signedInWithGoogle();
-    _controllerGS = AnimationController(
-      duration: const Duration(milliseconds: 500),
-      vsync: this,
-    );
-
-    _animationGS = CurvedAnimation(
-      parent: _controllerGS,
-      curve: Curves.easeInOut,
-    ).drive(Tween<double>(begin: 0, end: 15));
-
-    _controllerGS.addListener(() {
-      if (mounted) {
-        setState(() {});
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    _controllerGS.dispose();
-    super.dispose();
-  }
-
-  void _onGSHover(PointerEvent details) {
-    _controllerGS.forward();
-    setState(() {
-      hovering = true;
-    });
-  }
-
-  void _onGSExit(PointerEvent details) {
-    _controllerGS.reverse();
-    setState(() {
-      hovering = false;
-    });
   }
 
   Future<void> resetPassword(String? email) async {
     try {
       email != null
-          ? FirebaseAuth.instance.sendPasswordResetEmail(email: email ?? "")
+          ? FirebaseAuth.instance.sendPasswordResetEmail(email: email)
           : null;
     } catch (e) {
       rethrow;
@@ -99,9 +63,9 @@ class _AccountPageState extends State<AccountPage>
     return Column(
       children: [
         Container(
-          width: width(context) * 0.5,
-          height: height(context) * 0.06,
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          width: 50.w,
+          height: 6.h,
+          padding: EdgeInsets.symmetric(horizontal: 1.66.w),
           decoration: ShapeDecoration(
             color: color,
             shape: RoundedRectangleBorder(
@@ -123,10 +87,16 @@ class _AccountPageState extends State<AccountPage>
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Center(
-                child: Text(
+                child: AutoSizeText(
                   text,
+                  maxLines: 1,
+                  minFontSize: 0,
                   style: lightButtonTextStyle.copyWith(
-                      fontSize: 21, fontWeight: FontWeight.bold),
+                      fontSize: height(context) * 21 / 814 >
+                              width(context) * 21 / 1440
+                          ? width(context) * 21 / 1440
+                          : height(context) * 21 / 814,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
             ],
@@ -176,11 +146,11 @@ class _AccountPageState extends State<AccountPage>
 
   Widget _buildOperations(BuildContext context) {
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.8,
-      width: MediaQuery.of(context).size.width * 0.4,
+      height: 80.h,
+      width: 40.w,
       child: Container(
-        width: MediaQuery.of(context).size.width * 579 / 1280,
-        height: MediaQuery.of(context).size.height * 592 / 832,
+        width: 45.w,
+        height: 71.1.h,
         decoration: ShapeDecoration(
           color: lightTextColor,
           shape: RoundedRectangleBorder(
@@ -191,9 +161,13 @@ class _AccountPageState extends State<AccountPage>
           children: [
             Padding(
               padding: EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
-              child: Text(
+              child: AutoSizeText(
                 "Operations and Preferences",
-                style: announcementTextStyle.copyWith(fontSize: 36),
+                style: announcementTextStyle.copyWith(
+                    fontSize:
+                        height(context) * 36 / 814 > width(context) * 36 / 1440
+                            ? width(context) * 36 / 1440
+                            : height(context) * 36 / 814),
               ),
             ),
             Align(
@@ -208,8 +182,7 @@ class _AccountPageState extends State<AccountPage>
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.01,
+                                height: 1.h,
                               ),
                               Padding(
                                 padding: EdgeInsets.fromLTRB(
@@ -219,11 +192,22 @@ class _AccountPageState extends State<AccountPage>
                                   children: [
                                     SizedBox(
                                       width: MediaQuery.of(context).size.width *
-                                          0.02,
+                                          2.w,
                                     ),
-                                    const Text("Change Email"),
+                                    AutoSizeText(
+                                      "Change Email",
+                                      minFontSize: 0,
+                                      maxLines: 1,
+                                      style: blackBodyTextStyle.copyWith(
+                                          fontSize: height(context) * 12 / 814 >
+                                                  width(context) * 12 / 1440
+                                              ? width(context) * 12 / 1440
+                                              : height(context) * 12 / 814),
+                                    ),
                                     const Spacer(),
                                     Container(
+                                      height: 5.5.h > 9.7.w ? 9.7.w : 5.5.h,
+                                      width: 5.5.h > 9.7.w ? 9.7.w : 5.5.h,
                                       decoration: BoxDecoration(
                                         color: darkAccent,
                                         borderRadius:
@@ -231,12 +215,18 @@ class _AccountPageState extends State<AccountPage>
                                       ),
                                       child: Center(
                                         child: IconButton(
-                                            padding: const EdgeInsets.all(6),
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: .7.h,
+                                                horizontal: .42.w),
                                             onPressed: () =>
                                                 changeEmail(context),
-                                            icon: const Icon(
+                                            icon: Icon(
                                               Icons.email_outlined,
                                               color: lightTextColor,
+                                              size: height(context) * 25 / 814 >
+                                                      width(context) * 25 / 1440
+                                                  ? width(context) * 25 / 1440
+                                                  : height(context) * 25 / 814,
                                             )),
                                       ),
                                     )
@@ -244,7 +234,8 @@ class _AccountPageState extends State<AccountPage>
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                padding:
+                                    EdgeInsets.fromLTRB(.55.w, 0, .55.w, 0),
                                 child: Divider(
                                   height: 1,
                                   color: Colors.grey.withOpacity(0.3),
@@ -257,7 +248,7 @@ class _AccountPageState extends State<AccountPage>
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.01,
+                          height: 1.h,
                         ),
                         Padding(
                           padding:
@@ -266,31 +257,44 @@ class _AccountPageState extends State<AccountPage>
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.02,
+                                width: 2.w,
                               ),
-                              const Text("Change Password"),
+                              AutoSizeText(
+                                "Change Password",
+                                style: blackBodyTextStyle.copyWith(
+                                    fontSize: height(context) * 12 / 814 >
+                                            width(context) * 12 / 1440
+                                        ? width(context) * 12 / 1440
+                                        : height(context) * 12 / 814),
+                              ),
                               const Spacer(),
                               Container(
+                                height: 5.5.h > 9.7.w ? 9.7.w : 5.5.h,
+                                width: 5.5.h > 9.7.w ? 9.7.w : 5.5.h,
                                 decoration: BoxDecoration(
                                   color: darkAccent,
                                   borderRadius: BorderRadius.circular(180),
                                 ),
                                 child: Center(
                                   child: IconButton(
-                                      padding: const EdgeInsets.all(6),
-                                      onPressed: () =>
-                                          sendPasswordChangeEmail(context),
-                                      icon: const Icon(
-                                        Icons.lock_outline,
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: .7.h, horizontal: .42.w),
+                                    onPressed: () =>
+                                        sendPasswordChangeEmail(context),
+                                    icon: Icon(Icons.lock_outline,
                                         color: lightTextColor,
-                                      )),
+                                        size: height(context) * 25 / 814 >
+                                                width(context) * 25 / 1440
+                                            ? width(context) * 25 / 1440
+                                            : height(context) * 25 / 814),
+                                  ),
                                 ),
                               )
                             ],
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                          padding: EdgeInsets.fromLTRB(.55.w, 0, .55.w, 0),
                           child: Divider(
                             height: 1,
                             color: Colors.grey.withOpacity(0.3),
@@ -302,7 +306,7 @@ class _AccountPageState extends State<AccountPage>
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.01,
+                          height: 1.h,
                         ),
                         Padding(
                           padding:
@@ -311,48 +315,67 @@ class _AccountPageState extends State<AccountPage>
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.02,
+                                width: 2.w,
                               ),
-                              const Text("Sign Out"),
+                              AutoSizeText(
+                                "Sign Out",
+                                style: blackBodyTextStyle.copyWith(
+                                    fontSize: height(context) * 12 / 814 >
+                                            width(context) * 12 / 1440
+                                        ? width(context) * 12 / 1440
+                                        : height(context) * 12 / 814),
+                              ),
                               const Spacer(),
                               Container(
+                                height: 5.5.h > 9.7.w ? 9.7.w : 5.5.h,
+                                width: 5.5.h > 9.7.w ? 9.7.w : 5.5.h,
                                 decoration: BoxDecoration(
                                   color: darkAccent,
                                   borderRadius: BorderRadius.circular(180),
                                 ),
                                 child: Center(
                                   child: IconButton(
-                                      padding: const EdgeInsets.all(6),
-                                      onPressed: () => signOut(),
-                                      icon: const Icon(
-                                        Icons.logout,
-                                        color: lightTextColor,
-                                      )),
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: .7.h, horizontal: .42.w),
+                                    onPressed: () => signOut(),
+                                    icon: Icon(
+                                      Icons.logout,
+                                      color: lightTextColor,
+                                      size: height(context) * 25 / 814 >
+                                              width(context) * 25 / 1440
+                                          ? width(context) * 25 / 1440
+                                          : height(context) * 25 / 814,
+                                    ),
+                                  ),
                                 ),
                               )
                             ],
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                          padding: EdgeInsets.fromLTRB(.55.w, 0, .55.w, 0),
                           child: Divider(
-                            height: 1,
+                            height: .12.h,
                             color: Colors.grey.withOpacity(0.3),
                           ),
                         ),
                       ],
                     ),
                     SizedBox(
-                      height: height(context) * 0.4,
+                      height: 25.h,
                     ),
                     GestureDetector(
                       onTap: () {
                         deleteAccount();
                       },
                       child: Padding(
-                        padding: const EdgeInsets.all(12.0),
+                        padding: EdgeInsets.symmetric(
+                            vertical: 1.4.h, horizontal: .84.w),
                         child: buildButton(brightAccent, "Delete"),
                       ),
+                    ),
+                    SizedBox(
+                      height: 1.h,
                     ),
                   ],
                 ),
@@ -372,9 +395,16 @@ class _AccountPageState extends State<AccountPage>
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text("Change Email"),
+          title: AutoSizeText(
+            "Change Email",
+            style: blackBodyTextStyle.copyWith(
+                fontSize:
+                    height(context) * 12 / 814 > width(context) * 12 / 1440
+                        ? width(context) * 12 / 1440
+                        : height(context) * 12 / 814),
+          ),
           content: Container(
-            height: height(context) * 0.2,
+            height: 20.h,
             child: Column(
               children: [
                 TextField(
@@ -397,7 +427,14 @@ class _AccountPageState extends State<AccountPage>
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text("Cancel"),
+              child: AutoSizeText(
+                "Cancel",
+                style: blackBodyTextStyle.copyWith(
+                    fontSize:
+                        height(context) * 12 / 814 > width(context) * 12 / 1440
+                            ? width(context) * 12 / 1440
+                            : height(context) * 12 / 814),
+              ),
             ),
             TextButton(
               onPressed: () async {
@@ -417,7 +454,14 @@ class _AccountPageState extends State<AccountPage>
                   print('Error updating email: $e');
                 }
               },
-              child: const Text("Change"),
+              child: AutoSizeText(
+                "Change",
+                style: blackBodyTextStyle.copyWith(
+                    fontSize:
+                        height(context) * 12 / 814 > width(context) * 12 / 1440
+                            ? width(context) * 12 / 1440
+                            : height(context) * 12 / 814),
+              ),
             ),
           ],
         );
@@ -429,59 +473,67 @@ class _AccountPageState extends State<AccountPage>
     // Implement your send password change email logic here
     print("Password change email sent");
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Password change email sent")),
+      SnackBar(
+        content: AutoSizeText(
+          "Password Change Email Sent",
+          style: blackBodyTextStyle.copyWith(
+              fontSize: height(context) * 12 / 814 > width(context) * 12 / 1440
+                  ? width(context) * 12 / 1440
+                  : height(context) * 12 / 814),
+        ),
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        height: double.infinity,
-        decoration: backgroundColor,
-        child: Column(
-          children: [
-            // Space Above Header
-            SizedBox(
-              height: height(context) * 0.015,
-            ),
-            const BuildHeader(),
-            // Space Below Header
-            SizedBox(
-              height: height(context) * 0.025,
-            ),
+      body: LayoutBuilder(builder: (context, _) {
+        return Container(
+          height: double.infinity,
+          decoration: backgroundColor,
+          child: Column(
+            children: [
+              // Space Above Header
+              SizedBox(
+                height: 1.5.h,
+              ),
+              const BuildHeader(),
+              // Space Below Header
+              SizedBox(
+                height: 2.5.h,
+              ),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(
-                      left: MediaQuery.of(context).size.width * 0.05),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: buildPrefs(context),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: 5.w),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: buildPrefs(context),
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                      right: MediaQuery.of(context).size.width * 0.05),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: _buildOperations(context),
+                  Padding(
+                    padding: EdgeInsets.only(right: 5.w),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: _buildOperations(context),
+                    ),
                   ),
-                ),
-              ],
-            )
-                .animate()
-                .fade(duration: const Duration(milliseconds: 1000))
-                .slideY(
-                    begin: 0.25,
-                    end: 0,
-                    duration: const Duration(milliseconds: 600),
-                    curve: Curves.ease),
-          ],
-        ),
-      ),
+                ],
+              )
+                  .animate()
+                  .fade(duration: const Duration(milliseconds: 1000))
+                  .slideY(
+                      begin: 0.25,
+                      end: 0,
+                      duration: const Duration(milliseconds: 600),
+                      curve: Curves.ease),
+            ],
+          ),
+        );
+      }),
     );
   }
 }

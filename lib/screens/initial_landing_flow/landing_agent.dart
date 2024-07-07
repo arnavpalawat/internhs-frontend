@@ -12,7 +12,7 @@ import 'what_we_do.dart';
 
 class LandingAgent extends StatefulWidget {
   final int index;
-  LandingAgent({Key? key, this.index = 0}) : super(key: key);
+  const LandingAgent({Key? key, this.index = 0}) : super(key: key);
 
   @override
   State<LandingAgent> createState() => _LandingAgentState();
@@ -24,7 +24,7 @@ class _LandingAgentState extends State<LandingAgent> {
 
   @override
   void initState() {
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_pageController.hasClients) {
         _pageController.animateToPage(widget.index,
             duration: const Duration(seconds: 1), curve: Curves.easeInOutCubic);
@@ -78,7 +78,7 @@ class _LandingAgentState extends State<LandingAgent> {
             case 2:
               return const OurStoryPage();
             case 3:
-              return WhatWeDoPage();
+              return const WhatWeDoPage();
             default:
               return LoadingAnimationWidget.twoRotatingArc(
                 color: lightBackgroundColor,

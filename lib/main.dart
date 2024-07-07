@@ -11,17 +11,31 @@ void main() async {
   runApp(const InternHS());
 }
 
-class InternHS extends StatelessWidget {
+class InternHS extends StatefulWidget {
   const InternHS({super.key});
 
+  @override
+  State<InternHS> createState() => _InternHSState();
+}
+
+class _InternHSState extends State<InternHS> {
   @override
   Widget build(BuildContext context) {
     return ResponsiveSizer(builder: (context, orientation, screenType) {
       print(Device.pixelRatio);
-      return MaterialApp(
-        title: 'InternHS',
-        home: LandingAgent(),
-      );
+      return LayoutBuilder(builder: (context, constraints) {
+        WidgetsBinding.instance.addPostFrameCallback(
+          (_) {
+            setState(() {
+              MediaQuery.of(context);
+            });
+          },
+        );
+        return MaterialApp(
+          title: 'InternHS',
+          home: LandingAgent(),
+        );
+      });
     });
   }
 }

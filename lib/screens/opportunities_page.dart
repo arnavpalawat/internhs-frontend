@@ -1,5 +1,6 @@
 import 'dart:js' as js;
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -149,16 +150,22 @@ class _OpportunitiesPageState extends State<OpportunitiesPage> {
         textAlign: TextAlign.center,
         style: authTextStyle.copyWith(
           fontSize: height(context) * 20 / 840,
-          height: 1.5,
+          height: 1,
         ),
         decoration: textFieldDecoration.copyWith(
           filled: true,
           hintText: "Search for a Title: ",
-          hintStyle: darkButtonTextStyle,
+          hintStyle: darkButtonTextStyle.copyWith(
+              fontSize: height(context) * 16 / 814 > width(context) * 16 / 1440
+                  ? width(context) * 16 / 1440
+                  : height(context) * 16 / 814, height: 0),
           fillColor: lightBackgroundColor,
-          suffixIcon: const Icon(
+          suffixIcon: Icon(
             Icons.search,
             color: brightAccent,
+            size: height(context) * 25 / 814 > width(context) * 25 / 1440
+                ? width(context) * 25 / 1440
+                : height(context) * 25 / 814,
           ),
           border: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -172,6 +179,8 @@ class _OpportunitiesPageState extends State<OpportunitiesPage> {
             borderSide: const BorderSide(color: lightBackgroundColor),
             borderRadius: BorderRadius.circular(25.7),
           ),
+          contentPadding: EdgeInsets.symmetric(
+              vertical: 0.814.h), // Adjust the vertical padding as needed
         ),
       );
     }
@@ -195,27 +204,37 @@ class _OpportunitiesPageState extends State<OpportunitiesPage> {
           },
           child: Container(
             padding: EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
-            width: width(context) * 0.35,
-            height: height(context) * 0.75,
+            width: 35.w,
+            height: 75.h,
             decoration: authBoxDecorations,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Center(
-                  child: Text(
+                Center(
+                  child: AutoSizeText(
                     "Login to Unlock your \n Personalized Intership Wishlist",
-                    style: darkHeaderTextStyle,
+                    style: darkHeaderTextStyle.copyWith(
+                      fontSize: height(context) * 25 / 814 >
+                              width(context) * 25 / 1440
+                          ? width(context) * 25 / 1440
+                          : height(context) * 25 / 814,
+                    ),
+                    minFontSize: 0,
+                    maxLines: 2,
                     textAlign: TextAlign.center,
                   ),
                 ),
-                SizedBox(width: width(context) * 0.005),
-                const Center(
+                SizedBox(width: .5.w),
+                Center(
                   child: Icon(
                     Icons.arrow_forward_ios_rounded,
                     color: darkAccent,
+                    size: height(context) * 20 / 814 > width(context) * 20 / 814
+                        ? width(context) * 20 / 814
+                        : height(context) * 20 / 814,
                   ),
                 ),
-                SizedBox(width: width(context) * 0.005),
+                SizedBox(width: .5.w),
               ],
             ),
           ),
@@ -224,8 +243,8 @@ class _OpportunitiesPageState extends State<OpportunitiesPage> {
         // Convert Future<Stream> to Stream
         return Container(
           padding: EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
-          width: width(context) * 0.35,
-          height: height(context) * 0.75,
+          width: 35.w,
+          height: 75.h,
           decoration: authBoxDecorations,
           child: FutureBuilder(
             future: _wishlistedStream,
@@ -235,7 +254,9 @@ class _OpportunitiesPageState extends State<OpportunitiesPage> {
                 return Center(
                   child: LoadingAnimationWidget.twoRotatingArc(
                     color: darkTextColor,
-                    size: 20,
+                    size: height(context) * 20 / 814 > width(context) * 20 / 814
+                        ? width(context) * 20 / 814
+                        : height(context) * 20 / 814,
                   ),
                 );
               } else if (wishlistFutureSnapshot.hasError) {
@@ -256,7 +277,10 @@ class _OpportunitiesPageState extends State<OpportunitiesPage> {
                       return Center(
                         child: LoadingAnimationWidget.twoRotatingArc(
                           color: darkTextColor,
-                          size: 20,
+                          size: height(context) * 20 / 814 >
+                                  width(context) * 20 / 814
+                              ? width(context) * 20 / 814
+                              : height(context) * 20 / 814,
                         ),
                       );
                     } else if (allJobSnapshot.hasError) {
@@ -282,7 +306,10 @@ class _OpportunitiesPageState extends State<OpportunitiesPage> {
                             return Center(
                               child: LoadingAnimationWidget.twoRotatingArc(
                                 color: darkTextColor,
-                                size: 20,
+                                size: height(context) * 20 / 814 >
+                                        width(context) * 20 / 814
+                                    ? width(context) * 20 / 814
+                                    : height(context) * 20 / 814,
                               ),
                             );
                           } else if (jobSnapshot.hasError) {
@@ -304,7 +331,10 @@ class _OpportunitiesPageState extends State<OpportunitiesPage> {
                                     ConnectionState.waiting) {
                                   return LoadingAnimationWidget.twoRotatingArc(
                                     color: darkTextColor,
-                                    size: 20,
+                                    size: height(context) * 20 / 814 >
+                                            width(context) * 20 / 814
+                                        ? width(context) * 20 / 814
+                                        : height(context) * 20 / 814,
                                   );
                                 } else if (streamSnapshot.hasError) {
                                   return Center(
@@ -329,13 +359,17 @@ class _OpportunitiesPageState extends State<OpportunitiesPage> {
 
                                       return GestureDetector(
                                         onTap: () {
-                                          js.context.callMethod('open',
-                                              [job?.link ?? "indeed.com"]);
+                                          js.context.callMethod(
+                                            'open',
+                                            [
+                                              job?.link ?? "indeed.com",
+                                            ],
+                                          );
                                         },
                                         child: Column(
                                           children: [
                                             Container(
-                                              height: height(context) * 0.0935,
+                                              height: 9.35.h,
                                               decoration: authBoxDecorations,
                                               child: Row(
                                                 crossAxisAlignment:
@@ -343,28 +377,61 @@ class _OpportunitiesPageState extends State<OpportunitiesPage> {
                                                 children: [
                                                   Padding(
                                                     padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
+                                                        EdgeInsets.fromLTRB(
+                                                      .556.w,
+                                                      .983.h,
+                                                      .556.w,
+                                                      .983.h,
+                                                    ),
                                                     child: Column(
                                                       crossAxisAlignment:
                                                           CrossAxisAlignment
                                                               .start,
                                                       children: [
-                                                        Text(
-                                                          job?.title.length > 30
-                                                              ? "${job?.title.substring(0, 26)}..."
+                                                        AutoSizeText(
+                                                          job?.title.length > 26
+                                                              ? "${job?.title.substring(0, 24)}..."
                                                               : "${job?.title}",
-                                                          style:
-                                                              darkHeaderTextStyle,
+                                                          minFontSize: 0,
+                                                          maxLines: 1,
+                                                          style: darkHeaderTextStyle.copyWith(
+                                                              fontSize: height(
+                                                                              context) *
+                                                                          25 /
+                                                                          814 >
+                                                                      width(context) *
+                                                                          25 /
+                                                                          1440
+                                                                  ? width(context) *
+                                                                      25 /
+                                                                      1440
+                                                                  : height(
+                                                                          context) *
+                                                                      25 /
+                                                                      814),
                                                         ),
-                                                        Text(
-                                                          "@ ${job?.company.length > 58 ? "${job?.company.substring(0, 50)}..." : job?.company}",
-                                                          style:
-                                                              darkAccentHeaderTextStyle
-                                                                  .copyWith(
-                                                                      fontSize:
-                                                                          16),
-                                                        ),
+                                                        AutoSizeText(
+                                                            "@ ${job?.company.length > 58 ? "${job?.company.substring(0, 50)}..." : job?.company}",
+                                                            minFontSize: 0,
+                                                            maxLines: 1,
+                                                            style:
+                                                                darkAccentHeaderTextStyle
+                                                                    .copyWith(
+                                                              fontSize: height(
+                                                                              context) *
+                                                                          16 /
+                                                                          814 >
+                                                                      width(context) *
+                                                                          16 /
+                                                                          1440
+                                                                  ? width(context) *
+                                                                      16 /
+                                                                      1440
+                                                                  : height(
+                                                                          context) *
+                                                                      16 /
+                                                                      814,
+                                                            )),
                                                       ],
                                                     ),
                                                   ),
@@ -384,9 +451,22 @@ class _OpportunitiesPageState extends State<OpportunitiesPage> {
                                                           .delete();
                                                     },
                                                     child: wishlisted
-                                                        ? const Icon(
+                                                        ? Icon(
                                                             Icons.favorite,
                                                             color: brightAccent,
+                                                            size: height(context) *
+                                                                        20 /
+                                                                        814 >
+                                                                    width(context) *
+                                                                        20 /
+                                                                        1440
+                                                                ? width(context) *
+                                                                    20 /
+                                                                    1440
+                                                                : height(
+                                                                        context) *
+                                                                    20 /
+                                                                    814,
                                                           )
                                                         : Icon(
                                                             Icons
@@ -394,30 +474,47 @@ class _OpportunitiesPageState extends State<OpportunitiesPage> {
                                                             color: darkTextColor
                                                                 .withOpacity(
                                                                     0.6),
+                                                            size: height(context) *
+                                                                        20 /
+                                                                        814 >
+                                                                    width(context) *
+                                                                        20 /
+                                                                        814
+                                                                ? width(context) *
+                                                                    20 /
+                                                                    814
+                                                                : height(
+                                                                        context) *
+                                                                    20 /
+                                                                    814,
                                                           ),
                                                   ),
-                                                  SizedBox(
-                                                      width: width(context) *
-                                                          0.005),
+                                                  SizedBox(width: .5.w),
                                                   Icon(
                                                     Icons
                                                         .arrow_forward_ios_rounded,
                                                     color: darkAccent,
+                                                    size: height(context) *
+                                                                18 /
+                                                                814 >
+                                                            width(context) *
+                                                                18 /
+                                                                1440
+                                                        ? width(context) *
+                                                            18 /
+                                                            1440
+                                                        : height(context) *
+                                                            18 /
+                                                            814,
                                                   ),
-                                                  SizedBox(
-                                                      width: width(context) *
-                                                          0.005),
+                                                  SizedBox(width: .5.w),
                                                 ],
                                               ),
                                             ),
+                                            SizedBox(height: .5.h),
                                             SizedBox(
-                                                height:
-                                                    height(context) * 0.005),
-                                            SizedBox(
-                                              width: width(context) * 0.225,
-                                              child: Divider(
-                                                  height:
-                                                      height(context) * 0.01),
+                                              width: 22.5.w,
+                                              child: Divider(height: 1.h),
                                             ),
                                           ],
                                         ),
@@ -441,152 +538,158 @@ class _OpportunitiesPageState extends State<OpportunitiesPage> {
     }
 
     return Scaffold(
-      body: Container(
-        height: double.infinity,
-        width: double.infinity,
-        decoration: backgroundColor,
-        child: Stack(
-          children: [
-            Positioned(
-              left: width(context) * 0.05,
-              top: height(context) * 0.4,
-              child: Image.asset(
-                "lib/assets/images/opportunities.png",
-                scale: 1,
-              ),
-            ),
-            SizedBox(
-              width: width(context),
-              child: Center(
-                child: Column(
-                  children: [
-                    SizedBox(height: height(context) * 0.015),
-                    // Header section
-                    const BuildHeader(),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              height: height(context) * 0.85,
-                              width: width(context),
-                              child: FutureBuilder<List<Job>>(
-                                future: jobsFuture,
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return Center(
-                                      child:
-                                          LoadingAnimationWidget.twoRotatingArc(
-                                        color: lightBackgroundColor,
-                                        size: 20,
-                                      ),
-                                    );
-                                  } else if (snapshot.hasError) {
-                                    return Center(
-                                      child: Text('Error: ${snapshot.error}'),
-                                    );
-                                  } else if (!snapshot.hasData ||
-                                      snapshot.data!.isEmpty) {
-                                    return const Center(
-                                      child: Text('No jobs available'),
-                                    );
-                                  } else if (snapshot.connectionState ==
-                                      ConnectionState.done) {
-                                    if (first) {
-                                      originalJobs = snapshot.data!;
-                                      jobs = originalJobs;
-                                      WidgetsBinding.instance
-                                          .addPostFrameCallback(
-                                        (_) {
-                                          setState(
-                                            () {
-                                              first = false;
-                                            },
-                                          );
-                                        },
-                                      );
-                                    }
-                                    return Column(
-                                      children: [
-                                        // Swiper and Wishlist
-                                        Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.end,
-                                          children: [
-                                            Column(
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.fromLTRB(
-                                                          30, 30, 30, 0),
-                                                  child: SizedBox(
-                                                    width:
-                                                        width(context) * 0.32,
-                                                    height: height(context) *
-                                                        56 /
-                                                        840,
-                                                    child: buildTextFormField(),
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                    height:
-                                                        height(context) * 0.65,
-                                                    width:
-                                                        width(context) * 0.35,
-                                                    child: TinderSwiper(
-                                                        jobs: jobs)),
-                                              ],
-                                            ),
-                                            Column(
-                                              children: [
-                                                SizedBox(
-                                                  height: height(context) * 0.6,
-                                                  child: buildWishlist(),
-                                                ),
-                                                SizedBox(
-                                                  height:
-                                                      height(context) * 0.025,
-                                                )
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    );
-                                  } else {
-                                    return Container();
-                                  }
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    )
-                        .animate()
-                        .fade(
-                          duration: const Duration(milliseconds: 1000),
-                        )
-                        .slideY(
-                          begin: 0.25,
-                          end: 0,
-                          duration: const Duration(milliseconds: 600),
-                          curve: Curves.ease,
-                        ),
-                  ],
+      body: LayoutBuilder(builder: (context, _) {
+        return Container(
+          height: double.infinity,
+          width: double.infinity,
+          decoration: backgroundColor,
+          child: Stack(
+            children: [
+              Positioned(
+                left: 5.w,
+                top: 40.h,
+                child: Image.asset(
+                  "lib/assets/images/opportunities.png",
+                  scale: height(context) * -2 / 814 + 3 <
+                          width(context) * -2 / 1440 + 3
+                      ? width(context) * -2 / 1440 + 3
+                      : height(context) * -2 / 814 + 3,
                 ),
               ),
-            ),
-          ],
-        ),
-      ),
+              SizedBox(
+                width: width(context),
+                child: Center(
+                  child: Column(
+                    children: [
+                      SizedBox(height: 1.5.h),
+                      // Header section
+                      const BuildHeader(),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                height: 85.h,
+                                width: width(context),
+                                child: FutureBuilder<List<Job>>(
+                                  future: jobsFuture,
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return Center(
+                                        child: LoadingAnimationWidget
+                                            .twoRotatingArc(
+                                          color: lightBackgroundColor,
+                                          size: height(context) * 20 / 814 >
+                                                  width(context) * 20 / 814
+                                              ? width(context) * 20 / 814
+                                              : height(context) * 20 / 814,
+                                        ),
+                                      );
+                                    } else if (snapshot.hasError) {
+                                      return Center(
+                                        child: Text('Error: ${snapshot.error}'),
+                                      );
+                                    } else if (!snapshot.hasData ||
+                                        snapshot.data!.isEmpty) {
+                                      return const Center(
+                                        child: Text('No jobs available'),
+                                      );
+                                    } else if (snapshot.connectionState ==
+                                        ConnectionState.done) {
+                                      if (first) {
+                                        originalJobs = snapshot.data!;
+                                        jobs = originalJobs;
+                                        WidgetsBinding.instance
+                                            .addPostFrameCallback(
+                                          (_) {
+                                            setState(
+                                              () {
+                                                first = false;
+                                              },
+                                            );
+                                          },
+                                        );
+                                      }
+                                      return Column(
+                                        children: [
+                                          // Swiper and Wishlist
+                                          Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.end,
+                                            children: [
+                                              Column(
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsets.fromLTRB(
+                                                            2.1.w,
+                                                            3.7.h,
+                                                            3.7.h,
+                                                            0.w),
+                                                    child: SizedBox(
+                                                      width: 32.w,
+                                                      height: 6.h,
+                                                      child:
+                                                          buildTextFormField(),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                      height: 65.h,
+                                                      width: 35.w,
+                                                      child: TinderSwiper(
+                                                          jobs: jobs)),
+                                                ],
+                                              ),
+                                              Column(
+                                                children: [
+                                                  SizedBox(
+                                                    height: 60.h,
+                                                    child: buildWishlist(),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 2.5.h,
+                                                  )
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      );
+                                    } else {
+                                      return Container();
+                                    }
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      )
+                          .animate()
+                          .fade(
+                            duration: const Duration(milliseconds: 1000),
+                          )
+                          .slideY(
+                            begin: 0.25,
+                            end: 0,
+                            duration: const Duration(milliseconds: 600),
+                            curve: Curves.ease,
+                          ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      }),
     );
   }
 }

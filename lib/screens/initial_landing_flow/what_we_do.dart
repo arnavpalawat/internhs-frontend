@@ -131,136 +131,139 @@ class _WhatWeDoPageState extends State<WhatWeDoPage>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: lightBackgroundColor,
-      body: SizedBox(
-        height: height(context),
-        width: width(context),
-        child: Column(
-          children: [
-            Stack(
-              children: [
-                Column(
-                  children: [
-                    SizedBox(
-                      height: 30.h,
-                    ),
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: 60.w,
-                        ),
-                        SizedBox(
-                          child: Image.asset(
-                            "lib/assets/images/what-we-do-vector.png",
-                            scale: 1.5,
+      body: LayoutBuilder(builder: (context, _) {
+        return SizedBox(
+          height: height(context),
+          width: width(context),
+          child: Column(
+            children: [
+              Stack(
+                children: [
+                  Column(
+                    children: [
+                      SizedBox(
+                        height: 30.h,
+                      ),
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 60.w,
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    SizedBox(
-                      width: 15.w,
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: 15.h),
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          child: Padding(
-                            padding: EdgeInsets.fromLTRB(
-                                1.4.w, 2.25.h, 1.4.w, 2.25.h),
-                            child: AutoSizeText(
-                              "What We Do",
-                              maxLines: 1,
-                              minFontSize: 0,
-                              style: italicAnnouncementTextStyle.copyWith(
-                                  fontSize: height(context) * 36 / 814),
+                          SizedBox(
+                            child: Image.asset(
+                              "lib/assets/images/what-we-do-vector.png",
+                              scale: 1.5,
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          width: 80.w,
-                          child: AutoSizeText(
-                            "From interest to Innovation",
-                            minFontSize: 0,
-                            maxLines: 1,
-                            style: announcementTextStyle.copyWith(
-                                fontSize: height(context) * 48 / 814),
-                            textAlign: TextAlign.left,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 15, 48, 20),
-                          child: SizedBox(
-                            width: 80.w,
-                            child: RichText(
-                              textAlign: TextAlign.left,
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: "InternHS offers a ",
-                                    style: announcementBodyTextStyle.copyWith(
-                                        fontSize: height(context) * 24 / 814),
-                                  ),
-                                  TextSpan(
-                                    text: "Completely Free ",
-                                    style: announcementBodyTextStyle.copyWith(
-                                        fontSize: height(context) * 24 / 814,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  TextSpan(
-                                    text:
-                                        "AI Based Service for High School \nStudents to ",
-                                    style: announcementBodyTextStyle.copyWith(
-                                        fontSize: height(context) * 24 / 814,
-                                        height: 1.5),
-                                  ),
-                                  TextSpan(
-                                    text:
-                                        "experience the workplace by finding and recommending \nthem internships.",
-                                    style: announcementBodyTextStyle.copyWith(
-                                        fontSize: height(context) * 24 / 814,
-                                        height: 1.5),
-                                  ),
-                                ],
+                        ],
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: 15.w,
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 15.h),
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            child: Padding(
+                              padding: EdgeInsets.fromLTRB(
+                                  1.4.w, 2.25.h, 1.4.w, 2.25.h),
+                              child: AutoSizeText(
+                                "What We Do",
+                                maxLines: 1,
+                                minFontSize: 0,
+                                style: italicAnnouncementTextStyle.copyWith(
+                                    fontSize: height(context) * 36 / 814),
                               ),
                             ),
                           ),
-                        ),
-                        Row(
-                          children: [
-                            GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    PageRouteBuilder(
-                                      pageBuilder:
-                                          (context, animation1, animation2) =>
-                                              const OpportunitiesPage(),
-                                      transitionDuration: Duration.zero,
-                                      reverseTransitionDuration: Duration.zero,
+                          SizedBox(
+                            width: 80.w,
+                            child: AutoSizeText(
+                              "From interest to Innovation",
+                              minFontSize: 0,
+                              maxLines: 1,
+                              style: announcementTextStyle.copyWith(
+                                  fontSize: height(context) * 48 / 814),
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 15, 48, 20),
+                            child: SizedBox(
+                              width: 80.w,
+                              child: RichText(
+                                textAlign: TextAlign.left,
+                                text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: "InternHS offers a ",
+                                      style: announcementBodyTextStyle.copyWith(
+                                          fontSize: height(context) * 24 / 814),
                                     ),
-                                  );
-                                },
-                                child: buildButton()),
-                          ],
-                        ),
-                        const Footer(),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ).animate().fade(
-                duration: const Duration(milliseconds: 2000),
-                curve: Curves.easeInOutCubicEmphasized),
-          ],
-        ),
-      ),
+                                    TextSpan(
+                                      text: "Completely Free ",
+                                      style: announcementBodyTextStyle.copyWith(
+                                          fontSize: height(context) * 24 / 814,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    TextSpan(
+                                      text:
+                                          "AI Based Service for High School \nStudents to ",
+                                      style: announcementBodyTextStyle.copyWith(
+                                          fontSize: height(context) * 24 / 814,
+                                          height: 1.5),
+                                    ),
+                                    TextSpan(
+                                      text:
+                                          "experience the workplace by finding and recommending \nthem internships.",
+                                      style: announcementBodyTextStyle.copyWith(
+                                          fontSize: height(context) * 24 / 814,
+                                          height: 1.5),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      PageRouteBuilder(
+                                        pageBuilder:
+                                            (context, animation1, animation2) =>
+                                                const OpportunitiesPage(),
+                                        transitionDuration: Duration.zero,
+                                        reverseTransitionDuration:
+                                            Duration.zero,
+                                      ),
+                                    );
+                                  },
+                                  child: buildButton()),
+                            ],
+                          ),
+                          const Footer(),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ).animate().fade(
+                  duration: const Duration(milliseconds: 2000),
+                  curve: Curves.easeInOutCubicEmphasized),
+            ],
+          ),
+        );
+      }),
     );
   }
 }

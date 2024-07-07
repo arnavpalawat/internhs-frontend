@@ -3,9 +3,11 @@ import 'dart:js' as js;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:internhs/screens/authentication_flow/login_screen.dart';
 import 'package:internhs/util/tinder_card.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../constants/colors.dart';
 import 'job.dart';
@@ -37,12 +39,31 @@ class _TinderSwiperState extends State<TinderSwiper> {
         : [
             const TinderCard(null),
           ];
+    RawKeyboard.instance.addListener(_keyboardCallback);
   }
 
   @override
   void dispose() {
     controller.dispose();
+    RawKeyboard.instance.removeListener(_keyboardCallback);
+
     super.dispose();
+  }
+
+  /// Handle KBD
+  void _keyboardCallback(RawKeyEvent keyEvent) {
+    if (keyEvent is! RawKeyDownEvent) return;
+
+    switch (keyEvent.data.logicalKey) {
+      case (LogicalKeyboardKey.arrowLeft):
+        controller.swipe(CardSwiperDirection.left);
+      case (LogicalKeyboardKey.arrowDown):
+        controller.swipe(CardSwiperDirection.bottom);
+      case (LogicalKeyboardKey.arrowRight):
+        controller.swipe(CardSwiperDirection.right);
+      case (LogicalKeyboardKey.arrowUp):
+        controller.swipe(CardSwiperDirection.top);
+    }
   }
 
   @override
@@ -105,6 +126,17 @@ class _TinderSwiperState extends State<TinderSwiper> {
     void onUpSwipe(int index) async {
       // Open the job link in a new browser tab
       js.context.callMethod('open', [widget.jobs![index].link ?? "indeed.com"]);
+      if (auth.currentUser != null) {
+        CollectionReference users =
+            FirebaseFirestore.instance.collection('user');
+        String uid = auth.currentUser!.uid;
+        DocumentReference docRef =
+            users.doc(uid).collection("wishlisted").doc(widget.jobs?[index].id);
+
+        await docRef.set({
+          'jobId': widget.jobs?[index].id,
+        }, SetOptions(merge: true));
+      }
     }
 
     // Executes when the user swipes down on a card
@@ -151,84 +183,87 @@ class _TinderSwiperState extends State<TinderSwiper> {
       return true;
     }
 
-    return CardSwiper(
-      isLoop: false,
-      controller: controller,
-      cardsCount: widget.jobs != null || widget.jobs!.isNotEmpty
-          ? widget.jobs!.length + 1
-          : 1,
-      onSwipe: onSwipe,
-      numberOfCardsDisplayed: widget.jobs != null || widget.jobs!.isNotEmpty
-          ? widget.jobs!.length > 2
-              ? 3
-              : widget.jobs!.length > 1
-                  ? 2
-                  : 1
-          : 1,
-      backCardOffset: const Offset(20, 20),
-      padding: const EdgeInsets.all(24.0),
-      isDisabled: disable,
-      cardBuilder: (
-        context,
-        index,
-        horizontalThresholdPercentage,
-        verticalThresholdPercentage,
-      ) {
-        int cardAmt = widget.jobs != null || widget.jobs!.isNotEmpty
+    return LayoutBuilder(builder: (context, _) {
+      return CardSwiper(
+        isLoop: false,
+        controller: controller,
+        cardsCount: widget.jobs != null || widget.jobs!.isNotEmpty
             ? widget.jobs!.length + 1
-            : 1;
-        return index < cardAmt
-            ? TinderCard(widget.jobs?[index])
-            : Container(
-                // Placeholder card when no more jobs are available
-                clipBehavior: Clip.hardEdge,
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  color: lightBackgroundColor,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.2),
-                      spreadRadius: 3,
-                      blurRadius: 7,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
-                ),
-                alignment: Alignment.center,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Flexible(
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: headerTextColors,
+            : 1,
+        onSwipe: onSwipe,
+        numberOfCardsDisplayed: widget.jobs != null || widget.jobs!.isNotEmpty
+            ? widget.jobs!.length > 2
+                ? 3
+                : widget.jobs!.length > 1
+                    ? 2
+                    : 1
+            : 1,
+        backCardOffset: const Offset(20, 20),
+        padding: EdgeInsets.fromLTRB(1.67.w, 2.96.h, 1.67.w, 2.96.h),
+        isDisabled: disable,
+        cardBuilder: (
+          context,
+          index,
+          horizontalThresholdPercentage,
+          verticalThresholdPercentage,
+        ) {
+          int cardAmt = widget.jobs != null || widget.jobs!.isNotEmpty
+              ? widget.jobs!.length + 1
+              : 1;
+          return index < cardAmt
+              ? TinderCard(widget.jobs?[index])
+              : Container(
+                  // Placeholder card when no more jobs are available
+                  clipBehavior: Clip.hardEdge,
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    color: lightBackgroundColor,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.2),
+                        spreadRadius: 3,
+                        blurRadius: 7,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  alignment: Alignment.center,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Flexible(
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: headerTextColors,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "No more available Internships",
-                            style: TextStyle(
-                              color: darkTextColor,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
+                      Padding(
+                        padding:
+                            EdgeInsets.fromLTRB(1.11.w, 1.97.h, 1.11.w, 1.97.h),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "No more available Internships",
+                              style: TextStyle(
+                                color: darkTextColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              );
-      },
-    );
+                    ],
+                  ),
+                );
+        },
+      );
+    });
   }
 }
