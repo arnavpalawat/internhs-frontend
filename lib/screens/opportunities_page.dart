@@ -32,8 +32,14 @@ class _OpportunitiesPageState extends State<OpportunitiesPage> {
   List<Job> originalJobs = [];
   bool first = true;
   late Future<List<Job>> jobsFuture;
+  final Timestamp currentDate = Timestamp.now();
+  late Timestamp threeMonthsAgo;
+
   @override
   void initState() {
+    threeMonthsAgo = Timestamp.fromDate(DateTime.fromMillisecondsSinceEpoch(
+        currentDate.millisecondsSinceEpoch - (3 * 30 * 24 * 60 * 60 * 1000)));
+
     jobsFuture = fetchJobs();
     _wishlistedStream = _fetchWishlistStream();
     super.initState();
@@ -117,7 +123,13 @@ class _OpportunitiesPageState extends State<OpportunitiesPage> {
         filteredJobs = filteredJobs
             .where((job) => !unlikedJobIds.contains(job.id))
             .toList();
-        rJobs = filteredJobs;
+        List<Job> filteredList = [];
+
+        filteredList = filteredJobs
+            .where((jobF) => jobF.date!.compareTo(threeMonthsAgo) > 0)
+            .toList();
+
+        rJobs = filteredList;
       }
 
       return rJobs;
@@ -137,7 +149,11 @@ class _OpportunitiesPageState extends State<OpportunitiesPage> {
             if (text.isNotEmpty) {
               setState(() {
                 jobs = originalJobs
-                    .where((job) => job.title.contains(text))
+                    .where(
+                      (job) => job.title.toString().toLowerCase().contains(
+                            text.toLowerCase(),
+                          ),
+                    )
                     .toList();
               });
             } else {
@@ -158,7 +174,8 @@ class _OpportunitiesPageState extends State<OpportunitiesPage> {
           hintStyle: darkButtonTextStyle.copyWith(
               fontSize: height(context) * 16 / 814 > width(context) * 16 / 1440
                   ? width(context) * 16 / 1440
-                  : height(context) * 16 / 814, height: 0),
+                  : height(context) * 16 / 814,
+              height: 0),
           fillColor: lightBackgroundColor,
           suffixIcon: Icon(
             Icons.search,
@@ -641,10 +658,11 @@ class _OpportunitiesPageState extends State<OpportunitiesPage> {
                                                     ),
                                                   ),
                                                   SizedBox(
-                                                      height: 65.h,
-                                                      width: 35.w,
-                                                      child: TinderSwiper(
-                                                          jobs: jobs)),
+                                                    height: 65.h,
+                                                    width: 37.w,
+                                                    child: TinderSwiper(
+                                                        jobs: jobs),
+                                                  ),
                                                 ],
                                               ),
                                               Column(

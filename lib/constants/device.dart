@@ -10,3 +10,5 @@ double width(BuildContext context) {
 double height(BuildContext context) {
   return MediaQuery.of(context).size.height;
 }
+
+int landingAgentIndex = 0;

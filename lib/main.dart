@@ -22,7 +22,6 @@ class _InternHSState extends State<InternHS> {
   @override
   Widget build(BuildContext context) {
     return ResponsiveSizer(builder: (context, orientation, screenType) {
-      print(Device.pixelRatio);
       return LayoutBuilder(builder: (context, constraints) {
         WidgetsBinding.instance.addPostFrameCallback(
           (_) {
@@ -31,7 +30,7 @@ class _InternHSState extends State<InternHS> {
             });
           },
         );
-        return MaterialApp(
+        return const MaterialApp(
           title: 'InternHS',
           home: LandingAgent(),
         );

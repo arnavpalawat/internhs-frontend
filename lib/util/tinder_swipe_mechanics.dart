@@ -30,7 +30,7 @@ class _TinderSwiperState extends State<TinderSwiper> {
   void initState() {
     super.initState();
     // Initialize cards with jobs or a placeholder card
-    cards = widget.jobs != null
+    cards = widget.jobs != null && widget.jobs!.isNotEmpty
         ? widget.jobs!
             .map(
               (job) => TinderCard(job),
@@ -57,12 +57,16 @@ class _TinderSwiperState extends State<TinderSwiper> {
     switch (keyEvent.data.logicalKey) {
       case (LogicalKeyboardKey.arrowLeft):
         controller.swipe(CardSwiperDirection.left);
+        break;
       case (LogicalKeyboardKey.arrowDown):
         controller.swipe(CardSwiperDirection.bottom);
+        break;
       case (LogicalKeyboardKey.arrowRight):
         controller.swipe(CardSwiperDirection.right);
+        break;
       case (LogicalKeyboardKey.arrowUp):
         controller.swipe(CardSwiperDirection.top);
+        break;
     }
   }
 
@@ -142,15 +146,17 @@ class _TinderSwiperState extends State<TinderSwiper> {
     // Executes when the user swipes down on a card
     Future<void> onDownSwipe(int index) async {
       // Flag the job as inappropriate or spam
-      CollectionReference users = FirebaseFirestore.instance.collection('jobs');
-      String id = widget.jobs?[index].id;
-      await users.doc(id).set({
-        'flagged': true,
-      }, SetOptions(merge: true)).whenComplete(() => print("complete"));
+      CollectionReference jobs = FirebaseFirestore.instance.collection('jobs');
+      String? id = widget.jobs?[index].id;
+      if (id != null) {
+        await jobs.doc(id).set({
+          'flagged': true,
+        }, SetOptions(merge: true)).whenComplete(() => print("complete"));
+      }
     }
 
     /// Combines all swipe direction logic
-    void directionLogic(CardSwiperDirection direction, index) {
+    void directionLogic(CardSwiperDirection direction, int index) {
       switch (direction.name) {
         case 'right':
           onRightSwipe(index);
@@ -187,18 +193,14 @@ class _TinderSwiperState extends State<TinderSwiper> {
       return CardSwiper(
         isLoop: false,
         controller: controller,
-        cardsCount: widget.jobs != null || widget.jobs!.isNotEmpty
-            ? widget.jobs!.length + 1
+        cardsCount: widget.jobs != null && widget.jobs!.isNotEmpty
+            ? widget.jobs!.length
             : 1,
         onSwipe: onSwipe,
-        numberOfCardsDisplayed: widget.jobs != null || widget.jobs!.isNotEmpty
-            ? widget.jobs!.length > 2
-                ? 3
-                : widget.jobs!.length > 1
-                    ? 2
-                    : 1
+        numberOfCardsDisplayed: widget.jobs != null && widget.jobs!.isNotEmpty
+            ? (widget.jobs!.length >= 3 ? 3 : widget.jobs!.length)
             : 1,
-        backCardOffset: const Offset(20, 20),
+        backCardOffset: Offset(2.w, 4.h),
         padding: EdgeInsets.fromLTRB(1.67.w, 2.96.h, 1.67.w, 2.96.h),
         isDisabled: disable,
         cardBuilder: (
@@ -207,61 +209,63 @@ class _TinderSwiperState extends State<TinderSwiper> {
           horizontalThresholdPercentage,
           verticalThresholdPercentage,
         ) {
-          int cardAmt = widget.jobs != null || widget.jobs!.isNotEmpty
-              ? widget.jobs!.length + 1
-              : 1;
-          return index < cardAmt
-              ? TinderCard(widget.jobs?[index])
-              : Container(
-                  // Placeholder card when no more jobs are available
-                  clipBehavior: Clip.hardEdge,
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
-                    color: lightBackgroundColor,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.2),
-                        spreadRadius: 3,
-                        blurRadius: 7,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
+          if (widget.jobs != null &&
+              widget.jobs!.isNotEmpty &&
+              index < widget.jobs!.length) {
+            return TinderCard(widget.jobs?[index]);
+          } else {
+            return Container(
+              width: 35.w,
+              // Placeholder card when no more jobs are available
+              clipBehavior: Clip.hardEdge,
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                color: lightBackgroundColor,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.2),
+                    spreadRadius: 3,
+                    blurRadius: 7,
+                    offset: const Offset(0, 3),
                   ),
-                  alignment: Alignment.center,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Flexible(
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: headerTextColors,
-                            ),
+                ],
+              ),
+              alignment: Alignment.center,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Flexible(
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: headerTextColors,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding:
+                        EdgeInsets.fromLTRB(1.11.w, 1.97.h, 1.11.w, 1.97.h),
+                    child: const Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "No more available Internships",
+                          style: TextStyle(
+                            color: darkTextColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding:
-                            EdgeInsets.fromLTRB(1.11.w, 1.97.h, 1.11.w, 1.97.h),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "No more available Internships",
-                              style: TextStyle(
-                                color: darkTextColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                );
+                ],
+              ),
+            );
+          }
         },
       );
     });

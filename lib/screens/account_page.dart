@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:internhs/constants/text.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -108,7 +109,55 @@ class _AccountPageState extends State<AccountPage>
 
   Future<void> signOut() async {
     await FirebaseAuth.instance.signOut().whenComplete(
-          () => Navigator.push(
+      () {
+        if (google) {
+          GoogleSignIn().signOut();
+        }
+        Navigator.push(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (context, animation1, animation2) =>
+                const LandingAgent(
+              index: 0,
+            ),
+            transitionDuration: Duration.zero,
+            reverseTransitionDuration: Duration.zero,
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> deleteAccount(BuildContext context) async {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    Future<void> deleteSubcollection(
+        String userId, String subcollectionName) async {
+      CollectionReference subcollection = FirebaseFirestore.instance
+          .collection("user")
+          .doc(userId)
+          .collection(subcollectionName);
+
+      QuerySnapshot snapshot = await subcollection.get();
+      for (DocumentSnapshot doc in snapshot.docs) {
+        await doc.reference.delete();
+      }
+    }
+
+    try {
+      if (user != null) {
+        String userId = user.uid;
+        if (google) {
+          GoogleSignIn().signOut();
+        }
+        await deleteSubcollection(userId, "unliked");
+        await deleteSubcollection(userId, "wishlisted");
+        await FirebaseFirestore.instance
+            .collection("user")
+            .doc(userId)
+            .delete();
+        await user.delete().whenComplete(() {
+          Navigator.push(
             context,
             PageRouteBuilder(
               pageBuilder: (context, animation1, animation2) => LandingAgent(
@@ -117,27 +166,9 @@ class _AccountPageState extends State<AccountPage>
               transitionDuration: Duration.zero,
               reverseTransitionDuration: Duration.zero,
             ),
-          ),
-        );
-  }
-
-  Future<void> deleteAccount() async {
-    User? user = FirebaseAuth.instance.currentUser;
-
-    try {
-      FirebaseFirestore.instance.collection("user").doc(user?.uid).delete();
-      await user?.delete().whenComplete(
-            () => Navigator.push(
-              context,
-              PageRouteBuilder(
-                pageBuilder: (context, animation1, animation2) => LandingAgent(
-                  index: 0,
-                ),
-                transitionDuration: Duration.zero,
-                reverseTransitionDuration: Duration.zero,
-              ),
-            ),
           );
+        });
+      }
     } catch (e) {
       print("Failed to delete account: $e");
       // Handle the exception here
@@ -366,7 +397,7 @@ class _AccountPageState extends State<AccountPage>
                     ),
                     GestureDetector(
                       onTap: () {
-                        deleteAccount();
+                        deleteAccount(context);
                       },
                       child: Padding(
                         padding: EdgeInsets.symmetric(

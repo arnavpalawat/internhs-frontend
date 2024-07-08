@@ -9,6 +9,7 @@ class Job {
   dynamic field;
   dynamic description;
   dynamic link;
+  Timestamp? date; // New field
 
   Job({
     required this.flagged,
@@ -19,6 +20,7 @@ class Job {
     required this.field,
     required this.description,
     required this.link,
+    required this.date, // New field in the constructor
   }) {
     // Set defaults if any parameter is null
     flagged ??= false;
@@ -29,6 +31,7 @@ class Job {
     field ??= 'N/A';
     description ??= 'N/A';
     link ??= 'N/A';
+    date ??= Timestamp.now(); // Default to current time if null
   }
 
   factory Job.fromFirebase(Map<String, dynamic> data) {
@@ -41,8 +44,10 @@ class Job {
       link: data['link'] ?? '',
       prestige: data['prestige'] ?? '',
       title: data['title'] ?? '',
+      date: data['date'] ?? Timestamp.now(), // New field
     );
   }
+
   // Convert a Job object into a map object
   Map<String, dynamic> toMap() {
     return {
@@ -54,6 +59,7 @@ class Job {
       'field': field,
       'description': description,
       'link': link,
+      'date': date, // New field
     };
   }
 

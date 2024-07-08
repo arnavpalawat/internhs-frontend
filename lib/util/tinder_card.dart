@@ -108,7 +108,7 @@ class TinderCard extends StatelessWidget {
                       children: [
                         AutoSizeText(
                           job!.title.toString().length > 30
-                              ? job?.title.toString().substring(0, 26) ??
+                              ? "${job?.title.toString().substring(0, 25)}..." ??
                                   "No Jobs Available"
                               : job?.title.toString() ?? "No Jobs Available",
                           maxLines: 1,
