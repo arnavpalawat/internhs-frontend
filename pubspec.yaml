@@ -23,6 +23,7 @@ dependencies:
   url_launcher: ^6.3.0
   responsive_sizer: ^3.3.1
   auto_size_text: ^3.0.0
+  google_fonts: 6.1.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -40,24 +41,24 @@ flutter:
     - lib/assets/images/db.jpg
     - lib/assets/images/cashapp.png
     - lib/assets/images/venmo.png
-  fonts:
-    - family: Lora
-      fonts:
-        - asset: lib/assets/fonts/Lora/Lora-Italic-VariableFont_wght.ttf
-          style: italic
-    - family: SchibstedGrotesk
-      fonts:
-        - asset: lib/assets/fonts/Schibsted_Grotesk/SchibstedGrotesk-VariableFont_wght.ttf
-    - family: Poppins
-      fonts:
-        - asset: lib/assets/fonts/Poppins/Poppins-Bold.ttf
-          weight: 400
-        - asset: lib/assets/fonts/Poppins/Poppins-Regular.ttf
-    - family: Inter
-      fonts:
-        - asset: lib/assets/fonts/Inter/Inter-VariableFont_slnt,wght.ttf
-        - asset: lib/assets/fonts/Inter/Inter-SemiBold.otf
-          weight: 400
-    - family: Questral
-      fonts:
-        - asset: lib/assets/fonts/Questrial/Questrial-Regular.ttf
+#  fonts:
+#    - family: Lora
+#      fonts:
+#        - asset: lib/assets/fonts/Lora/Lora-Italic-VariableFont_wght.ttf
+#          style: italic
+#    - family: SchibstedGrotesk
+#      fonts:
+#        - asset: lib/assets/fonts/Schibsted_Grotesk/SchibstedGrotesk-VariableFont_wght.ttf
+#    - family: Poppins
+#      fonts:
+#        - asset: lib/assets/fonts/Poppins/Poppins-Bold.ttf
+#          weight: 700
+#        - asset: lib/assets/fonts/Poppins/Poppins-Regular.ttf
+#    - family: Inter
+#      fonts:
+#        - asset: lib/assets/fonts/Inter/Inter-VariableFont_slnt,wght.ttf
+#        - asset: lib/assets/fonts/Inter/Inter-SemiBold.otf
+#          weight: 400
+#    - family: Questral
+#      fonts:
+#        - asset: lib/assets/fonts/Questrial/Questrial-Regular.ttf

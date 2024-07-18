@@ -130,7 +130,7 @@ class _BuildHeaderState extends State<BuildHeader> {
             SizedBox(width: 5.w),
             Material(
               color: Colors.transparent,
-              elevation: 20,
+              shadowColor: Colors.transparent,
               child: Container(
                 height: 13.22.h,
                 width: 93.75.w,

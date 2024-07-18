@@ -1,100 +1,104 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import 'colors.dart';
 
 /// Announcement Styles
-final announcementTextStyle = TextStyle(
-  color: darkTextColor,
-  fontSize: Device.height * 80 / 814,
-  fontFamily: 'Poppins',
-  fontWeight: FontWeight.w700,
-  height: 1.5,
+final announcementTextStyle = GoogleFonts.poppins(
+  textStyle: TextStyle(
+    color: darkTextColor,
+    fontSize: Device.height * 80 / 814,
+    fontWeight: FontWeight.bold,
+    height: 1.5,
+  ),
 );
 
-final italicAnnouncementTextStyle = TextStyle(
-  color: darkTextColor,
-  fontSize: Device.height * 80 / 814,
-  fontStyle: FontStyle.italic,
-  fontFamily: 'Lora',
-  fontWeight: FontWeight.w400,
-  height: 1.5,
-);
-final announcementBodyTextStyle = TextStyle(
-  color: darkTextColor,
-  fontSize: 24,
-  fontFamily: 'Questral',
-  fontWeight: FontWeight.w400,
-  height: 1.5,
+final italicAnnouncementTextStyle = GoogleFonts.lora(
+  textStyle: TextStyle(
+    color: darkTextColor,
+    fontSize: Device.height * 80 / 814,
+    fontStyle: FontStyle.italic,
+    height: 1.5,
+  ),
 );
 
-final blackBodyTextStyle = TextStyle(
-  color: darkTextColor,
-  fontSize: 20,
-  fontFamily: 'Inter',
-  height: 1,
+final announcementBodyTextStyle = GoogleFonts.questrial(
+  textStyle: const TextStyle(
+      color: darkTextColor,
+      fontSize: 24,
+      height: 1.5,
+      fontWeight: FontWeight.normal),
+);
+
+final blackBodyTextStyle = GoogleFonts.inter(
+  textStyle: const TextStyle(
+      color: darkTextColor,
+      fontSize: 20,
+      height: 1,
+      fontWeight: FontWeight.normal),
 );
 
 /// Button Styles
-const lightButtonTextStyle = TextStyle(
-  color: lightTextColor,
-  fontSize: 16,
-  fontFamily: 'Inter',
-  fontWeight: FontWeight.w500,
+final lightButtonTextStyle = GoogleFonts.inter(
+  textStyle: const TextStyle(
+    color: lightTextColor,
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+  ),
 );
 
-const darkButtonTextStyle = TextStyle(
-  color: darkTextColor,
-  fontSize: 16,
-  fontFamily: 'Inter',
-  fontWeight: FontWeight.w500,
+final darkButtonTextStyle = GoogleFonts.inter(
+  textStyle: const TextStyle(
+    color: darkTextColor,
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+  ),
 );
 
 /// Authentication Styles
-const authTextStyle = TextStyle(
-  color: darkTextColor,
-  fontSize: 16,
-  fontFamily: 'Poppins',
-  fontWeight: FontWeight.w400,
-  height: 0,
+final authTextStyle = GoogleFonts.poppins(
+  textStyle: const TextStyle(
+      color: darkTextColor, fontSize: 16, fontWeight: FontWeight.normal),
 );
 
-const authHeadingStyle = TextStyle(
-  color: darkTextColor,
-  fontSize: 32,
-  fontFamily: 'Poppins',
-  fontWeight: FontWeight.w500,
-  height: 0,
+final authHeadingStyle = GoogleFonts.poppins(
+  textStyle: const TextStyle(
+      color: darkTextColor, fontSize: 32, fontWeight: FontWeight.normal),
 );
 
 /// Header Text Styles
-const lightHeaderTextStyle = TextStyle(
-  color: lightTextColor,
-  fontSize: 25,
-  fontFamily: 'Inter',
-  fontWeight: FontWeight.w500,
-);
-const darkHeaderTextStyle = TextStyle(
-  color: darkTextColor,
-  fontSize: 25,
-  fontFamily: 'Inter',
-  fontWeight: FontWeight.bold,
-  overflow: TextOverflow.ellipsis,
-);
-const darkAccentHeaderTextStyle = TextStyle(
-  color: darkTextColor,
-  fontSize: 25,
-  fontStyle: FontStyle.italic,
-  fontFamily: 'Lora',
-  fontWeight: FontWeight.w400,
+final lightHeaderTextStyle = GoogleFonts.inter(
+  textStyle: const TextStyle(
+    color: lightTextColor,
+    fontSize: 25,
+    fontWeight: FontWeight.w400,
+  ),
 );
 
-const lightAccentHeaderTextStyle = TextStyle(
-  color: lightTextColor,
-  fontSize: 25,
-  fontStyle: FontStyle.italic,
-  fontFamily: 'Lora',
-  fontWeight: FontWeight.w400,
+final darkHeaderTextStyle = GoogleFonts.inter(
+  textStyle: const TextStyle(
+    color: darkTextColor,
+    fontSize: 25,
+    fontWeight: FontWeight.bold,
+    overflow: TextOverflow.ellipsis,
+  ),
+);
+
+final darkAccentHeaderTextStyle = GoogleFonts.lora(
+  textStyle: const TextStyle(
+      color: darkTextColor,
+      fontSize: 25,
+      fontStyle: FontStyle.italic,
+      fontWeight: FontWeight.normal),
+);
+
+final lightAccentHeaderTextStyle = GoogleFonts.lora(
+  textStyle: const TextStyle(
+      color: lightTextColor,
+      fontSize: 25,
+      fontStyle: FontStyle.italic,
+      fontWeight: FontWeight.normal),
 );
 
 InputDecoration textFieldDecoration = InputDecoration(

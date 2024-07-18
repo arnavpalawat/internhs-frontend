@@ -1,10 +1,17 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:internhs/util/api_service.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../constants/colors.dart';
 import '../constants/device.dart';
 import '../constants/text.dart';
+
+TextEditingController countryController = TextEditingController();
+TextEditingController radiusController = TextEditingController();
+String remote = "Yes";
+
+TextEditingController ageController = TextEditingController();
 
 Widget _buildPref(String type, double length, BuildContext context) {
   if (type == "Remote") {
@@ -44,6 +51,7 @@ Widget _buildPref(String type, double length, BuildContext context) {
                   },
                   items: <String>['Yes', 'No']
                       .map<DropdownMenuItem<String>>((String value) {
+                    remote = value;
                     return DropdownMenuItem<String>(
                       value: value,
                       child: AutoSizeText(
@@ -107,8 +115,13 @@ Widget _buildPref(String type, double length, BuildContext context) {
                 width: length.toDouble(),
                 height: 3.65.h,
                 child: TextField(
-                  controller:
-                      TextEditingController(), // Provide your controller here
+                  controller: type == "Country"
+                      ? countryController
+                      : type == "Search Radius"
+                          ? radiusController
+                          : type == "Age in Hours"
+                              ? ageController
+                              : TextEditingController(),
                   cursorColor: lightBackgroundColor,
                   style: lightButtonTextStyle.copyWith(
                       fontSize: height(context) * 12 / 814 >
@@ -240,7 +253,17 @@ Widget buildPrefs(context) {
           SizedBox(
             height: 15.h,
           ),
-          _buildButton(darkAccent, "Go!", context),
+          GestureDetector(
+              onTap: () {
+                var api = ApiService();
+                api.scrapeJobs(
+                  countryValue: countryController.text,
+                  radiusValue: radiusController.text,
+                  remoteValue: remote == "Yes" ? true : false,
+                  ageValue: ageController.text,
+                );
+              },
+              child: _buildButton(darkAccent, "Go!", context)),
         ],
       ),
     ),

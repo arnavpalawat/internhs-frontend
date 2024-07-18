@@ -70,11 +70,15 @@ class _LandingAgentState extends State<LandingAgent> {
         itemBuilder: (BuildContext context, int index) {
           switch (index) {
             case 0:
-              return LandingPage(
-                pageController: _pageController,
-              );
+              return LayoutBuilder(builder: (context, _) {
+                return LandingPage(
+                  pageController: _pageController,
+                );
+              });
             case 1:
-              return const PricingPage();
+              return LayoutBuilder(builder: (context, _) {
+                return const PricingPage();
+              });
             case 2:
               return const OurStoryPage();
             case 3:
