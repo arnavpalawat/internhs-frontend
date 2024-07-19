@@ -542,7 +542,7 @@ class _AccountPageState extends State<AccountPage>
                     padding: EdgeInsets.only(left: 5.w),
                     child: Align(
                       alignment: Alignment.centerLeft,
-                      child: buildPrefs(context),
+                      child: buildPrefs(),
                     ),
                   ),
                   Padding(

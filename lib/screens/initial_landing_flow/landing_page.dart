@@ -75,32 +75,50 @@ class _LandingPageState extends State<LandingPage>
             TextSpan(
               text: 'Establishing teens \n',
               style: announcementTextStyle.copyWith(
-                  fontSize: height(context) * 80 / 814),
+                  fontSize:
+                      height(context) * 80 / 814 > width(context) * 80 / 1440
+                          ? width(context) * 80 / 1440
+                          : height(context) * 80 / 814),
             ),
             TextSpan(
               text: 'initiative ',
               style: italicAnnouncementTextStyle.copyWith(
-                  fontSize: height(context) * 80 / 814),
+                  fontSize:
+                      height(context) * 80 / 814 > width(context) * 80 / 1440
+                          ? width(context) * 80 / 1440
+                          : height(context) * 80 / 814),
             ),
             TextSpan(
               text: 'into competitive \n',
               style: announcementTextStyle.copyWith(
-                  fontSize: height(context) * 80 / 814),
+                  fontSize:
+                      height(context) * 80 / 814 > width(context) * 80 / 1440
+                          ? width(context) * 80 / 1440
+                          : height(context) * 80 / 814),
             ),
             TextSpan(
               text: 'workplaces, one ',
               style: announcementTextStyle.copyWith(
-                  fontSize: height(context) * 80 / 814),
+                  fontSize:
+                      height(context) * 80 / 814 > width(context) * 80 / 1440
+                          ? width(context) * 80 / 1440
+                          : height(context) * 80 / 814),
             ),
             TextSpan(
               text: 'internship\n',
               style: italicAnnouncementTextStyle.copyWith(
-                  fontSize: height(context) * 80 / 814),
+                  fontSize:
+                      height(context) * 80 / 814 > width(context) * 80 / 1440
+                          ? width(context) * 80 / 1440
+                          : height(context) * 80 / 814),
             ),
             TextSpan(
               text: 'at a time',
               style: announcementTextStyle.copyWith(
-                  fontSize: height(context) * 80 / 814),
+                  fontSize:
+                      height(context) * 80 / 814 > width(context) * 80 / 1440
+                          ? width(context) * 80 / 1440
+                          : height(context) * 80 / 814),
             ),
           ],
         ),

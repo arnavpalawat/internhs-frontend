@@ -21,22 +21,32 @@ class ApiService {
     required bool remoteValue,
     required String ageValue,
   }) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/py/scrape'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode({
-        'country_value': countryValue,
-        'radius_value': radiusValue,
-        'remote_value': remoteValue,
-        'age_value': ageValue,
-      }),
-    );
-    if (response.statusCode == 200) {
-      return json.decode(response.body);
-    } else {
-      throw Exception('Failed to scrape jobs');
+    final apiUrl = 'http://127.0.0.1:5000/server/scrape';
+    try {
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode({
+          'country': countryValue,
+          'radius': radiusValue,
+          'remote': remoteValue,
+          'age': ageValue,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+      } else {
+        print(
+            'Failed to scrape jobs: ${response.statusCode} - ${response.body}');
+        throw Exception('Failed to scrape jobs');
+      }
+    } catch (e, stacktrace) {
+      print('Error scraping jobs: $e');
+      print('Stacktrace: $stacktrace');
+      throw e;
     }
   }
 }

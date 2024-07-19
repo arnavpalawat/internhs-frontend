@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:internhs/constants/device.dart';
 import 'package:internhs/screens/account_page.dart';
 import 'package:internhs/screens/initial_landing_flow/landing_agent.dart';
@@ -216,15 +217,7 @@ class _BuildHeaderState extends State<BuildHeader> {
                     SizedBox(width: 5.w),
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          PageRouteBuilder(
-                            pageBuilder: (context, animation1, animation2) =>
-                                LandingAgent(index: 3),
-                            transitionDuration: Duration.zero,
-                            reverseTransitionDuration: Duration.zero,
-                          ),
-                        );
+                        context.go("/contacts");
                       },
                       child: text("Contact Us"),
                     ),

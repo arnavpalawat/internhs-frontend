@@ -78,14 +78,7 @@ class _TinderSwiperState extends State<TinderSwiper> {
     void onRightSwipe(int index) async {
       if (auth.currentUser == null) {
         // Redirect to login page if user is not authenticated
-        Navigator.push(
-          context,
-          PageRouteBuilder(
-            pageBuilder: (context, animation1, animation2) => const LoginPage(),
-            transitionDuration: Duration.zero,
-            reverseTransitionDuration: Duration.zero,
-          ),
-        );
+        Navigator.pushNamed(context, '/login');
       } else {
         // Save the job as wishlisted by the user
         CollectionReference users =

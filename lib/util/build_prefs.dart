@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:internhs/util/api_service.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../constants/colors.dart';
@@ -218,54 +219,83 @@ Widget _buildButton(Color color, String text, context) {
   );
 }
 
-Widget buildPrefs(context) {
-  return SizedBox(
-    height: 80.h,
-    width: 40.w,
-    child: Container(
-      width: 45.23.w,
-      height: 91.3.h,
-      decoration: ShapeDecoration(
-        color: lightBackgroundColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(25),
+class buildPrefs extends StatefulWidget {
+  const buildPrefs({super.key});
+
+  @override
+  State<buildPrefs> createState() => _buildPrefsState();
+}
+
+class _buildPrefsState extends State<buildPrefs> {
+  bool loading = false;
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 80.h,
+      width: 40.w,
+      child: Container(
+        width: 45.23.w,
+        height: 91.3.h,
+        decoration: ShapeDecoration(
+          color: lightBackgroundColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(25),
+          ),
         ),
+        child: loading == true
+            ? Center(
+                child: LoadingAnimationWidget.twoRotatingArc(
+                  color: darkTextColor,
+                  size: height(context) * 20 / 814 > width(context) * 20 / 814
+                      ? width(context) * 20 / 814
+                      : height(context) * 20 / 814,
+                ),
+              )
+            : Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
+                    child: AutoSizeText(
+                      "Generate New Internships",
+                      maxLines: 1,
+                      minFontSize: 0,
+                      style: announcementTextStyle.copyWith(
+                          fontSize: height(context) * 36 / 814 >
+                                  width(context) * 36 / 1440
+                              ? width(context) * 36 / 1440
+                              : height(context) * 36 / 814),
+                    ),
+                  ),
+                  _buildPref("Country", 22.w, context),
+                  _buildPref("Search Radius", 10.1.w, context),
+                  _buildPref("Remote", 10.1.w, context),
+                  _buildPref("Age in Hours", 22.w, context),
+                  SizedBox(
+                    height: 15.h,
+                  ),
+                  GestureDetector(
+                      onTap: () async {
+                        var api = ApiService();
+                        setState(() {
+                          loading = true;
+                        });
+                        await api
+                            .scrapeJobs(
+                          countryValue: countryController.text,
+                          radiusValue: radiusController.text,
+                          remoteValue: remote == "Yes" ? true : false,
+                          ageValue: ageController.text,
+                        )
+                            .whenComplete(() {
+                          setState(() {
+                            loading = false;
+                          });
+                        });
+                      },
+                      child: _buildButton(darkAccent, "Go!", context)),
+                ],
+              ),
       ),
-      child: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
-            child: AutoSizeText(
-              "Generate New Internships",
-              maxLines: 1,
-              minFontSize: 0,
-              style: announcementTextStyle.copyWith(
-                  fontSize:
-                      height(context) * 36 / 814 > width(context) * 36 / 1440
-                          ? width(context) * 36 / 1440
-                          : height(context) * 36 / 814),
-            ),
-          ),
-          _buildPref("Country", 22.w, context),
-          _buildPref("Search Radius", 10.1.w, context),
-          _buildPref("Remote", 10.1.w, context),
-          _buildPref("Age in Hours", 22.w, context),
-          SizedBox(
-            height: 15.h,
-          ),
-          GestureDetector(
-              onTap: () {
-                var api = ApiService();
-                api.scrapeJobs(
-                  countryValue: countryController.text,
-                  radiusValue: radiusController.text,
-                  remoteValue: remote == "Yes" ? true : false,
-                  ageValue: ageController.text,
-                );
-              },
-              child: _buildButton(darkAccent, "Go!", context)),
-        ],
-      ),
-    ),
-  );
+    );
+  }
 }

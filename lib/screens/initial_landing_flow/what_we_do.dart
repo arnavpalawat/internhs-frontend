@@ -96,7 +96,10 @@ class _WhatWeDoPageState extends State<WhatWeDoPage>
                   minFontSize: 0,
                   maxLines: 1,
                   style: lightButtonTextStyle.copyWith(
-                      fontSize: height(context) * 16 / 814),
+                      fontSize: height(context) * 16 / 814 >
+                              width(context) * 16 / 1440
+                          ? width(context) * 16 / 1440
+                          : height(context) * 16 / 814),
                 ),
                 const Spacer(),
                 hovering
@@ -142,7 +145,7 @@ class _WhatWeDoPageState extends State<WhatWeDoPage>
                   Column(
                     children: [
                       SizedBox(
-                        height: 30.h,
+                        height: 28.h,
                       ),
                       Row(
                         children: [
@@ -179,7 +182,10 @@ class _WhatWeDoPageState extends State<WhatWeDoPage>
                                 maxLines: 1,
                                 minFontSize: 0,
                                 style: italicAnnouncementTextStyle.copyWith(
-                                    fontSize: height(context) * 36 / 814),
+                                    fontSize: height(context) * 36 / 814 >
+                                            width(context) * 36 / 1440
+                                        ? width(context) * 36 / 1440
+                                        : height(context) * 36 / 814),
                               ),
                             ),
                           ),
@@ -190,45 +196,27 @@ class _WhatWeDoPageState extends State<WhatWeDoPage>
                               minFontSize: 0,
                               maxLines: 1,
                               style: announcementTextStyle.copyWith(
-                                  fontSize: height(context) * 48 / 814),
+                                  fontSize: height(context) * 48 / 814 >
+                                          width(context) * 48 / 1440
+                                      ? width(context) * 48 / 1440
+                                      : height(context) * 48 / 814),
                               textAlign: TextAlign.left,
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 15, 48, 20),
+                            padding:
+                                EdgeInsets.fromLTRB(0, 1.8.h, 3.33.w, 2.45.h),
                             child: SizedBox(
-                              width: 80.w,
-                              child: RichText(
-                                textAlign: TextAlign.left,
-                                text: TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: "InternHS offers a ",
-                                      style: announcementBodyTextStyle.copyWith(
-                                          fontSize: height(context) * 24 / 814),
-                                    ),
-                                    TextSpan(
-                                      text: "Completely Free ",
-                                      style: announcementBodyTextStyle.copyWith(
-                                          fontSize: height(context) * 24 / 814,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    TextSpan(
-                                      text:
-                                          "AI Based Service for High School \nStudents to ",
-                                      style: announcementBodyTextStyle.copyWith(
-                                          fontSize: height(context) * 24 / 814,
-                                          height: 1.5),
-                                    ),
-                                    TextSpan(
-                                      text:
-                                          "experience the workplace by finding and recommending \nthem internships.",
-                                      style: announcementBodyTextStyle.copyWith(
-                                          fontSize: height(context) * 24 / 814,
-                                          height: 1.5),
-                                    ),
-                                  ],
-                                ),
+                              width: 55.w,
+                              child: AutoSizeText(
+                                "InternHS offers a Completely Free AI Based Service for High School Students to Experience the workplace",
+                                maxLines: 3,
+                                minFontSize: 0,
+                                style: announcementBodyTextStyle.copyWith(
+                                    fontSize: height(context) * 32 / 814 >
+                                            width(context) * 32 / 1440
+                                        ? width(context) * 32 / 1440
+                                        : height(context) * 32 / 814),
                               ),
                             ),
                           ),

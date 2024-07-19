@@ -93,7 +93,10 @@ class _FooterState extends State<Footer> with SingleTickerProviderStateMixin {
                   maxLines: 1,
                   minFontSize: 0,
                   style: lightButtonTextStyle.copyWith(
-                      fontSize: height(context) * 15 / 814),
+                      fontSize: height(context) * 15 / 814 >
+                              width(context) * 15 / 1440
+                          ? width(context) * 15 / 1440
+                          : height(context) * 15 / 814),
                 ),
                 const Spacer(),
                 hovering
@@ -172,7 +175,10 @@ class _FooterState extends State<Footer> with SingleTickerProviderStateMixin {
                     maxLines: 1,
                     minFontSize: 0,
                     style: italicAnnouncementTextStyle.copyWith(
-                        fontSize: height(context) * 36 / 814),
+                        fontSize: height(context) * 36 / 814 >
+                                width(context) * 36 / 1440
+                            ? width(context) * 36 / 1440
+                            : height(context) * 36 / 814),
                   ),
                 ),
               ),
@@ -183,7 +189,10 @@ class _FooterState extends State<Footer> with SingleTickerProviderStateMixin {
                   minFontSize: 0,
                   maxLines: 1,
                   style: announcementTextStyle.copyWith(
-                      fontSize: height(context) * 48 / 814),
+                      fontSize: height(context) * 48 / 814 >
+                              width(context) * 48 / 1440
+                          ? width(context) * 48 / 1440
+                          : height(context) * 48 / 814),
                   textAlign: TextAlign.left,
                 ),
               ),
@@ -199,7 +208,10 @@ class _FooterState extends State<Footer> with SingleTickerProviderStateMixin {
                         maxLines: 1,
                         minFontSize: 0,
                         style: italicAnnouncementTextStyle.copyWith(
-                            fontSize: height(context) * 24 / 814),
+                            fontSize: height(context) * 24 / 814 >
+                                    width(context) * 24 / 1440
+                                ? width(context) * 24 / 1440
+                                : height(context) * 24 / 814),
                       ),
                     ),
                   ),
@@ -228,12 +240,18 @@ class _FooterState extends State<Footer> with SingleTickerProviderStateMixin {
                             TextSpan(
                               text: "Based In: ",
                               style: italicAnnouncementTextStyle.copyWith(
-                                  fontSize: height(context) * 24 / 814),
+                                  fontSize: height(context) * 24 / 814 >
+                                          width(context) * 24 / 1440
+                                      ? width(context) * 24 / 1440
+                                      : height(context) * 24 / 814),
                             ),
                             TextSpan(
                               text: "Westford, MA",
                               style: italicAnnouncementTextStyle.copyWith(
-                                  fontSize: height(context) * 24 / 814,
+                                  fontSize: height(context) * 24 / 814 >
+                                          width(context) * 24 / 1440
+                                      ? width(context) * 24 / 1440
+                                      : height(context) * 24 / 814,
                                   fontWeight: FontWeight.bold),
                             ),
                           ],
