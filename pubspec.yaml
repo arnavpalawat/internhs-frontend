@@ -1,5 +1,5 @@
 name: internhs
-description: "Help all high schoolers get the intership they dream of"
+description: "Allow all highschoolers to have the opportunity to enter the workplace; One internship at a time"
 publish_to: 'none'
 version: 1.0.0+1
 environment:
@@ -42,24 +42,3 @@ flutter:
     - lib/assets/images/db.jpg
     - lib/assets/images/cashapp.png
     - lib/assets/images/venmo.png
-#  fonts:
-#    - family: Lora
-#      fonts:
-#        - asset: lib/assets/fonts/Lora/Lora-Italic-VariableFont_wght.ttf
-#          style: italic
-#    - family: SchibstedGrotesk
-#      fonts:
-#        - asset: lib/assets/fonts/Schibsted_Grotesk/SchibstedGrotesk-VariableFont_wght.ttf
-#    - family: Poppins
-#      fonts:
-#        - asset: lib/assets/fonts/Poppins/Poppins-Bold.ttf
-#          weight: 700
-#        - asset: lib/assets/fonts/Poppins/Poppins-Regular.ttf
-#    - family: Inter
-#      fonts:
-#        - asset: lib/assets/fonts/Inter/Inter-VariableFont_slnt,wght.ttf
-#        - asset: lib/assets/fonts/Inter/Inter-SemiBold.otf
-#          weight: 400
-#    - family: Questral
-#      fonts:
-#        - asset: lib/assets/fonts/Questrial/Questrial-Regular.ttf

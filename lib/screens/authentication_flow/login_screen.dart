@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:internhs/constants/colors.dart';
@@ -21,58 +20,11 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final FirebaseAuth _authInstance = FirebaseAuth.instance;
 
-  // Controllers
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
 
-  // Outside Build to update the state
   bool fieldFilled = false;
   bool obscure = true;
-
-  Future<void> _signInWithGoogle() async {
-    GoogleAuthProvider authProvider = GoogleAuthProvider();
-
-    try {
-      UserCredential userCredential =
-          await _authInstance.signInWithPopup(authProvider).whenComplete(() {
-        if (_authInstance.currentUser?.uid != null) {
-          Navigator.push(
-            context,
-            PageRouteBuilder(
-              pageBuilder: (context, animation1, animation2) =>
-                  const OpportunitiesPage(),
-              transitionDuration: Duration.zero,
-              reverseTransitionDuration: Duration.zero,
-            ),
-          );
-        }
-      });
-
-      // Add user details to Firestore
-      User? currentUser = userCredential.user;
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
-    }
-  }
-
-  Future<void> _loginUser(String email, String password) async {
-    try {
-      await _authInstance.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      if (kDebugMode) {
-        print(
-            "Login was Successful to $email with a uid of ${_authInstance.currentUser!.uid}");
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        print("Error signing in: $e");
-      }
-    }
-  }
 
   @override
   void initState() {
@@ -88,47 +40,393 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
+  Future<void> _signInWithGoogle() async {
+    GoogleAuthProvider authProvider = GoogleAuthProvider();
+
+    try {
+      UserCredential userCredential =
+          await _authInstance.signInWithPopup(authProvider);
+      if (_authInstance.currentUser != null) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const OpportunitiesPage(),
+          ),
+        );
+      }
+    } catch (e) {
+      _showErrorDialog(e.toString());
+    }
+  }
+
+  Future<void> _loginUser(String email, String password) async {
+    try {
+      await _authInstance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      if (_authInstance.currentUser != null) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const OpportunitiesPage(),
+          ),
+        );
+      }
+    } catch (e) {
+      _showErrorDialog(e.toString());
+    }
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Error"),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: const Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    /// Social Media Button
-    Widget buildLoginPlatforms() {
-      return Container(
-        width: 42.24.w,
-        height: 8.33.h,
-        decoration: BoxDecoration(
-          color: lightTextColor,
-          border: Border.all(
-            color: const Color(0xFF333333),
-          ),
-          borderRadius: const BorderRadius.all(
-            Radius.circular(90),
-          ),
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: EdgeInsets.fromLTRB(1.04.w, 1.78.h, 1.04.w, 1.78.h),
-              child: Image.asset("lib/assets/images/google.png"),
+    return Scaffold(
+      body: LayoutBuilder(builder: (context, _) {
+        return Stack(
+          children: <Widget>[
+            _buildBackground(),
+            Column(
+              children: [
+                SizedBox(height: 6.h),
+                Center(
+                  child: Container(
+                    width: 56.w,
+                    height: 89.h,
+                    clipBehavior: Clip.antiAlias,
+                    decoration: authBoxDecorations,
+                    child: Column(
+                      children: [
+                        _buildHeader(),
+                        _buildAvatar(),
+                        _buildTitle(),
+                        SizedBox(height: .94.h),
+                        _buildSignUpLink(),
+                        SizedBox(height: .47.h),
+                        GestureDetector(
+                            onTap: _signInWithGoogle,
+                            child: _buildLoginPlatforms()),
+                        SizedBox(height: height(context) * 55 / 840),
+                        _buildDivider(),
+                        SizedBox(height: height(context) * 40 / 840),
+                        _buildCredentialsText(),
+                        SizedBox(height: height(context) * 16 / 840),
+                        _buildAuthFields(),
+                        SizedBox(height: height(context) * 16 / 840),
+                        _buildCreateAccountButton(),
+                      ],
+                    ),
+                  ),
+                )
+                    .animate()
+                    .fade(duration: const Duration(milliseconds: 1000))
+                    .slideY(
+                      begin: 0.25,
+                      end: 0,
+                      duration: const Duration(milliseconds: 600),
+                      curve: Curves.ease,
+                    ),
+              ],
             ),
-            Text(
-              "Login With Google",
-              style: authTextStyle.copyWith(
-                fontSize:
-                    height(context) * 16 / 814 > width(context) * 16 / 1440
-                        ? width(context) * 16 / 1440
-                        : height(context) * 16 / 814,
-              ),
-            )
           ],
-        ),
-      );
-    }
+        );
+      }),
+    );
+  }
 
-    /// Create Account Button
-    Widget buildCreateAccount() {
-      return Container(
+  Widget _buildBackground() {
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("lib/assets/images/auth_background.png"),
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
+  }
+
+  Row _buildHeader() {
+    return Row(
+      children: [
+        SizedBox(height: 5.71.h),
+        const Spacer(),
+        Padding(
+          padding: EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
+          child: IconButton(
+            hoverColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation1, animation2) =>
+                      const LandingAgent(),
+                  transitionDuration: Duration.zero,
+                  reverseTransitionDuration: Duration.zero,
+                ),
+              );
+            },
+            icon: Icon(
+              Icons.close_outlined,
+              color: darkAccent,
+              size: height(context) * 20 / 814 > width(context) * 20 / 1440
+                  ? width(context) * 20 / 1440
+                  : height(context) * 20 / 814,
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  Center _buildAvatar() {
+    return Center(
+      child: Container(
+        width: _getAvatarSize(),
+        height: _getAvatarSize(),
+        decoration: const ShapeDecoration(
+          color: Color(0xFFC4C4C4),
+          shape: OvalBorder(),
+        ),
+      ),
+    );
+  }
+
+  double _getAvatarSize() {
+    return height(context) * 48 / 814 > width(context) * 48 / 1440
+        ? width(context) * 48 / 1440
+        : height(context) * 48 / 814;
+  }
+
+  Text _buildTitle() {
+    return Text(
+      'Log into an account',
+      textAlign: TextAlign.center,
+      style: authHeadingStyle.copyWith(
+        fontSize: height(context) * 32 / 814 > width(context) * 32 / 1440
+            ? width(context) * 32 / 1440
+            : height(context) * 32 / 814,
+      ),
+    );
+  }
+
+  Widget _buildSignUpLink() {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: .24.h, horizontal: .139.w),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          GestureDetector(
+            onTap: () {
+              Navigator.pushReplacement(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation1, animation2) =>
+                      const SignUpPage(),
+                  transitionDuration: Duration.zero,
+                  reverseTransitionDuration: Duration.zero,
+                ),
+              );
+            },
+            child: Text.rich(
+              TextSpan(
+                children: [
+                  TextSpan(
+                    text: 'Need an account?  ',
+                    style: authTextStyle.copyWith(
+                      fontSize: _getFontSize(16),
+                    ),
+                  ),
+                  TextSpan(
+                    text: 'Sign Up  ',
+                    style: authTextStyle.copyWith(
+                      decoration: TextDecoration.underline,
+                      fontSize: _getFontSize(16),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  double _getFontSize(double baseSize) {
+    return height(context) * baseSize / 814 > width(context) * baseSize / 1440
+        ? width(context) * baseSize / 1440
+        : height(context) * baseSize / 814;
+  }
+
+  Widget _buildLoginPlatforms() {
+    return Container(
+      width: 42.24.w,
+      height: 8.33.h,
+      decoration: BoxDecoration(
+        color: lightTextColor,
+        border: Border.all(color: const Color(0xFF333333)),
+        borderRadius: const BorderRadius.all(Radius.circular(90)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Padding(
+            padding: EdgeInsets.fromLTRB(1.04.w, 1.78.h, 1.04.w, 1.78.h),
+            child: Image.asset("lib/assets/images/google.png"),
+          ),
+          Text(
+            "Login With Google",
+            style: authTextStyle.copyWith(
+              fontSize: _getFontSize(16),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDivider() {
+    return Center(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          _buildSingleDivider(),
+          SizedBox(width: width(context) * 24 / 1240),
+          Text(
+            "Or",
+            style: authTextStyle.copyWith(fontSize: height(context) * 16 / 840),
+          ),
+          SizedBox(width: width(context) * 24 / 1240),
+          _buildSingleDivider(),
+        ],
+      ),
+    );
+  }
+
+  SizedBox _buildSingleDivider() {
+    return SizedBox(
+      width: width(context) * 224.5 / 1240,
+      child: Divider(height: height(context) * 2 / 840),
+    );
+  }
+
+  Widget _buildCredentialsText() {
+    return Text.rich(
+      TextSpan(
+        children: [
+          TextSpan(
+            text: 'Enter your credentials to ',
+            style: authTextStyle.copyWith(fontSize: height(context) * 16 / 840),
+          ),
+          TextSpan(
+            text: 'log into an account.',
+            style: authTextStyle.copyWith(
+              decoration: TextDecoration.underline,
+              fontSize: height(context) * 16 / 840,
+            ),
+          ),
+        ],
+      ),
+      textAlign: TextAlign.center,
+    );
+  }
+
+  Widget _buildAuthFields() {
+    return Column(
+      children: [
+        _buildFieldTitle("Your Email"),
+        SizedBox(height: height(context) * 6 / 840),
+        _buildEmailField(),
+        SizedBox(height: height(context) * 16 / 840),
+        _buildFieldTitle("Your Password"),
+        SizedBox(height: height(context) * 6 / 840),
+        _buildPasswordField(),
+      ],
+    );
+  }
+
+  SizedBox _buildFieldTitle(String title) {
+    return SizedBox(
+      width: width(context) * 528 / 1240,
+      child: Text(
+        title,
+        style: authTextStyle.copyWith(fontSize: height(context) * 16 / 840),
+        textAlign: TextAlign.start,
+      ),
+    );
+  }
+
+  SizedBox _buildEmailField() {
+    return SizedBox(
+      width: width(context) * 528 / 1240,
+      height: height(context) * 56 / 840,
+      child: TextFormField(
+        onChanged: (_) => _updateFieldFilledState(),
+        controller: _emailController,
+        decoration: textFieldDecoration,
+      ),
+    );
+  }
+
+  SizedBox _buildPasswordField() {
+    return SizedBox(
+      width: width(context) * 528 / 1240,
+      height: height(context) * 56 / 840,
+      child: TextFormField(
+        onChanged: (_) => _updateFieldFilledState(),
+        controller: _passwordController,
+        decoration: textFieldDecoration.copyWith(
+          suffixIcon: IconButton(
+            focusColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            hoverColor: Colors.transparent,
+            icon: Icon(obscure ? Icons.visibility_off : Icons.visibility),
+            onPressed: () {
+              setState(() {
+                obscure = !obscure;
+              });
+            },
+          ),
+        ),
+        obscureText: obscure,
+      ),
+    );
+  }
+
+  void _updateFieldFilledState() {
+    setState(() {
+      fieldFilled = _emailController.text.isNotEmpty &&
+          _passwordController.text.isNotEmpty;
+    });
+  }
+
+  Widget _buildCreateAccountButton() {
+    return GestureDetector(
+      onTap: () => _loginUser(_emailController.text, _passwordController.text),
+      child: Container(
         width: 42.58.w,
         height: 7.62.h,
         clipBehavior: Clip.antiAlias,
@@ -144,381 +442,20 @@ class _LoginPageState extends State<LoginPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  'Log into an account',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: lightBackgroundColor,
-                    fontSize:
-                        height(context) * 22 / 814 > width(context) * 22 / 1440
-                            ? width(context) * 22 / 1440
-                            : height(context) * 22 / 814,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w500,
-                    height: 0,
-                  ),
-                ),
-              ],
+            Text(
+              'Log into an account',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: lightBackgroundColor,
+                fontSize: _getFontSize(22),
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w500,
+                height: 0,
+              ),
             ),
           ],
         ),
-      );
-    }
-
-    return Scaffold(
-      body: LayoutBuilder(builder: (context, _) {
-        return Stack(
-          children: <Widget>[
-            Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  /// Background
-                  image: AssetImage("lib/assets/images/auth_background.png"),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            Column(
-              children: [
-                SizedBox(
-                  height: 6.h,
-                ),
-                Center(
-                  child: Container(
-                    width: 56.w,
-                    height: 89.h,
-                    clipBehavior: Clip.antiAlias,
-                    decoration: authBoxDecorations,
-                    child: Column(
-                      children: [
-                        /// Build Header of Login
-                        Row(
-                          children: [
-                            SizedBox(
-                              height: 5.71.h,
-                            ),
-                            const Spacer(),
-                            Padding(
-                              padding: EdgeInsets.fromLTRB(
-                                  1.4.w, 2.25.h, 1.4.w, 2.25.h),
-                              child: IconButton(
-                                hoverColor: Colors.transparent,
-                                highlightColor: Colors.transparent,
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    PageRouteBuilder(
-                                      pageBuilder:
-                                          (context, animation1, animation2) =>
-                                              const LandingAgent(),
-                                      transitionDuration: Duration.zero,
-                                      reverseTransitionDuration: Duration.zero,
-                                    ),
-                                  );
-                                },
-                                icon: Icon(
-                                  Icons.close_outlined,
-                                  color: darkAccent,
-                                  size: height(context) * 20 / 814 >
-                                          width(context) * 20 / 1440
-                                      ? width(context) * 20 / 1440
-                                      : height(context) * 20 / 814,
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                        Center(
-                          child: Container(
-                            width: height(context) * 48 / 814 >
-                                    width(context) * 48 / 1440
-                                ? width(context) * 48 / 1440
-                                : height(context) * 48 / 814,
-                            height: height(context) * 48 / 814 >
-                                    width(context) * 48 / 1440
-                                ? width(context) * 48 / 1440
-                                : height(context) * 48 / 814,
-                            decoration: const ShapeDecoration(
-                              color: Color(0xFFC4C4C4),
-                              shape: OvalBorder(),
-                            ),
-                          ),
-                        ),
-                        Text(
-                          'Log into an account',
-                          textAlign: TextAlign.center,
-                          style: authHeadingStyle.copyWith(
-                              fontSize: height(context) * 32 / 814 >
-                                      width(context) * 32 / 1440
-                                  ? width(context) * 32 / 1440
-                                  : height(context) * 32 / 814),
-                        ),
-                        SizedBox(height: .94.h),
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                              vertical: .24.h, horizontal: .139.w),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    PageRouteBuilder(
-                                      pageBuilder:
-                                          (context, animation1, animation2) =>
-                                              const SignUpPage(),
-                                      transitionDuration: Duration.zero,
-                                      reverseTransitionDuration: Duration.zero,
-                                    ),
-                                  );
-                                },
-                                child: Text.rich(
-                                  TextSpan(
-                                    children: [
-                                      TextSpan(
-                                        text: 'Need an account?  ',
-                                        style: authTextStyle.copyWith(
-                                            fontSize: height(context) *
-                                                        16 /
-                                                        814 >
-                                                    width(context) * 16 / 1440
-                                                ? width(context) * 16 / 1440
-                                                : height(context) * 16 / 814),
-                                      ),
-                                      TextSpan(
-                                        text: 'Sign Up  ',
-                                        style: authTextStyle.copyWith(
-                                            decoration:
-                                                TextDecoration.underline,
-                                            fontSize: height(context) *
-                                                        16 /
-                                                        814 >
-                                                    width(context) * 16 / 1440
-                                                ? width(context) * 16 / 1440
-                                                : height(context) * 16 / 814),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: .47.h,
-                        ),
-
-                        /// Build Login with
-                        GestureDetector(
-                            onTap: () {
-                              _signInWithGoogle();
-                            },
-                            child: buildLoginPlatforms()),
-                        SizedBox(
-                          height: height(context) * 55 / 840,
-                        ),
-
-                        /// Build Divider
-                        Center(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SizedBox(
-                                width: width(context) * 224.5 / 1240,
-                                child: Divider(
-                                  height: height(context) * 2 / 840,
-                                ),
-                              ),
-                              SizedBox(
-                                width: width(context) * 24 / 1240,
-                              ),
-                              Text(
-                                "Or",
-                                style: authTextStyle.copyWith(
-                                    fontSize: height(context) * 16 / 840),
-                              ),
-                              SizedBox(
-                                width: width(context) * 24 / 1240,
-                              ),
-                              SizedBox(
-                                width: width(context) * 224.5 / 1240,
-                                child: Divider(
-                                  height: height(context) * 2 / 840,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: height(context) * 40 / 840,
-                        ),
-
-                        /// Build Email Signup Text
-                        Text.rich(
-                          TextSpan(
-                            children: [
-                              TextSpan(
-                                text: 'Enter your credentials to ',
-                                style: authTextStyle.copyWith(
-                                    fontSize: height(context) * 16 / 840),
-                              ),
-                              TextSpan(
-                                  text: 'log into an account.',
-                                  style: authTextStyle.copyWith(
-                                      decoration: TextDecoration.underline,
-                                      fontSize: height(context) * 16 / 840)),
-                            ],
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        SizedBox(
-                          height: height(context) * 16 / 840,
-                        ),
-
-                        /// Build authentication fields
-                        Column(
-                          children: [
-                            SizedBox(
-                              width: width(context) * 528 / 1240,
-                              child: Text(
-                                "Your Email",
-                                style: authTextStyle.copyWith(
-                                    fontSize: height(context) * 16 / 840),
-                                textAlign: TextAlign.start,
-                              ),
-                            ),
-                            SizedBox(
-                              height: height(context) * 6 / 840,
-                            ),
-
-                            /// Email Field
-                            SizedBox(
-                              width: width(context) * 528 / 1240,
-                              height: height(context) * 56 / 840,
-                              child: TextFormField(
-                                onChanged: (_) {
-                                  if (_emailController.text.isNotEmpty &&
-                                      _passwordController.text.isNotEmpty) {
-                                    setState(() {
-                                      fieldFilled = true;
-                                    });
-                                  }
-                                  if (_emailController.text.isEmpty ||
-                                      _passwordController.text.isEmpty) {
-                                    setState(() {
-                                      fieldFilled = false;
-                                    });
-                                  }
-                                },
-                                controller: _emailController,
-                                decoration: textFieldDecoration,
-                              ),
-                            ),
-                            SizedBox(
-                              height: height(context) * 16 / 840,
-                            ),
-                            SizedBox(
-                              width: width(context) * 528 / 1240,
-                              child: Text(
-                                "Your Password",
-                                style: authTextStyle.copyWith(
-                                    fontSize: height(context) * 16 / 840),
-                                textAlign: TextAlign.start,
-                              ),
-                            ),
-
-                            /// Password Field
-                            SizedBox(
-                              height: height(context) * 6 / 840,
-                            ),
-                            SizedBox(
-                              width: width(context) * 528 / 1240,
-                              height: height(context) * 56 / 840,
-                              child: TextFormField(
-                                onChanged: (String value) {
-                                  if (_emailController.text.isNotEmpty &&
-                                      _passwordController.text.isNotEmpty) {
-                                    setState(() {
-                                      fieldFilled = true;
-                                    });
-                                  }
-                                  if (_emailController.text.isEmpty ||
-                                      _passwordController.text.isEmpty) {
-                                    setState(() {
-                                      fieldFilled = false;
-                                    });
-                                  }
-                                },
-                                controller: _passwordController,
-                                decoration: textFieldDecoration.copyWith(
-                                  suffixIcon: IconButton(
-                                    focusColor: Colors.transparent,
-                                    highlightColor: Colors.transparent,
-                                    hoverColor: Colors.transparent,
-                                    icon: Icon(
-                                      obscure
-                                          ? Icons.visibility_off
-                                          : Icons.visibility,
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        obscure = !obscure;
-                                      });
-                                    },
-                                  ),
-                                ),
-                                obscureText: obscure,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: height(context) * 16 / 840,
-                        ),
-                        GestureDetector(
-                            onTap: () {
-                              _loginUser(_emailController.text,
-                                  _passwordController.text);
-                              if (_authInstance.currentUser?.uid != null) {
-                                Navigator.push(
-                                  context,
-                                  PageRouteBuilder(
-                                    pageBuilder:
-                                        (context, animation1, animation2) =>
-                                            const OpportunitiesPage(),
-                                    transitionDuration: Duration.zero,
-                                    reverseTransitionDuration: Duration.zero,
-                                  ),
-                                );
-                              }
-                            },
-                            child: buildCreateAccount()),
-                      ],
-                    ),
-                  ),
-                )
-                    .animate()
-                    .fade(
-                      duration: const Duration(milliseconds: 1000),
-                    )
-                    .slideY(
-                        begin: 0.25,
-                        end: 0,
-                        duration: const Duration(milliseconds: 600),
-                        curve: Curves.ease),
-              ],
-            ),
-          ],
-        );
-      }),
+      ),
     );
   }
 }

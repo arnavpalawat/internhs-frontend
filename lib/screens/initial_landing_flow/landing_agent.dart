@@ -24,14 +24,13 @@ class _LandingAgentState extends State<LandingAgent> {
 
   @override
   void initState() {
+    super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_pageController.hasClients) {
         _pageController.animateToPage(widget.index,
             duration: const Duration(seconds: 1), curve: Curves.easeInOutCubic);
       }
     });
-
-    super.initState();
   }
 
   @override
@@ -40,7 +39,65 @@ class _LandingAgentState extends State<LandingAgent> {
     super.dispose();
   }
 
-  NotificationListener<ScrollNotification> _pageView() {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SizedBox(
+        height: double.infinity,
+        width: double.infinity,
+        child: Stack(
+          children: [
+            PageViewWidget(
+              pageController: _pageController,
+              onPageChanged: (index) {
+                setState(() {
+                  ind = index;
+                });
+              },
+            ),
+            const Positioned(
+              left: 0,
+              top: 0,
+              child: HeaderWidget(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class HeaderWidget extends StatelessWidget {
+  const HeaderWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(
+          height: height(context) * 0.015,
+        ),
+        const BuildHeader(),
+        SizedBox(
+          height: height(context) * 0.015,
+        ),
+      ],
+    );
+  }
+}
+
+class PageViewWidget extends StatelessWidget {
+  final PageController pageController;
+  final Function(int) onPageChanged;
+
+  const PageViewWidget({
+    Key? key,
+    required this.pageController,
+    required this.onPageChanged,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return NotificationListener<ScrollNotification>(
       onNotification: (ScrollNotification notification) {
         // Check if we're at the top or bottom of the page view
@@ -56,23 +113,19 @@ class _LandingAgentState extends State<LandingAgent> {
       },
       child: PageView.builder(
         scrollDirection: Axis.vertical,
-        controller: _pageController,
+        controller: pageController,
         itemCount: 4,
         pageSnapping: false,
         scrollBehavior:
             const CupertinoScrollBehavior().copyWith(overscroll: true),
         physics: const AlwaysScrollableScrollPhysics(),
-        onPageChanged: (index) {
-          setState(() {
-            ind = index;
-          });
-        },
+        onPageChanged: onPageChanged,
         itemBuilder: (BuildContext context, int index) {
           switch (index) {
             case 0:
               return LayoutBuilder(builder: (context, _) {
                 return LandingPage(
-                  pageController: _pageController,
+                  pageController: pageController,
                 );
               });
             case 1:
@@ -90,36 +143,6 @@ class _LandingAgentState extends State<LandingAgent> {
               );
           }
         },
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SizedBox(
-        height: double.infinity,
-        width: double.infinity,
-        child: Stack(
-          children: [
-            _pageView(),
-            Positioned(
-              left: 0,
-              top: 0,
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: height(context) * 0.015,
-                  ),
-                  const BuildHeader(),
-                  SizedBox(
-                    height: height(context) * 0.015,
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

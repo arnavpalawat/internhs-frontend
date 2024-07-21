@@ -162,7 +162,7 @@ class TinderCard extends StatelessWidget {
                     style: blackBodyTextStyle.copyWith(
                       fontSize: height(context) * 20 / 814,
                     ),
-                    maxLines: 14,
+                    maxLines: 23,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ],

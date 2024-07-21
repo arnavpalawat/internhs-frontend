@@ -12,7 +12,7 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 class LandingPage extends StatefulWidget {
   final PageController pageController;
 
-  LandingPage({Key? key, required this.pageController}) : super(key: key);
+  const LandingPage({Key? key, required this.pageController}) : super(key: key);
 
   @override
   State<LandingPage> createState() => _LandingPageState();
@@ -64,7 +64,69 @@ class _LandingPageState extends State<LandingPage>
     });
   }
 
-  Widget buildAnnouncement() {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        decoration: backgroundColor,
+        width: 100.w,
+        height: 100.h,
+        child: Column(
+          children: [
+            SizedBox(height: 11.5.h),
+            Padding(
+              padding:
+                  EdgeInsets.symmetric(horizontal: 1.4.w, vertical: 2.25.h),
+              child: Stack(
+                children: [
+                  Positioned(
+                    left: 35.w,
+                    top: 25.h,
+                    width: 70.w,
+                    height: 60.h,
+                    child: Image.asset(
+                      "lib/assets/images/landing-vector.png",
+                      scale: 0.5,
+                    ),
+                  ),
+                  Column(
+                    children: [
+                      AnnouncementText(),
+                      SizedBox(height: 1.h),
+                      BodyText(),
+                      SizedBox(height: 2.h),
+                      ButtonRow(
+                        pageController: widget.pageController,
+                        animationGS: _animationGS,
+                        hovering: hovering,
+                        onGSHover: _onGSHover,
+                        onGSExit: _onGSExit,
+                      ),
+                    ],
+                  )
+                      .animate()
+                      .fade(
+                        duration: const Duration(milliseconds: 1000),
+                      )
+                      .slideY(
+                        begin: 0.25,
+                        end: 0,
+                        duration: const Duration(milliseconds: 600),
+                        curve: Curves.ease,
+                      ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class AnnouncementText extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     return SizedBox(
       width: 88.w,
       height: 57.h,
@@ -75,58 +137,67 @@ class _LandingPageState extends State<LandingPage>
             TextSpan(
               text: 'Establishing teens \n',
               style: announcementTextStyle.copyWith(
-                  fontSize:
-                      height(context) * 80 / 814 > width(context) * 80 / 1440
-                          ? width(context) * 80 / 1440
-                          : height(context) * 80 / 814),
+                fontSize:
+                    height(context) * 80 / 814 > width(context) * 80 / 1440
+                        ? width(context) * 80 / 1440
+                        : height(context) * 80 / 814,
+              ),
             ),
             TextSpan(
               text: 'initiative ',
               style: italicAnnouncementTextStyle.copyWith(
-                  fontSize:
-                      height(context) * 80 / 814 > width(context) * 80 / 1440
-                          ? width(context) * 80 / 1440
-                          : height(context) * 80 / 814),
+                fontSize:
+                    height(context) * 80 / 814 > width(context) * 80 / 1440
+                        ? width(context) * 80 / 1440
+                        : height(context) * 80 / 814,
+              ),
             ),
             TextSpan(
               text: 'into competitive \n',
               style: announcementTextStyle.copyWith(
-                  fontSize:
-                      height(context) * 80 / 814 > width(context) * 80 / 1440
-                          ? width(context) * 80 / 1440
-                          : height(context) * 80 / 814),
+                fontSize:
+                    height(context) * 80 / 814 > width(context) * 80 / 1440
+                        ? width(context) * 80 / 1440
+                        : height(context) * 80 / 814,
+              ),
             ),
             TextSpan(
               text: 'workplaces, one ',
               style: announcementTextStyle.copyWith(
-                  fontSize:
-                      height(context) * 80 / 814 > width(context) * 80 / 1440
-                          ? width(context) * 80 / 1440
-                          : height(context) * 80 / 814),
+                fontSize:
+                    height(context) * 80 / 814 > width(context) * 80 / 1440
+                        ? width(context) * 80 / 1440
+                        : height(context) * 80 / 814,
+              ),
             ),
             TextSpan(
               text: 'internship\n',
               style: italicAnnouncementTextStyle.copyWith(
-                  fontSize:
-                      height(context) * 80 / 814 > width(context) * 80 / 1440
-                          ? width(context) * 80 / 1440
-                          : height(context) * 80 / 814),
+                fontSize:
+                    height(context) * 80 / 814 > width(context) * 80 / 1440
+                        ? width(context) * 80 / 1440
+                        : height(context) * 80 / 814,
+              ),
             ),
             TextSpan(
               text: 'at a time',
               style: announcementTextStyle.copyWith(
-                  fontSize:
-                      height(context) * 80 / 814 > width(context) * 80 / 1440
-                          ? width(context) * 80 / 1440
-                          : height(context) * 80 / 814),
+                fontSize:
+                    height(context) * 80 / 814 > width(context) * 80 / 1440
+                        ? width(context) * 80 / 1440
+                        : height(context) * 80 / 814,
+              ),
             ),
           ],
         ),
       ),
     );
   }
+}
 
-  Widget buildBodyText() {
+class BodyText extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     return SizedBox(
       width: 88.w,
       height: 14.h,
@@ -137,22 +208,113 @@ class _LandingPageState extends State<LandingPage>
             'Through robust AI recommendation algorithms, and \ntailored recommendations. We guide the next generation \nof employees as early as high school.',
             minFontSize: 0,
             style: announcementBodyTextStyle.copyWith(
-                fontSize: height(context) * 24 / 814),
+              fontSize: height(context) * 24 / 814,
+            ),
             maxLines: 3,
           ),
         ],
       ),
     );
   }
+}
 
-  Widget buildButton(Color color, String text) {
+class ButtonRow extends StatelessWidget {
+  final PageController pageController;
+  final Animation<double> animationGS;
+  final bool hovering;
+  final void Function(PointerEvent) onGSHover;
+  final void Function(PointerEvent) onGSExit;
+
+  const ButtonRow({
+    Key? key,
+    required this.pageController,
+    required this.animationGS,
+    required this.hovering,
+    required this.onGSHover,
+    required this.onGSExit,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 88.w,
+      child: Row(
+        children: [
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation1, animation2) {
+                    return FirebaseAuth.instance.currentUser == null
+                        ? const SignUpPage()
+                        : const OpportunitiesPage();
+                  },
+                  transitionDuration: Duration.zero,
+                  reverseTransitionDuration: Duration.zero,
+                ),
+              );
+            },
+            child: HoverButton(
+              color: brightAccent,
+              text: "Get Started",
+              animationGS: animationGS,
+              hovering: hovering,
+              onGSHover: onGSHover,
+              onGSExit: onGSExit,
+            ),
+          ),
+          SizedBox(width: 1.w),
+          GestureDetector(
+            onTap: () {
+              pageController.animateToPage(
+                2,
+                duration: const Duration(seconds: 1),
+                curve: Curves.easeInOutCubicEmphasized,
+              );
+            },
+            child: HoverButton(
+              color: darkAccent,
+              text: "Our Story",
+              animationGS: animationGS,
+              hovering: hovering,
+              onGSHover: onGSHover,
+              onGSExit: onGSExit,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class HoverButton extends StatelessWidget {
+  final Color color;
+  final String text;
+  final Animation<double> animationGS;
+  final bool hovering;
+  final void Function(PointerEvent)? onGSHover;
+  final void Function(PointerEvent)? onGSExit;
+
+  const HoverButton({
+    Key? key,
+    required this.color,
+    required this.text,
+    required this.animationGS,
+    required this.hovering,
+    this.onGSHover,
+    this.onGSExit,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return MouseRegion(
-      onEnter: text == "Get Started" ? _onGSHover : null,
-      onExit: text == "Get Started" ? _onGSExit : null,
+      onEnter: text == "Get Started" ? onGSHover : null,
+      onExit: text == "Get Started" ? onGSExit : null,
       child: Column(
         children: [
           Container(
-            width: 14.4.w + (text == "Get Started" ? _animationGS.value : 0),
+            width: 14.4.w + (text == "Get Started" ? animationGS.value : 0),
             height: 8.9.h,
             padding: EdgeInsets.symmetric(
               horizontal: 1.66.w,
@@ -169,7 +331,7 @@ class _LandingPageState extends State<LandingPage>
                   blurRadius: 2,
                   offset: Offset(0, 1),
                   spreadRadius: 0,
-                )
+                ),
               ],
             ),
             child: Row(
@@ -194,11 +356,11 @@ class _LandingPageState extends State<LandingPage>
                   AnimatedOpacity(
                     opacity: hovering ? 1 : 0,
                     duration: const Duration(milliseconds: 200),
-                    child: _animationGS.value > 0
+                    child: animationGS.value > 0
                         ? Icon(
                             Icons.arrow_forward_ios_rounded,
                             color: lightBackgroundColor,
-                            size: _animationGS.value > 10
+                            size: animationGS.value > 10
                                 ? height(context) * 24 / 814 >
                                         width(context) * 24 / 1440
                                     ? width(context) * 24 / 1440
@@ -213,96 +375,6 @@ class _LandingPageState extends State<LandingPage>
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        decoration: backgroundColor,
-        width: 100.w,
-        height: 100.h,
-        child: Column(
-          children: [
-            SizedBox(
-              height: 11.5.h,
-            ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
-              child: Stack(
-                children: [
-                  Positioned(
-                    left: 35.w,
-                    top: 25.h,
-                    width: 70.w,
-                    height: 60.h,
-                    child: Image.asset(
-                      "lib/assets/images/landing-vector.png",
-                      scale: 0.5,
-                    ),
-                  ),
-                  Column(
-                    children: [
-                      buildAnnouncement(),
-                      SizedBox(height: 1.h),
-                      buildBodyText(),
-                      SizedBox(height: 2.h),
-                      SizedBox(
-                        width: 88.w,
-                        child: Row(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  PageRouteBuilder(
-                                    pageBuilder:
-                                        (context, animation1, animation2) {
-                                      return FirebaseAuth
-                                                  .instance.currentUser ==
-                                              null
-                                          ? const SignUpPage()
-                                          : const OpportunitiesPage();
-                                    },
-                                    transitionDuration: Duration.zero,
-                                    reverseTransitionDuration: Duration.zero,
-                                  ),
-                                );
-                              },
-                              child: buildButton(brightAccent, "Get Started"),
-                            ),
-                            SizedBox(width: 1.w),
-                            GestureDetector(
-                              onTap: () {
-                                widget.pageController.animateToPage(
-                                  2,
-                                  duration: const Duration(seconds: 1),
-                                  curve: Curves.easeInOutCubicEmphasized,
-                                );
-                              },
-                              child: buildButton(darkAccent, "Our Story"),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  )
-                      .animate()
-                      .fade(
-                        duration: const Duration(milliseconds: 1000),
-                      )
-                      .slideY(
-                          begin: 0.25,
-                          end: 0,
-                          duration: const Duration(milliseconds: 600),
-                          curve: Curves.ease),
-                ],
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

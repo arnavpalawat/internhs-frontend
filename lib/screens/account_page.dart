@@ -147,27 +147,36 @@ class _AccountPageState extends State<AccountPage>
     try {
       if (user != null) {
         String userId = user.uid;
+
+        // Sign out of Google if necessary
         if (google) {
-          GoogleSignIn().signOut();
+          await GoogleSignIn().signOut();
         }
+
+        // Delete subcollections
         await deleteSubcollection(userId, "unliked");
         await deleteSubcollection(userId, "wishlisted");
+
+        // Delete user document
         await FirebaseFirestore.instance
             .collection("user")
             .doc(userId)
             .delete();
-        await user.delete().whenComplete(() {
-          Navigator.push(
-            context,
-            PageRouteBuilder(
-              pageBuilder: (context, animation1, animation2) => LandingAgent(
-                index: 0,
-              ),
-              transitionDuration: Duration.zero,
-              reverseTransitionDuration: Duration.zero,
-            ),
-          );
-        });
+
+        // Delete user account
+        await user.delete();
+
+        // Sign out and navigate to the landing page
+        await FirebaseAuth.instance.signOut();
+        Navigator.pushReplacement(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (context, animation1, animation2) =>
+                const LandingAgent(index: 0),
+            transitionDuration: Duration.zero,
+            reverseTransitionDuration: Duration.zero,
+          ),
+        );
       }
     } catch (e) {
       print("Failed to delete account: $e");
@@ -540,7 +549,7 @@ class _AccountPageState extends State<AccountPage>
                 children: [
                   Padding(
                     padding: EdgeInsets.only(left: 5.w),
-                    child: Align(
+                    child: const Align(
                       alignment: Alignment.centerLeft,
                       child: buildPrefs(),
                     ),

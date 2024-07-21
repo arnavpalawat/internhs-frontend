@@ -6,16 +6,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:internhs/screens/authentication_flow/login_screen.dart';
-import 'package:internhs/util/tinder_card.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../constants/colors.dart';
 import 'job.dart';
+import 'tinder_card.dart';
 
 class TinderSwiper extends StatefulWidget {
-  final List<Job>? jobs;
+  List<Job>? jobs;
+  final Function() onSwipeCallback; // Callback function
 
-  const TinderSwiper({super.key, required this.jobs});
+  TinderSwiper({super.key, required this.jobs, required this.onSwipeCallback});
 
   @override
   State<TinderSwiper> createState() => _TinderSwiperState();
@@ -24,21 +25,10 @@ class TinderSwiper extends StatefulWidget {
 class _TinderSwiperState extends State<TinderSwiper> {
   final CardSwiperController controller = CardSwiperController();
   bool disable = false;
-  late final List<Widget> cards;
 
   @override
   void initState() {
     super.initState();
-    // Initialize cards with jobs or a placeholder card
-    cards = widget.jobs != null && widget.jobs!.isNotEmpty
-        ? widget.jobs!
-            .map(
-              (job) => TinderCard(job),
-            )
-            .toList()
-        : [
-            const TinderCard(null),
-          ];
     RawKeyboard.instance.addListener(_keyboardCallback);
   }
 
@@ -46,142 +36,133 @@ class _TinderSwiperState extends State<TinderSwiper> {
   void dispose() {
     controller.dispose();
     RawKeyboard.instance.removeListener(_keyboardCallback);
-
     super.dispose();
   }
 
-  /// Handle KBD
+  @override
+  void didUpdateWidget(TinderSwiper oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.jobs != oldWidget.jobs) {
+      setState(() {
+        setState(() {
+          widget.jobs;
+        });
+      });
+    }
+  }
+
   void _keyboardCallback(RawKeyEvent keyEvent) {
     if (keyEvent is! RawKeyDownEvent) return;
-
     switch (keyEvent.data.logicalKey) {
-      case (LogicalKeyboardKey.arrowLeft):
+      case LogicalKeyboardKey.arrowLeft:
         controller.swipe(CardSwiperDirection.left);
         break;
-      case (LogicalKeyboardKey.arrowDown):
+      case LogicalKeyboardKey.arrowDown:
         controller.swipe(CardSwiperDirection.bottom);
         break;
-      case (LogicalKeyboardKey.arrowRight):
+      case LogicalKeyboardKey.arrowRight:
         controller.swipe(CardSwiperDirection.right);
         break;
-      case (LogicalKeyboardKey.arrowUp):
+      case LogicalKeyboardKey.arrowUp:
         controller.swipe(CardSwiperDirection.top);
         break;
     }
   }
 
+  void onRightSwipe(int index) async {
+    if (FirebaseAuth.instance.currentUser == null) {
+      Navigator.pushNamed(context, '/login');
+    } else {
+      CollectionReference users = FirebaseFirestore.instance.collection('user');
+      String uid = FirebaseAuth.instance.currentUser!.uid;
+      DocumentReference docRef =
+          users.doc(uid).collection("wishlisted").doc(widget.jobs?[index].id);
+
+      await docRef
+          .set({'jobId': widget.jobs?[index].id}, SetOptions(merge: true));
+    }
+  }
+
+  void onLeftSwipe(int index) async {
+    if (FirebaseAuth.instance.currentUser == null) {
+      Navigator.push(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (context, animation1, animation2) => const LoginPage(),
+          transitionDuration: Duration.zero,
+          reverseTransitionDuration: Duration.zero,
+        ),
+      );
+    } else {
+      CollectionReference users = FirebaseFirestore.instance.collection('user');
+      String uid = FirebaseAuth.instance.currentUser!.uid;
+      DocumentReference docRef =
+          users.doc(uid).collection("unliked").doc(widget.jobs?[index].id);
+
+      await docRef
+          .set({'jobId': widget.jobs?[index].id}, SetOptions(merge: true));
+    }
+  }
+
+  void onUpSwipe(int index) async {
+    js.context.callMethod('open', [widget.jobs![index].link ?? "indeed.com"]);
+    if (FirebaseAuth.instance.currentUser != null) {
+      CollectionReference users = FirebaseFirestore.instance.collection('user');
+      String uid = FirebaseAuth.instance.currentUser!.uid;
+      DocumentReference docRef =
+          users.doc(uid).collection("wishlisted").doc(widget.jobs?[index].id);
+
+      await docRef
+          .set({'jobId': widget.jobs?[index].id}, SetOptions(merge: true));
+    }
+  }
+
+  Future<void> onDownSwipe(int index) async {
+    CollectionReference jobs = FirebaseFirestore.instance.collection('jobs');
+    String? id = widget.jobs?[index].id;
+    if (id != null) {
+      await jobs.doc(id).set({'flagged': true},
+          SetOptions(merge: true)).whenComplete(() => print("complete"));
+    }
+  }
+
+  void directionLogic(CardSwiperDirection direction, int index) {
+    switch (direction.name) {
+      case 'right':
+        onRightSwipe(index);
+        break;
+      case 'left':
+        onLeftSwipe(index);
+        break;
+      case 'bottom':
+        onDownSwipe(index);
+        break;
+      case 'top':
+        onUpSwipe(index);
+        break;
+    }
+    setState(() {
+      widget.onSwipeCallback(); // Call the callback on each swipe
+    });
+  }
+
+  bool onSwipe(
+      int previousIndex, int? currentIndex, CardSwiperDirection direction) {
+    if (currentIndex == null || currentIndex >= widget.jobs!.length) {
+      setState(() {
+        disable = true;
+      });
+    }
+    debugPrint(
+      'The card $previousIndex was swiped to the ${direction.name}. Now the card $currentIndex is on top',
+    );
+    directionLogic(direction, previousIndex);
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
-    FirebaseAuth auth = FirebaseAuth.instance;
-
-    /// Executes when the user swipes right on a card
-    void onRightSwipe(int index) async {
-      if (auth.currentUser == null) {
-        // Redirect to login page if user is not authenticated
-        Navigator.pushNamed(context, '/login');
-      } else {
-        // Save the job as wishlisted by the user
-        CollectionReference users =
-            FirebaseFirestore.instance.collection('user');
-        String uid = auth.currentUser!.uid;
-        DocumentReference docRef =
-            users.doc(uid).collection("wishlisted").doc(widget.jobs?[index].id);
-
-        await docRef.set({
-          'jobId': widget.jobs?[index].id,
-        }, SetOptions(merge: true));
-      }
-    }
-
-    // Executes when the user swipes left on a card
-    void onLeftSwipe(int index) async {
-      if (auth.currentUser == null) {
-        // Redirect to login page if user is not authenticated
-        Navigator.push(
-          context,
-          PageRouteBuilder(
-            pageBuilder: (context, animation1, animation2) => const LoginPage(),
-            transitionDuration: Duration.zero,
-            reverseTransitionDuration: Duration.zero,
-          ),
-        );
-      } else {
-        // Save the job as unliked by the user
-        CollectionReference users =
-            FirebaseFirestore.instance.collection('user');
-        String uid = auth.currentUser!.uid;
-        DocumentReference docRef =
-            users.doc(uid).collection("unliked").doc(widget.jobs?[index].id);
-
-        await docRef.set({
-          'jobId': widget.jobs?[index].id,
-        }, SetOptions(merge: true));
-      }
-    }
-
-    // Executes when the user swipes up on a card
-    void onUpSwipe(int index) async {
-      // Open the job link in a new browser tab
-      js.context.callMethod('open', [widget.jobs![index].link ?? "indeed.com"]);
-      if (auth.currentUser != null) {
-        CollectionReference users =
-            FirebaseFirestore.instance.collection('user');
-        String uid = auth.currentUser!.uid;
-        DocumentReference docRef =
-            users.doc(uid).collection("wishlisted").doc(widget.jobs?[index].id);
-
-        await docRef.set({
-          'jobId': widget.jobs?[index].id,
-        }, SetOptions(merge: true));
-      }
-    }
-
-    // Executes when the user swipes down on a card
-    Future<void> onDownSwipe(int index) async {
-      // Flag the job as inappropriate or spam
-      CollectionReference jobs = FirebaseFirestore.instance.collection('jobs');
-      String? id = widget.jobs?[index].id;
-      if (id != null) {
-        await jobs.doc(id).set({
-          'flagged': true,
-        }, SetOptions(merge: true)).whenComplete(() => print("complete"));
-      }
-    }
-
-    /// Combines all swipe direction logic
-    void directionLogic(CardSwiperDirection direction, int index) {
-      switch (direction.name) {
-        case 'right':
-          onRightSwipe(index);
-          break;
-        case 'left':
-          onLeftSwipe(index);
-          break;
-        case 'bottom':
-          onDownSwipe(index);
-          break;
-        case 'top':
-          onUpSwipe(index);
-          break;
-      }
-    }
-
-    /// Handles user swipe events
-    bool onSwipe(
-        int previousIndex, int? currentIndex, CardSwiperDirection direction) {
-      if (currentIndex == null || currentIndex >= widget.jobs!.length) {
-        // Disable swipe when there are no more cards
-        setState(() {
-          disable = true;
-        });
-      }
-      debugPrint(
-        'The card $previousIndex was swiped to the ${direction.name}. Now the card $currentIndex is on top',
-      );
-      directionLogic(direction, previousIndex);
-      return true;
-    }
-
     return LayoutBuilder(builder: (context, _) {
       return CardSwiper(
         isLoop: false,
@@ -196,12 +177,8 @@ class _TinderSwiperState extends State<TinderSwiper> {
         backCardOffset: Offset(2.w, 4.h),
         padding: EdgeInsets.fromLTRB(1.67.w, 2.96.h, 1.67.w, 2.96.h),
         isDisabled: disable,
-        cardBuilder: (
-          context,
-          index,
-          horizontalThresholdPercentage,
-          verticalThresholdPercentage,
-        ) {
+        cardBuilder: (context, index, horizontalThresholdPercentage,
+            verticalThresholdPercentage) {
           if (widget.jobs != null &&
               widget.jobs!.isNotEmpty &&
               index < widget.jobs!.length) {
@@ -209,7 +186,6 @@ class _TinderSwiperState extends State<TinderSwiper> {
           } else {
             return Container(
               width: 35.w,
-              // Placeholder card when no more jobs are available
               clipBehavior: Clip.hardEdge,
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(Radius.circular(10)),
