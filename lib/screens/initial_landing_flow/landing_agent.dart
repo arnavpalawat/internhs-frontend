@@ -20,15 +20,19 @@ class LandingAgent extends StatefulWidget {
 
 class _LandingAgentState extends State<LandingAgent> {
   final PageController _pageController = PageController();
-  int ind = 0;
+  int _currentIndex = 0;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Animate to the initial page based on widget index
       if (_pageController.hasClients) {
-        _pageController.animateToPage(widget.index,
-            duration: const Duration(seconds: 1), curve: Curves.easeInOutCubic);
+        _pageController.animateToPage(
+          widget.index,
+          duration: const Duration(seconds: 1),
+          curve: Curves.easeInOutCubic,
+        );
       }
     });
   }
@@ -47,14 +51,16 @@ class _LandingAgentState extends State<LandingAgent> {
         width: double.infinity,
         child: Stack(
           children: [
+            // PageViewWidget handles the PageView and its changes
             PageViewWidget(
               pageController: _pageController,
               onPageChanged: (index) {
                 setState(() {
-                  ind = index;
+                  _currentIndex = index;
                 });
               },
             ),
+            // Positioned header widget
             const Positioned(
               left: 0,
               top: 0,
@@ -74,13 +80,9 @@ class HeaderWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(
-          height: height(context) * 0.015,
-        ),
+        SizedBox(height: height(context) * 0.015),
         const BuildHeader(),
-        SizedBox(
-          height: height(context) * 0.015,
-        ),
+        SizedBox(height: height(context) * 0.015),
       ],
     );
   }
@@ -106,9 +108,10 @@ class PageViewWidget extends StatelessWidget {
         bool isAtBottom = notification.metrics.atEdge &&
             notification.metrics.pixels == notification.metrics.maxScrollExtent;
 
-        // Handle overscroll
-        if (notification is OverscrollNotification &&
-            (isAtTop || isAtBottom)) {}
+        // Handle overscroll (if needed, you can add specific actions here)
+        if (notification is OverscrollNotification && (isAtTop || isAtBottom)) {
+          // Handle overscroll
+        }
         return false;
       },
       child: PageView.builder(
@@ -121,29 +124,40 @@ class PageViewWidget extends StatelessWidget {
         physics: const AlwaysScrollableScrollPhysics(),
         onPageChanged: onPageChanged,
         itemBuilder: (BuildContext context, int index) {
-          switch (index) {
-            case 0:
-              return LayoutBuilder(builder: (context, _) {
-                return LandingPage(
-                  pageController: pageController,
-                );
-              });
-            case 1:
-              return LayoutBuilder(builder: (context, _) {
-                return const PricingPage();
-              });
-            case 2:
-              return const OurStoryPage();
-            case 3:
-              return const WhatWeDoPage();
-            default:
-              return LoadingAnimationWidget.twoRotatingArc(
-                color: lightBackgroundColor,
-                size: 15,
-              );
-          }
+          return _buildPage(context, index);
         },
       ),
     );
+  }
+
+  // Helper method to build pages based on index
+  Widget _buildPage(BuildContext context, int index) {
+    try {
+      switch (index) {
+        case 0:
+          return LayoutBuilder(
+            builder: (context, _) =>
+                LandingPage(pageController: pageController),
+          );
+        case 1:
+          return LayoutBuilder(
+            builder: (context, _) => const PricingPage(),
+          );
+        case 2:
+          return const OurStoryPage();
+        case 3:
+          return const WhatWeDoPage();
+        default:
+          return LoadingAnimationWidget.twoRotatingArc(
+            color: lightBackgroundColor,
+            size: 15,
+          );
+      }
+    } catch (e) {
+      return Center(
+        child:
+            Text('Error loading page: $e', style: TextStyle(color: Colors.red)),
+      );
+    }
   }
 }

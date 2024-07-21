@@ -40,44 +40,33 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
+  // Method to handle Google Sign-In
   Future<void> _signInWithGoogle() async {
     GoogleAuthProvider authProvider = GoogleAuthProvider();
-
     try {
-      UserCredential userCredential =
-          await _authInstance.signInWithPopup(authProvider);
+      await _authInstance.signInWithPopup(authProvider);
       if (_authInstance.currentUser != null) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const OpportunitiesPage(),
-          ),
-        );
+        _navigateToOpportunitiesPage();
       }
     } catch (e) {
       _showErrorDialog(e.toString());
     }
   }
 
+  // Method to handle Email/Password Sign-In
   Future<void> _loginUser(String email, String password) async {
     try {
       await _authInstance.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+          email: email, password: password);
       if (_authInstance.currentUser != null) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const OpportunitiesPage(),
-          ),
-        );
+        _navigateToOpportunitiesPage();
       }
     } catch (e) {
       _showErrorDialog(e.toString());
     }
   }
 
+  // Method to show error dialog
   void _showErrorDialog(String message) {
     showDialog(
       context: context,
@@ -98,6 +87,14 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  // Method to navigate to Opportunities Page
+  void _navigateToOpportunitiesPage() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const OpportunitiesPage()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -105,54 +102,14 @@ class _LoginPageState extends State<LoginPage> {
         return Stack(
           children: <Widget>[
             _buildBackground(),
-            Column(
-              children: [
-                SizedBox(height: 6.h),
-                Center(
-                  child: Container(
-                    width: 56.w,
-                    height: 89.h,
-                    clipBehavior: Clip.antiAlias,
-                    decoration: authBoxDecorations,
-                    child: Column(
-                      children: [
-                        _buildHeader(),
-                        _buildAvatar(),
-                        _buildTitle(),
-                        SizedBox(height: .94.h),
-                        _buildSignUpLink(),
-                        SizedBox(height: .47.h),
-                        GestureDetector(
-                            onTap: _signInWithGoogle,
-                            child: _buildLoginPlatforms()),
-                        SizedBox(height: height(context) * 55 / 840),
-                        _buildDivider(),
-                        SizedBox(height: height(context) * 40 / 840),
-                        _buildCredentialsText(),
-                        SizedBox(height: height(context) * 16 / 840),
-                        _buildAuthFields(),
-                        SizedBox(height: height(context) * 16 / 840),
-                        _buildCreateAccountButton(),
-                      ],
-                    ),
-                  ),
-                )
-                    .animate()
-                    .fade(duration: const Duration(milliseconds: 1000))
-                    .slideY(
-                      begin: 0.25,
-                      end: 0,
-                      duration: const Duration(milliseconds: 600),
-                      curve: Curves.ease,
-                    ),
-              ],
-            ),
+            _buildMainContent(),
           ],
         );
       }),
     );
   }
 
+  // Build background widget
   Widget _buildBackground() {
     return Container(
       decoration: const BoxDecoration(
@@ -164,6 +121,49 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  // Build main content widget
+  Widget _buildMainContent() {
+    return Column(
+      children: [
+        SizedBox(height: 6.h),
+        Center(
+          child: Container(
+            width: 56.w,
+            height: 89.h,
+            clipBehavior: Clip.antiAlias,
+            decoration: authBoxDecorations,
+            child: Column(
+              children: [
+                _buildHeader(),
+                _buildAvatar(),
+                _buildTitle(),
+                SizedBox(height: .94.h),
+                _buildSignUpLink(),
+                SizedBox(height: .47.h),
+                GestureDetector(
+                    onTap: _signInWithGoogle, child: _buildLoginPlatforms()),
+                SizedBox(height: height(context) * 55 / 840),
+                _buildDivider(),
+                SizedBox(height: height(context) * 40 / 840),
+                _buildCredentialsText(),
+                SizedBox(height: height(context) * 16 / 840),
+                _buildAuthFields(),
+                SizedBox(height: height(context) * 16 / 840),
+                _buildCreateAccountButton(),
+              ],
+            ),
+          ),
+        ).animate().fade(duration: const Duration(milliseconds: 1000)).slideY(
+              begin: 0.25,
+              end: 0,
+              duration: const Duration(milliseconds: 600),
+              curve: Curves.ease,
+            ),
+      ],
+    );
+  }
+
+  // Build header widget
   Row _buildHeader() {
     return Row(
       children: [
@@ -198,6 +198,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  // Build avatar widget
   Center _buildAvatar() {
     return Center(
       child: Container(
@@ -211,12 +212,14 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  // Get avatar size
   double _getAvatarSize() {
     return height(context) * 48 / 814 > width(context) * 48 / 1440
         ? width(context) * 48 / 1440
         : height(context) * 48 / 814;
   }
 
+  // Build title widget
   Text _buildTitle() {
     return Text(
       'Log into an account',
@@ -229,6 +232,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  // Build sign up link widget
   Widget _buildSignUpLink() {
     return Container(
       padding: EdgeInsets.symmetric(vertical: .24.h, horizontal: .139.w),
@@ -254,9 +258,7 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   TextSpan(
                     text: 'Need an account?  ',
-                    style: authTextStyle.copyWith(
-                      fontSize: _getFontSize(16),
-                    ),
+                    style: authTextStyle.copyWith(fontSize: _getFontSize(16)),
                   ),
                   TextSpan(
                     text: 'Sign Up  ',
@@ -274,12 +276,14 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  // Get font size based on context dimensions
   double _getFontSize(double baseSize) {
     return height(context) * baseSize / 814 > width(context) * baseSize / 1440
         ? width(context) * baseSize / 1440
         : height(context) * baseSize / 814;
   }
 
+  // Build login platforms widget
   Widget _buildLoginPlatforms() {
     return Container(
       width: 42.24.w,
@@ -299,15 +303,14 @@ class _LoginPageState extends State<LoginPage> {
           ),
           Text(
             "Login With Google",
-            style: authTextStyle.copyWith(
-              fontSize: _getFontSize(16),
-            ),
+            style: authTextStyle.copyWith(fontSize: _getFontSize(16)),
           )
         ],
       ),
     );
   }
 
+  // Build divider widget
   Widget _buildDivider() {
     return Center(
       child: Row(
@@ -326,6 +329,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  // Build single divider widget
   SizedBox _buildSingleDivider() {
     return SizedBox(
       width: width(context) * 224.5 / 1240,
@@ -333,6 +337,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  // Build credentials text widget
   Widget _buildCredentialsText() {
     return Text.rich(
       TextSpan(
@@ -354,6 +359,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  // Build authentication fields widget
   Widget _buildAuthFields() {
     return Column(
       children: [
@@ -368,6 +374,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  // Build field title widget
   SizedBox _buildFieldTitle(String title) {
     return SizedBox(
       width: width(context) * 528 / 1240,
@@ -379,6 +386,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  // Build email field widget
   SizedBox _buildEmailField() {
     return SizedBox(
       width: width(context) * 528 / 1240,
@@ -391,6 +399,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  // Build password field widget
   SizedBox _buildPasswordField() {
     return SizedBox(
       width: width(context) * 528 / 1240,
@@ -416,6 +425,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  // Update field filled state
   void _updateFieldFilledState() {
     setState(() {
       fieldFilled = _emailController.text.isNotEmpty &&
@@ -423,6 +433,7 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
+  // Build create account button widget
   Widget _buildCreateAccountButton() {
     return GestureDetector(
       onTap: () => _loginUser(_emailController.text, _passwordController.text),

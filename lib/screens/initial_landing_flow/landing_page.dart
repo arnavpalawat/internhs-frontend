@@ -27,6 +27,16 @@ class _LandingPageState extends State<LandingPage>
   @override
   void initState() {
     super.initState();
+    _initAnimations();
+  }
+
+  @override
+  void dispose() {
+    _controllerGS.dispose();
+    super.dispose();
+  }
+
+  void _initAnimations() {
     _controllerGS = AnimationController(
       duration: const Duration(milliseconds: 500),
       vsync: this,
@@ -42,12 +52,6 @@ class _LandingPageState extends State<LandingPage>
         setState(() {});
       }
     });
-  }
-
-  @override
-  void dispose() {
-    _controllerGS.dispose();
-    super.dispose();
   }
 
   void _onGSHover(PointerEvent details) {
@@ -133,65 +137,47 @@ class AnnouncementText extends StatelessWidget {
       child: RichText(
         maxLines: 4,
         text: TextSpan(
-          children: [
-            TextSpan(
-              text: 'Establishing teens \n',
-              style: announcementTextStyle.copyWith(
-                fontSize:
-                    height(context) * 80 / 814 > width(context) * 80 / 1440
-                        ? width(context) * 80 / 1440
-                        : height(context) * 80 / 814,
-              ),
-            ),
-            TextSpan(
-              text: 'initiative ',
-              style: italicAnnouncementTextStyle.copyWith(
-                fontSize:
-                    height(context) * 80 / 814 > width(context) * 80 / 1440
-                        ? width(context) * 80 / 1440
-                        : height(context) * 80 / 814,
-              ),
-            ),
-            TextSpan(
-              text: 'into competitive \n',
-              style: announcementTextStyle.copyWith(
-                fontSize:
-                    height(context) * 80 / 814 > width(context) * 80 / 1440
-                        ? width(context) * 80 / 1440
-                        : height(context) * 80 / 814,
-              ),
-            ),
-            TextSpan(
-              text: 'workplaces, one ',
-              style: announcementTextStyle.copyWith(
-                fontSize:
-                    height(context) * 80 / 814 > width(context) * 80 / 1440
-                        ? width(context) * 80 / 1440
-                        : height(context) * 80 / 814,
-              ),
-            ),
-            TextSpan(
-              text: 'internship\n',
-              style: italicAnnouncementTextStyle.copyWith(
-                fontSize:
-                    height(context) * 80 / 814 > width(context) * 80 / 1440
-                        ? width(context) * 80 / 1440
-                        : height(context) * 80 / 814,
-              ),
-            ),
-            TextSpan(
-              text: 'at a time',
-              style: announcementTextStyle.copyWith(
-                fontSize:
-                    height(context) * 80 / 814 > width(context) * 80 / 1440
-                        ? width(context) * 80 / 1440
-                        : height(context) * 80 / 814,
-              ),
-            ),
-          ],
+          children: _buildTextSpans(context),
         ),
       ),
     );
+  }
+
+  List<TextSpan> _buildTextSpans(BuildContext context) {
+    double fontSize = _calculateFontSize(context);
+
+    return [
+      TextSpan(
+        text: 'Establishing teens \n',
+        style: announcementTextStyle.copyWith(fontSize: fontSize),
+      ),
+      TextSpan(
+        text: 'initiative ',
+        style: italicAnnouncementTextStyle.copyWith(fontSize: fontSize),
+      ),
+      TextSpan(
+        text: 'into competitive \n',
+        style: announcementTextStyle.copyWith(fontSize: fontSize),
+      ),
+      TextSpan(
+        text: 'workplaces, one ',
+        style: announcementTextStyle.copyWith(fontSize: fontSize),
+      ),
+      TextSpan(
+        text: 'internship\n',
+        style: italicAnnouncementTextStyle.copyWith(fontSize: fontSize),
+      ),
+      TextSpan(
+        text: 'at a time',
+        style: announcementTextStyle.copyWith(fontSize: fontSize),
+      ),
+    ];
+  }
+
+  double _calculateFontSize(BuildContext context) {
+    return height(context) * 80 / 814 > width(context) * 80 / 1440
+        ? width(context) * 80 / 1440
+        : height(context) * 80 / 814;
   }
 }
 
@@ -240,51 +226,73 @@ class ButtonRow extends StatelessWidget {
       width: 88.w,
       child: Row(
         children: [
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                PageRouteBuilder(
-                  pageBuilder: (context, animation1, animation2) {
-                    return FirebaseAuth.instance.currentUser == null
-                        ? const SignUpPage()
-                        : const OpportunitiesPage();
-                  },
-                  transitionDuration: Duration.zero,
-                  reverseTransitionDuration: Duration.zero,
-                ),
-              );
-            },
-            child: HoverButton(
-              color: brightAccent,
-              text: "Get Started",
-              animationGS: animationGS,
-              hovering: hovering,
-              onGSHover: onGSHover,
-              onGSExit: onGSExit,
-            ),
-          ),
+          _buildGetStartedButton(context),
           SizedBox(width: 1.w),
-          GestureDetector(
-            onTap: () {
-              pageController.animateToPage(
-                2,
-                duration: const Duration(seconds: 1),
-                curve: Curves.easeInOutCubicEmphasized,
-              );
-            },
-            child: HoverButton(
-              color: darkAccent,
-              text: "Our Story",
-              animationGS: animationGS,
-              hovering: hovering,
-              onGSHover: onGSHover,
-              onGSExit: onGSExit,
-            ),
-          ),
+          _buildOurStoryButton(context),
         ],
       ),
     );
+  }
+
+  GestureDetector _buildGetStartedButton(BuildContext context) {
+    return GestureDetector(
+      onTap: () => _navigateToNextPage(context),
+      child: HoverButton(
+        color: brightAccent,
+        text: "Get Started",
+        animationGS: animationGS,
+        hovering: hovering,
+        onGSHover: onGSHover,
+        onGSExit: onGSExit,
+      ),
+    );
+  }
+
+  GestureDetector _buildOurStoryButton(BuildContext context) {
+    return GestureDetector(
+      onTap: () => _navigateToPage(context, 2),
+      child: HoverButton(
+        color: darkAccent,
+        text: "Our Story",
+        animationGS: animationGS,
+        hovering: hovering,
+        onGSHover: onGSHover,
+        onGSExit: onGSExit,
+      ),
+    );
+  }
+
+  void _navigateToNextPage(BuildContext context) {
+    try {
+      Navigator.push(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (context, animation1, animation2) {
+            return FirebaseAuth.instance.currentUser == null
+                ? const SignUpPage()
+                : const OpportunitiesPage();
+          },
+          transitionDuration: Duration.zero,
+          reverseTransitionDuration: Duration.zero,
+        ),
+      );
+    } catch (e) {
+      // Handle navigation error
+      print("Navigation error: $e");
+    }
+  }
+
+  void _navigateToPage(BuildContext context, int page) {
+    try {
+      pageController.animateToPage(
+        page,
+        duration: const Duration(seconds: 1),
+        curve: Curves.easeInOutCubicEmphasized,
+      );
+    } catch (e) {
+      // Handle page navigation error
+      print("Page navigation error: $e");
+    }
   }
 }
 
@@ -313,69 +321,75 @@ class HoverButton extends StatelessWidget {
       onExit: text == "Get Started" ? onGSExit : null,
       child: Column(
         children: [
-          Container(
-            width: 14.4.w + (text == "Get Started" ? animationGS.value : 0),
-            height: 8.9.h,
-            padding: EdgeInsets.symmetric(
-              horizontal: 1.66.w,
-              vertical: 1.93.h,
-            ),
-            decoration: ShapeDecoration(
-              color: color,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(360),
-              ),
-              shadows: const [
-                BoxShadow(
-                  color: Color(0x0C000000),
-                  blurRadius: 2,
-                  offset: Offset(0, 1),
-                  spreadRadius: 0,
-                ),
-              ],
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                AutoSizeText(
-                  text,
-                  minFontSize: 0,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: lightButtonTextStyle.copyWith(
-                    fontSize:
-                        height(context) * 24 / 814 > width(context) * 24 / 1440
-                            ? width(context) * 24 / 1440
-                            : height(context) * 24 / 814,
-                  ),
-                ),
-                const Spacer(),
-                if (text == "Get Started")
-                  AnimatedOpacity(
-                    opacity: hovering ? 1 : 0,
-                    duration: const Duration(milliseconds: 200),
-                    child: animationGS.value > 0
-                        ? Icon(
-                            Icons.arrow_forward_ios_rounded,
-                            color: lightBackgroundColor,
-                            size: animationGS.value > 10
-                                ? height(context) * 24 / 814 >
-                                        width(context) * 24 / 1440
-                                    ? width(context) * 24 / 1440
-                                    : height(context) * 24 / 814
-                                : 0.0,
-                          )
-                        : Container(width: 0),
-                  )
-                else
-                  Container(width: 0),
-              ],
-            ),
+          _buildButtonContent(context),
+        ],
+      ),
+    );
+  }
+
+  Container _buildButtonContent(BuildContext context) {
+    return Container(
+      width: 14.4.w + (text == "Get Started" ? animationGS.value : 0),
+      height: 8.9.h,
+      padding: EdgeInsets.symmetric(
+        horizontal: 1.66.w,
+        vertical: 1.93.h,
+      ),
+      decoration: ShapeDecoration(
+        color: color,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(360),
+        ),
+        shadows: const [
+          BoxShadow(
+            color: Color(0x0C000000),
+            blurRadius: 2,
+            offset: Offset(0, 1),
+            spreadRadius: 0,
           ),
         ],
       ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          AutoSizeText(
+            text,
+            minFontSize: 0,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: lightButtonTextStyle.copyWith(
+              fontSize: height(context) * 24 / 814 > width(context) * 24 / 1440
+                  ? width(context) * 24 / 1440
+                  : height(context) * 24 / 814,
+            ),
+          ),
+          const Spacer(),
+          if (text == "Get Started")
+            _buildArrowIcon(context)
+          else
+            Container(width: 0),
+        ],
+      ),
+    );
+  }
+
+  AnimatedOpacity _buildArrowIcon(BuildContext context) {
+    return AnimatedOpacity(
+      opacity: hovering ? 1 : 0,
+      duration: const Duration(milliseconds: 200),
+      child: animationGS.value > 0
+          ? Icon(
+              Icons.arrow_forward_ios_rounded,
+              color: lightBackgroundColor,
+              size: animationGS.value > 10
+                  ? height(context) * 24 / 814 > width(context) * 24 / 1440
+                      ? width(context) * 24 / 1440
+                      : height(context) * 24 / 814
+                  : 0.0,
+            )
+          : Container(width: 0),
     );
   }
 }

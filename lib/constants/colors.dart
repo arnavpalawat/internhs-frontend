@@ -40,7 +40,7 @@ ShapeDecoration authBoxDecorations = ShapeDecoration(
 );
 
 const borderStyle = OutlineInputBorder(
-  borderSide: const BorderSide(
+  borderSide: BorderSide(
     width: 1,
     color: borderColor,
   ),

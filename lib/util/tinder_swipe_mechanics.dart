@@ -33,6 +33,7 @@ class _TinderSwiperState extends State<TinderSwiper> {
   List<Job> recommendedJobs = [];
   bool recommendLoading = true;
   int cardsGoneThrough = 0;
+
   @override
   void initState() {
     super.initState();
@@ -53,20 +54,21 @@ class _TinderSwiperState extends State<TinderSwiper> {
 
     if (widget.jobs != oldWidget.jobs) {
       setState(() {
-        setState(() {
-          widget.jobs;
-        });
+        widget.jobs;
       });
     }
   }
 
+  /// Fetches job recommendations and updates the recommendedJobs list
   Future<void> fetchRecommendations() async {
     List<String> recommendedIds = [];
     List<Job> newRecommendedJobs = [];
+
     try {
       ApiService api = ApiService();
       recommendedIds = await api.getRecommendations(
-          uid: FirebaseAuth.instance.currentUser!.uid);
+        uid: FirebaseAuth.instance.currentUser!.uid,
+      );
 
       for (String id in recommendedIds) {
         try {
@@ -91,6 +93,7 @@ class _TinderSwiperState extends State<TinderSwiper> {
     }
   }
 
+  /// Handles keyboard arrow key events for card swiping
   void _keyboardCallback(RawKeyEvent keyEvent) {
     if (keyEvent is! RawKeyDownEvent) return;
     switch (keyEvent.data.logicalKey) {
@@ -109,7 +112,8 @@ class _TinderSwiperState extends State<TinderSwiper> {
     }
   }
 
-  void onRightSwipe(int index) async {
+  /// Handles right swipe action to wishlist a job
+  Future<void> onRightSwipe(int index) async {
     if (FirebaseAuth.instance.currentUser == null) {
       Navigator.pushNamed(context, '/login');
     } else {
@@ -123,7 +127,8 @@ class _TinderSwiperState extends State<TinderSwiper> {
     }
   }
 
-  void onLeftSwipe(int index) async {
+  /// Handles left swipe action to unlike a job
+  Future<void> onLeftSwipe(int index) async {
     if (FirebaseAuth.instance.currentUser == null) {
       Navigator.push(
         context,
@@ -144,7 +149,8 @@ class _TinderSwiperState extends State<TinderSwiper> {
     }
   }
 
-  void onUpSwipe(int index) async {
+  /// Handles up swipe action to open job link and wishlist the job
+  Future<void> onUpSwipe(int index) async {
     js.context.callMethod('open', [widget.jobs![index].link ?? "indeed.com"]);
     if (FirebaseAuth.instance.currentUser != null) {
       CollectionReference users = FirebaseFirestore.instance.collection('user');
@@ -157,6 +163,7 @@ class _TinderSwiperState extends State<TinderSwiper> {
     }
   }
 
+  /// Handles down swipe action to flag a job
   Future<void> onDownSwipe(int index) async {
     CollectionReference jobs = FirebaseFirestore.instance.collection('jobs');
     String? id = widget.jobs?[index].id;
@@ -166,6 +173,7 @@ class _TinderSwiperState extends State<TinderSwiper> {
     }
   }
 
+  /// Determines the action based on the swipe direction
   void directionLogic(CardSwiperDirection direction, int index) {
     switch (direction.name) {
       case 'right':
@@ -190,6 +198,7 @@ class _TinderSwiperState extends State<TinderSwiper> {
     }
   }
 
+  /// Handles card swipe event
   bool onSwipe(
       int previousIndex, int? currentIndex, CardSwiperDirection direction) {
     cardsGoneThrough++;
@@ -210,42 +219,39 @@ class _TinderSwiperState extends State<TinderSwiper> {
     return LayoutBuilder(builder: (context, _) {
       return FirebaseAuth.instance.currentUser != null
           ? recommendedJobs.isNotEmpty
-              ? CardSwiper(
-                  isLoop: false,
-                  controller: controller,
-                  cardsCount: recommendedJobs.length,
-                  onSwipe: onSwipe,
-                  numberOfCardsDisplayed: 3,
-                  backCardOffset: Offset(2.w, 4.h),
-                  padding: EdgeInsets.fromLTRB(1.67.w, 2.96.h, 1.67.w, 2.96.h),
-                  isDisabled: disable,
-                  cardBuilder: (context, index, horizontalThresholdPercentage,
-                      verticalThresholdPercentage) {
-                    return TinderCard(recommendedJobs[index]);
-                  },
-                )
-              : Center(
-                  child: LoadingAnimationWidget.twoRotatingArc(
-                    color: lightBackgroundColor,
-                    size: height(context) * 20 / 814 > width(context) * 20 / 814
-                        ? width(context) * 20 / 814
-                        : height(context) * 20 / 814,
-                  ),
-                )
-          : CardSwiper(
-              isLoop: false,
-              controller: controller,
-              cardsCount: widget.jobs!.length,
-              onSwipe: onSwipe,
-              numberOfCardsDisplayed: 3,
-              backCardOffset: Offset(2.w, 4.h),
-              padding: EdgeInsets.fromLTRB(1.67.w, 2.96.h, 1.67.w, 2.96.h),
-              isDisabled: disable,
-              cardBuilder: (context, index, horizontalThresholdPercentage,
-                  verticalThresholdPercentage) {
-                return TinderCard(recommendedJobs[index]);
-              },
-            );
+              ? buildCardSwiper(recommendedJobs.length, recommendedJobs)
+              : buildLoadingWidget()
+          : buildCardSwiper(widget.jobs!.length, widget.jobs!);
     });
+  }
+
+  /// Builds the CardSwiper widget
+  CardSwiper buildCardSwiper(int cardCount, List<Job> jobsList) {
+    return CardSwiper(
+      isLoop: false,
+      controller: controller,
+      cardsCount: cardCount,
+      onSwipe: onSwipe,
+      numberOfCardsDisplayed: 3,
+      backCardOffset: Offset(2.w, 4.h),
+      padding: EdgeInsets.fromLTRB(1.67.w, 2.96.h, 1.67.w, 2.96.h),
+      isDisabled: disable,
+      cardBuilder: (context, index, horizontalThresholdPercentage,
+          verticalThresholdPercentage) {
+        return TinderCard(jobsList[index]);
+      },
+    );
+  }
+
+  /// Builds the loading widget
+  Center buildLoadingWidget() {
+    return Center(
+      child: LoadingAnimationWidget.twoRotatingArc(
+        color: lightBackgroundColor,
+        size: height(context) * 20 / 814 > width(context) * 20 / 814
+            ? width(context) * 20 / 814
+            : height(context) * 20 / 814,
+      ),
+    );
   }
 }

@@ -54,30 +54,38 @@ class PricingHeader extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: 15.h),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
-                  child: AutoSizeText(
-                    "Pricing",
-                    minFontSize: 0,
-                    style: italicAnnouncementTextStyle.copyWith(
-                        fontSize: height(context) * 36 / 814),
-                  ),
-                ),
-                SizedBox(
-                  width: 80.w,
-                  child: AutoSizeText(
-                    "Donate to InternHS",
-                    minFontSize: 0,
-                    style: announcementTextStyle.copyWith(
-                        fontSize: height(context) * 48 / 814),
-                    textAlign: TextAlign.left,
-                  ),
-                ),
+                _buildHeaderTitle(context),
+                _buildHeaderSubtitle(context),
               ],
             )
           ],
         ),
       ],
+    );
+  }
+
+  Widget _buildHeaderTitle(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
+      child: AutoSizeText(
+        "Pricing",
+        minFontSize: 0,
+        style: italicAnnouncementTextStyle.copyWith(
+            fontSize: height(context) * 36 / 814),
+      ),
+    );
+  }
+
+  Widget _buildHeaderSubtitle(BuildContext context) {
+    return SizedBox(
+      width: 80.w,
+      child: AutoSizeText(
+        "Donate to InternHS",
+        minFontSize: 0,
+        style: announcementTextStyle.copyWith(
+            fontSize: height(context) * 48 / 814),
+        textAlign: TextAlign.left,
+      ),
     );
   }
 }
@@ -94,31 +102,8 @@ class PricingContent extends StatelessWidget {
         child: Column(
           children: [
             SizedBox(height: 2.5.h),
-            SizedBox(
-              width: 35.w,
-              child: AutoSizeText(
-                "Free Forever!",
-                minFontSize: 0,
-                style: blackBodyTextStyle.copyWith(
-                    fontSize: height(context) * 24 / 814,
-                    fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(5.89.w, 1.04.h, 5.89.w, 3.33.h),
-              child: SizedBox(
-                width: 85.w,
-                child: AutoSizeText(
-                  "InternHS runs exclusively on donations from our ecstatic users. \n We urge that if InternHS helped you get the internship of your dream in High school \n that you donate: We accept donations via both Cashapp and Venmo through the below links",
-                  maxLines: 3,
-                  minFontSize: 0,
-                  style: blackBodyTextStyle.copyWith(
-                      height: 1.5, fontSize: height(context) * 20 / 814),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
+            _buildContentTitle(context),
+            _buildContentDescription(context),
             SizedBox(height: 2.5.h),
             DonationOptions(),
           ],
@@ -127,6 +112,36 @@ class PricingContent extends StatelessWidget {
             end: 0,
             duration: const Duration(milliseconds: 900),
             curve: Curves.ease),
+      ),
+    );
+  }
+
+  Widget _buildContentTitle(BuildContext context) {
+    return SizedBox(
+      width: 35.w,
+      child: AutoSizeText(
+        "Free Forever!",
+        minFontSize: 0,
+        style: blackBodyTextStyle.copyWith(
+            fontSize: height(context) * 24 / 814, fontWeight: FontWeight.bold),
+        textAlign: TextAlign.center,
+      ),
+    );
+  }
+
+  Widget _buildContentDescription(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(5.89.w, 1.04.h, 5.89.w, 3.33.h),
+      child: SizedBox(
+        width: 85.w,
+        child: AutoSizeText(
+          "InternHS runs exclusively on donations from our ecstatic users. \n We urge that if InternHS helped you get the internship of your dream in High school \n that you donate: We accept donations via both Cashapp and Venmo through the below links",
+          maxLines: 3,
+          minFontSize: 0,
+          style: blackBodyTextStyle.copyWith(
+              height: 1.5, fontSize: height(context) * 20 / 814),
+          textAlign: TextAlign.center,
+        ),
       ),
     );
   }
@@ -140,7 +155,7 @@ class DonationOptions extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: 50.w,
-      child: const Row(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           DonationOption(
@@ -175,32 +190,45 @@ class DonationOption extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        js.context.callMethod('open', [url]);
-      },
+      onTap: () => _openDonationUrl(url),
       child: Column(
         children: [
-          Container(
-            height: 32.h,
-            width: 19.5.w,
-            decoration: BoxDecoration(
-              color: lightBackgroundColor,
-              borderRadius: BorderRadius.circular(180.0),
-            ),
-            padding: EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(16.0),
-              child: Image.asset(imageUrl),
-            ),
-          ),
-          AutoSizeText(
-            label,
-            minFontSize: 0,
-            style: darkHeaderTextStyle.copyWith(
-                fontSize: height(context) * 25 / 814),
-          ),
+          _buildDonationImage(),
+          _buildDonationLabel(context),
         ],
       ),
+    );
+  }
+
+  void _openDonationUrl(String url) {
+    try {
+      js.context.callMethod('open', [url]);
+    } catch (e) {
+      print('Could not open URL: $e');
+    }
+  }
+
+  Widget _buildDonationImage() {
+    return Container(
+      height: 32.h,
+      width: 19.5.w,
+      decoration: BoxDecoration(
+        color: lightBackgroundColor,
+        borderRadius: BorderRadius.circular(180.0),
+      ),
+      padding: EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(16.0),
+        child: Image.asset(imageUrl),
+      ),
+    );
+  }
+
+  Widget _buildDonationLabel(BuildContext context) {
+    return AutoSizeText(
+      label,
+      minFontSize: 0,
+      style: darkHeaderTextStyle.copyWith(fontSize: height(context) * 25 / 814),
     );
   }
 }

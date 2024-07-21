@@ -8,158 +8,169 @@ import '../constants/colors.dart';
 import '../constants/device.dart';
 import '../constants/text.dart';
 
+// TextEditingController instances for input fields
 TextEditingController countryController = TextEditingController();
 TextEditingController radiusController = TextEditingController();
-String remote = "Yes";
-
 TextEditingController ageController = TextEditingController();
+String remote = "Yes"; // Initial value for the dropdown
 
+/// Builds the preference widgets based on the [type] and [length] parameters.
 Widget _buildPref(String type, double length, BuildContext context) {
   if (type == "Remote") {
-    // If type is "Remote", display a dropdown with yes or no
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        SizedBox(
-          height: 1.h,
-        ),
-        Padding(
-          padding: EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: 2.w,
-              ),
-              AutoSizeText(
-                "$type: ",
-                maxLines: 1,
-                minFontSize: 0,
-                style: blackBodyTextStyle.copyWith(
-                    fontSize:
-                        height(context) * 12 / 814 > width(context) * 12 / 1440
-                            ? width(context) * 12 / 1440
-                            : height(context) * 12 / 814),
-              ),
-              const Spacer(),
-              SizedBox(
-                height: 7.h,
-                width: 8.w,
-                child: DropdownButton<String>(
-                  value: 'Yes', // Example initial value
-                  onChanged: (String? newValue) {
-                    // Handle dropdown value change
-                  },
-                  items: <String>['Yes', 'No']
-                      .map<DropdownMenuItem<String>>((String value) {
-                    remote = value;
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: AutoSizeText(
-                        value,
-                        minFontSize: 0,
-                        maxLines: 1,
-                        style: blackBodyTextStyle.copyWith(
-                            fontSize: height(context) * 24 / 814 >
-                                    width(context) * 24 / 1440
-                                ? width(context) * 24 / 1440
-                                : height(context) * 24 / 814),
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ),
-              SizedBox(
-                width: 2.w,
-              ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.fromLTRB(.55.w, 0, .55.w, 0),
-          child: Divider(
-            height: 1,
-            color: Colors.grey.withOpacity(0.3),
-          ),
-        ),
-      ],
-    );
+    return _buildRemotePref(context, type);
   } else {
-    // For other types, display a text field
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        SizedBox(
-          height: 1.h,
-        ),
-        Padding(
-          padding: EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: 2.w,
-              ),
-              AutoSizeText(
-                "$type: ",
-                maxLines: 1,
-                minFontSize: 0,
-                style: blackBodyTextStyle.copyWith(
-                  fontSize:
-                      height(context) * 12 / 814 > width(context) * 12 / 1440
-                          ? width(context) * 12 / 1440
-                          : height(context) * 12 / 814,
-                ),
-              ),
-              const Spacer(),
-              SizedBox(
-                width: length.toDouble(),
-                height: 3.65.h,
-                child: TextField(
-                  controller: type == "Country"
-                      ? countryController
-                      : type == "Search Radius"
-                          ? radiusController
-                          : type == "Age in Hours"
-                              ? ageController
-                              : TextEditingController(),
-                  cursorColor: lightBackgroundColor,
-                  style: lightButtonTextStyle.copyWith(
-                      fontSize: height(context) * 12 / 814 >
-                              width(context) * 12 / 1440
-                          ? width(context) * 12 / 1440
-                          : height(context) * 12 / 814),
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: darkAccent,
-                    contentPadding: EdgeInsets.symmetric(
-                        vertical: 1.8.h, horizontal: 1.38.w),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(29.0),
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: 2.w,
-              ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.fromLTRB(.55.w, 0, .55.w, 0),
-          child: Divider(
-            height: 1,
-            color: Colors.grey.withOpacity(0.3),
-          ),
-        ),
-      ],
-    );
+    return _buildTextFieldPref(context, type, length);
   }
 }
 
-Widget _buildButton(Color color, String text, context) {
+/// Builds the dropdown widget for the "Remote" preference.
+Widget _buildRemotePref(BuildContext context, String type) {
+  return Column(
+    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    children: [
+      SizedBox(height: 1.h),
+      Padding(
+        padding: EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(width: 2.w),
+            _buildLabel(context, type),
+            const Spacer(),
+            _buildDropdown(context),
+            SizedBox(width: 2.w),
+          ],
+        ),
+      ),
+      _buildDivider(),
+    ],
+  );
+}
+
+/// Builds the text field widget for other preferences.
+Widget _buildTextFieldPref(BuildContext context, String type, double length) {
+  return Column(
+    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    children: [
+      SizedBox(height: 1.h),
+      Padding(
+        padding: EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(width: 2.w),
+            _buildLabel(context, type),
+            const Spacer(),
+            _buildTextField(context, type, length),
+            SizedBox(width: 2.w),
+          ],
+        ),
+      ),
+      _buildDivider(),
+    ],
+  );
+}
+
+/// Builds the label widget for the preferences.
+Widget _buildLabel(BuildContext context, String type) {
+  return AutoSizeText(
+    "$type: ",
+    maxLines: 1,
+    minFontSize: 0,
+    style: blackBodyTextStyle.copyWith(
+      fontSize: height(context) * 12 / 814 > width(context) * 12 / 1440
+          ? width(context) * 12 / 1440
+          : height(context) * 12 / 814,
+    ),
+  );
+}
+
+/// Builds the dropdown widget for the "Remote" preference.
+Widget _buildDropdown(BuildContext context) {
+  return SizedBox(
+    height: 7.h,
+    width: 8.w,
+    child: DropdownButton<String>(
+      value: remote,
+      onChanged: (String? newValue) {
+        if (newValue != null) {
+          remote = newValue;
+        }
+      },
+      items:
+          <String>['Yes', 'No'].map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: AutoSizeText(
+            value,
+            minFontSize: 0,
+            maxLines: 1,
+            style: blackBodyTextStyle.copyWith(
+              fontSize: height(context) * 24 / 814 > width(context) * 24 / 1440
+                  ? width(context) * 24 / 1440
+                  : height(context) * 24 / 814,
+            ),
+          ),
+        );
+      }).toList(),
+    ),
+  );
+}
+
+/// Builds the text field widget for other preferences.
+Widget _buildTextField(BuildContext context, String type, double length) {
+  return SizedBox(
+    width: length.toDouble(),
+    height: 3.65.h,
+    child: TextField(
+      controller: _getControllerForType(type),
+      cursorColor: lightBackgroundColor,
+      style: lightButtonTextStyle.copyWith(
+        fontSize: height(context) * 12 / 814 > width(context) * 12 / 1440
+            ? width(context) * 12 / 1440
+            : height(context) * 12 / 814,
+      ),
+      decoration: InputDecoration(
+        filled: true,
+        fillColor: darkAccent,
+        contentPadding:
+            EdgeInsets.symmetric(vertical: 1.8.h, horizontal: 1.38.w),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(29.0),
+          borderSide: BorderSide.none,
+        ),
+      ),
+    ),
+  );
+}
+
+/// Gets the appropriate TextEditingController for the given [type].
+TextEditingController _getControllerForType(String type) {
+  switch (type) {
+    case "Country":
+      return countryController;
+    case "Search Radius":
+      return radiusController;
+    case "Age in Hours":
+      return ageController;
+    default:
+      return TextEditingController();
+  }
+}
+
+/// Builds the divider widget.
+Widget _buildDivider() {
+  return Padding(
+    padding: EdgeInsets.fromLTRB(.55.w, 0, .55.w, 0),
+    child: Divider(
+      height: 1,
+      color: Colors.grey.withOpacity(0.3),
+    ),
+  );
+}
+
+/// Builds the button widget with the given [color] and [text].
+Widget _buildButton(Color color, String text, BuildContext context) {
   return Column(
     children: [
       Container(
@@ -194,10 +205,11 @@ Widget _buildButton(Color color, String text, context) {
                     minFontSize: 0,
                     maxLines: 1,
                     style: lightButtonTextStyle.copyWith(
-                        fontSize: height(context) * 12 / 814 >
-                                width(context) * 12 / 1440
-                            ? width(context) * 12 / 1440
-                            : height(context) * 12 / 814),
+                      fontSize: height(context) * 12 / 814 >
+                              width(context) * 12 / 1440
+                          ? width(context) * 12 / 1440
+                          : height(context) * 12 / 814,
+                    ),
                   ),
                 ),
               )
@@ -207,10 +219,11 @@ Widget _buildButton(Color color, String text, context) {
                 minFontSize: 0,
                 maxLines: 1,
                 style: lightButtonTextStyle.copyWith(
-                    fontSize:
-                        height(context) * 12 / 814 > width(context) * 12 / 1440
-                            ? width(context) * 12 / 1440
-                            : height(context) * 12 / 814),
+                  fontSize:
+                      height(context) * 12 / 814 > width(context) * 12 / 1440
+                          ? width(context) * 12 / 1440
+                          : height(context) * 12 / 814,
+                ),
               ),
           ],
         ),
@@ -228,6 +241,32 @@ class buildPrefs extends StatefulWidget {
 
 class _buildPrefsState extends State<buildPrefs> {
   bool loading = false;
+
+  /// Handles the "Go!" button press.
+  Future<void> _handleGoButtonPress() async {
+    var api = ApiService();
+    setState(() {
+      loading = true;
+    });
+    try {
+      await api.scrapeJobs(
+        countryValue: countryController.text,
+        radiusValue: radiusController.text,
+        remoteValue: remote == "Yes",
+        ageValue: ageController.text,
+      );
+    } catch (e) {
+      // Handle errors here
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error: $e")),
+      );
+    } finally {
+      setState(() {
+        loading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -242,7 +281,7 @@ class _buildPrefsState extends State<buildPrefs> {
             borderRadius: BorderRadius.circular(25),
           ),
         ),
-        child: loading == true
+        child: loading
             ? Center(
                 child: LoadingAnimationWidget.twoRotatingArc(
                   color: darkTextColor,
@@ -260,39 +299,22 @@ class _buildPrefsState extends State<buildPrefs> {
                       maxLines: 1,
                       minFontSize: 0,
                       style: announcementTextStyle.copyWith(
-                          fontSize: height(context) * 36 / 814 >
-                                  width(context) * 36 / 1440
-                              ? width(context) * 36 / 1440
-                              : height(context) * 36 / 814),
+                        fontSize: height(context) * 36 / 814 >
+                                width(context) * 36 / 1440
+                            ? width(context) * 36 / 1440
+                            : height(context) * 36 / 814,
+                      ),
                     ),
                   ),
                   _buildPref("Country", 22.w, context),
                   _buildPref("Search Radius", 10.1.w, context),
                   _buildPref("Remote", 10.1.w, context),
                   _buildPref("Age in Hours", 22.w, context),
-                  SizedBox(
-                    height: 15.h,
-                  ),
+                  SizedBox(height: 15.h),
                   GestureDetector(
-                      onTap: () async {
-                        var api = ApiService();
-                        setState(() {
-                          loading = true;
-                        });
-                        await api
-                            .scrapeJobs(
-                          countryValue: countryController.text,
-                          radiusValue: radiusController.text,
-                          remoteValue: remote == "Yes" ? true : false,
-                          ageValue: ageController.text,
-                        )
-                            .whenComplete(() {
-                          setState(() {
-                            loading = false;
-                          });
-                        });
-                      },
-                      child: _buildButton(darkAccent, "Go!", context)),
+                    onTap: _handleGoButtonPress,
+                    child: _buildButton(darkAccent, "Go!", context),
+                  ),
                 ],
               ),
       ),

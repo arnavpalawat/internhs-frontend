@@ -40,26 +40,14 @@ class _SignUpPageState extends State<SignUpPage> {
     super.dispose();
   }
 
+  // Method to sign in with Google
   Future<void> _signInWithGoogle() async {
-    GoogleAuthProvider authProvider = GoogleAuthProvider();
-
     try {
-      UserCredential userCredential =
-          await _authInstance.signInWithPopup(authProvider);
-
+      final userCredential =
+          await _authInstance.signInWithPopup(GoogleAuthProvider());
       if (userCredential.user != null) {
-        db.User user = db.User(
-          email: userCredential.user!.email!,
-          uid: userCredential.user!.uid,
-        );
-        await user.addToFirestore();
-
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const OpportunitiesPage(),
-          ),
-        );
+        await _addUserToFirestore(userCredential.user!);
+        _navigateToOpportunitiesPage();
       } else {
         _showErrorDialog("No user is signed in.");
       }
@@ -68,50 +56,54 @@ class _SignUpPageState extends State<SignUpPage> {
     }
   }
 
+  // Method to create a new user
   Future<void> _createUser(String email, String password) async {
     try {
-      UserCredential userCredential =
-          await _authInstance.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-
+      final userCredential = await _authInstance.createUserWithEmailAndPassword(
+          email: email, password: password);
       if (userCredential.user != null) {
-        db.User user = db.User(
-          email: email,
-          uid: userCredential.user!.uid,
-        );
-        await user.addToFirestore();
-      }
-
-      Navigator.pop(context);
-
-      if (kDebugMode) {
-        print(
-            "Sign Up Successful: User created with email $email and password $password");
+        await _addUserToFirestore(userCredential.user!);
+        Navigator.pop(context);
+        if (kDebugMode) {
+          print(
+              "Sign Up Successful: User created with email $email and password $password");
+        }
       }
     } catch (e) {
       _showErrorDialog(e.toString());
     }
   }
 
+  // Method to add user to Firestore
+  Future<void> _addUserToFirestore(User user) async {
+    final dbUser = db.User(email: user.email!, uid: user.uid);
+    await dbUser.addToFirestore();
+  }
+
+  // Method to navigate to Opportunities Page
+  void _navigateToOpportunitiesPage() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const OpportunitiesPage(),
+      ),
+    );
+  }
+
+  // Method to show error dialog
   void _showErrorDialog(String message) {
     showDialog(
       context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Error"),
-          content: Text(message),
-          actions: <Widget>[
-            TextButton(
-              child: const Text("Close"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
+      builder: (context) => AlertDialog(
+        title: const Text("Error"),
+        content: Text(message),
+        actions: [
+          TextButton(
+            child: const Text("Close"),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ],
+      ),
     );
   }
 
@@ -120,59 +112,16 @@ class _SignUpPageState extends State<SignUpPage> {
     return Scaffold(
       body: LayoutBuilder(builder: (context, _) {
         return Stack(
-          children: <Widget>[
+          children: [
             _buildBackground(),
-            Column(
-              children: [
-                SizedBox(height: 6.h),
-                Center(
-                  child: Container(
-                    width: 56.w,
-                    height: 87.h,
-                    clipBehavior: Clip.antiAlias,
-                    decoration: authBoxDecorations,
-                    child: Column(
-                      children: [
-                        _buildHeader(),
-                        _buildAvatar(),
-                        SizedBox(height: .94.h),
-                        _buildTitle(),
-                        SizedBox(height: .94.h),
-                        _buildLoginLink(),
-                        SizedBox(height: .47.h),
-                        _buildLoginPlatforms(),
-                        SizedBox(height: height(context) * 55 / 840),
-                        _buildDivider(context),
-                        SizedBox(height: height(context) * 40 / 840),
-                        _buildCredentialsText(),
-                        SizedBox(
-                            height:
-                                MediaQuery.of(context).size.height * 16 / 840),
-                        _buildAuthFields(),
-                        SizedBox(
-                            height:
-                                MediaQuery.of(context).size.height * 16 / 840),
-                        _buildCreateAccountButton(),
-                      ],
-                    ),
-                  ),
-                )
-                    .animate()
-                    .fade(duration: const Duration(milliseconds: 1000))
-                    .slideY(
-                      begin: 0.25,
-                      end: 0,
-                      duration: const Duration(milliseconds: 600),
-                      curve: Curves.ease,
-                    ),
-              ],
-            ),
+            _buildContent(),
           ],
         );
       }),
     );
   }
 
+  // Widget for the background
   Widget _buildBackground() {
     return Container(
       decoration: const BoxDecoration(
@@ -184,6 +133,49 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
+  // Widget for the main content
+  Widget _buildContent() {
+    return Column(
+      children: [
+        SizedBox(height: 6.h),
+        Center(
+          child: Container(
+            width: 56.w,
+            height: 89.h,
+            clipBehavior: Clip.antiAlias,
+            decoration: authBoxDecorations,
+            child: Column(
+              children: [
+                _buildHeader(),
+                _buildAvatar(),
+                SizedBox(height: .94.h),
+                _buildTitle(),
+                SizedBox(height: .94.h),
+                _buildLoginLink(),
+                SizedBox(height: .47.h),
+                _buildLoginPlatforms(),
+                SizedBox(height: height(context) * 55 / 840),
+                _buildDivider(context),
+                SizedBox(height: height(context) * 40 / 840),
+                _buildCredentialsText(),
+                SizedBox(height: MediaQuery.of(context).size.height * 16 / 840),
+                _buildAuthFields(),
+                SizedBox(height: MediaQuery.of(context).size.height * 16 / 840),
+                _buildCreateAccountButton(),
+              ],
+            ),
+          ),
+        ).animate().fade(duration: const Duration(milliseconds: 1000)).slideY(
+              begin: 0.25,
+              end: 0,
+              duration: const Duration(milliseconds: 600),
+              curve: Curves.ease,
+            ),
+      ],
+    );
+  }
+
+  // Widget for the header
   Row _buildHeader() {
     return Row(
       children: [
@@ -194,17 +186,15 @@ class _SignUpPageState extends State<SignUpPage> {
           child: IconButton(
             hoverColor: Colors.transparent,
             highlightColor: Colors.transparent,
-            onPressed: () {
-              Navigator.push(
-                context,
-                PageRouteBuilder(
-                  pageBuilder: (context, animation1, animation2) =>
-                      const LoginPage(),
-                  transitionDuration: Duration.zero,
-                  reverseTransitionDuration: Duration.zero,
-                ),
-              );
-            },
+            onPressed: () => Navigator.push(
+              context,
+              PageRouteBuilder(
+                pageBuilder: (context, animation1, animation2) =>
+                    const LoginPage(),
+                transitionDuration: Duration.zero,
+                reverseTransitionDuration: Duration.zero,
+              ),
+            ),
             icon: Icon(
               Icons.close_outlined,
               color: darkAccent,
@@ -218,6 +208,7 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
+  // Widget for the avatar
   Center _buildAvatar() {
     return Center(
       child: Container(
@@ -231,12 +222,14 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
+  // Method to get avatar size
   double _getAvatarSize() {
     return height(context) * 48 / 814 > width(context) * 48 / 1440
         ? width(context) * 48 / 1440
         : height(context) * 48 / 814;
   }
 
+  // Widget for the title
   Text _buildTitle() {
     return Text(
       'Create an account',
@@ -249,6 +242,7 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
+  // Widget for the login link
   Widget _buildLoginLink() {
     return Container(
       padding: EdgeInsets.symmetric(vertical: .24.h, horizontal: .139.w),
@@ -258,17 +252,15 @@ class _SignUpPageState extends State<SignUpPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                PageRouteBuilder(
-                  pageBuilder: (context, animation1, animation2) =>
-                      const LoginPage(),
-                  transitionDuration: Duration.zero,
-                  reverseTransitionDuration: Duration.zero,
-                ),
-              );
-            },
+            onTap: () => Navigator.push(
+              context,
+              PageRouteBuilder(
+                pageBuilder: (context, animation1, animation2) =>
+                    const LoginPage(),
+                transitionDuration: Duration.zero,
+                reverseTransitionDuration: Duration.zero,
+              ),
+            ),
             child: Text.rich(
               TextSpan(
                 children: [
@@ -294,12 +286,14 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
+  // Method to get font size
   double _getFontSize(double baseSize) {
     return height(context) * baseSize / 814 > width(context) * baseSize / 1440
         ? width(context) * baseSize / 1440
         : height(context) * baseSize / 814;
   }
 
+  // Widget for the login platforms
   Widget _buildLoginPlatforms() {
     return GestureDetector(
       onTap: _signInWithGoogle,
@@ -336,6 +330,7 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
+  // Widget for the divider
   Widget _buildDivider(BuildContext context) {
     return Center(
       child: Row(
@@ -354,6 +349,7 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
+  // Widget for a single divider
   SizedBox _buildSingleDivider() {
     return SizedBox(
       width: width(context) * 224.5 / 1240,
@@ -363,6 +359,7 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
+  // Widget for the credentials text
   Widget _buildCredentialsText() {
     return Text.rich(
       TextSpan(
@@ -386,6 +383,7 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
+  // Widget for the authentication fields
   Widget _buildAuthFields() {
     return Column(
       children: [
@@ -400,6 +398,7 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
+  // Widget for the field title
   SizedBox _buildFieldTitle(String title) {
     return SizedBox(
       width: MediaQuery.of(context).size.width * 528 / 1240,
@@ -413,6 +412,7 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
+  // Widget for the email field
   SizedBox _buildEmailField() {
     return SizedBox(
       width: MediaQuery.of(context).size.width * 528 / 1240,
@@ -425,6 +425,7 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
+  // Widget for the password field
   SizedBox _buildPasswordField() {
     return SizedBox(
       width: MediaQuery.of(context).size.width * 528 / 1240,
@@ -453,6 +454,7 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
+  // Method to update the state of fieldFilled
   void _updateFieldFilledState() {
     setState(() {
       fieldFilled = _emailController.text.isNotEmpty &&
@@ -460,6 +462,7 @@ class _SignUpPageState extends State<SignUpPage> {
     });
   }
 
+  // Widget for the create account button
   Widget _buildCreateAccountButton() {
     return GestureDetector(
       onTap: () {

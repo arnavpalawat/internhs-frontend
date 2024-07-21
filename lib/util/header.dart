@@ -20,20 +20,25 @@ class BuildHeader extends StatefulWidget {
 }
 
 class _BuildHeaderState extends State<BuildHeader> {
-  FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  Widget buildLoginButton() {
+  // Function to build navigation button
+  Widget buildNavigationButton(String label, Widget targetPage) {
     return GestureDetector(
       onTap: () {
-        // Navigate to login screen
-        Navigator.push(
-          context,
-          PageRouteBuilder(
-            pageBuilder: (context, animation1, animation2) => const LoginPage(),
-            transitionDuration: Duration.zero,
-            reverseTransitionDuration: Duration.zero,
-          ),
-        );
+        try {
+          Navigator.push(
+            context,
+            PageRouteBuilder(
+              pageBuilder: (context, animation1, animation2) => targetPage,
+              transitionDuration: Duration.zero,
+              reverseTransitionDuration: Duration.zero,
+            ),
+          );
+        } catch (e) {
+          // Handle navigation error
+          debugPrint('Navigation error: $e');
+        }
       },
       child: Container(
         width: 9.w,
@@ -53,7 +58,7 @@ class _BuildHeaderState extends State<BuildHeader> {
         ),
         child: Center(
           child: AutoSizeText(
-            'Login',
+            label,
             maxLines: 1,
             minFontSize: 0,
             style: lightButtonTextStyle.copyWith(
@@ -65,174 +70,114 @@ class _BuildHeaderState extends State<BuildHeader> {
     );
   }
 
-  Widget buildAccountButton() {
+  // Function to create styled text widgets
+  Widget buildHeaderText(String text) {
     return GestureDetector(
       onTap: () {
-        // Navigate to account screen
-        Navigator.push(
-          context,
-          PageRouteBuilder(
-            pageBuilder: (context, animation1, animation2) =>
-                const AccountPage(),
-            transitionDuration: Duration.zero,
-            reverseTransitionDuration: Duration.zero,
-          ),
-        );
+        // Define navigation based on the text label
+        switch (text) {
+          case 'Home':
+            navigateToPage(LandingAgent(index: 0));
+            break;
+          case 'Opportunities':
+            navigateToPage(const OpportunitiesPage());
+            break;
+          case 'Pricing':
+            navigateToPage(LandingAgent(index: 1));
+            break;
+          case 'Our Story':
+            navigateToPage(LandingAgent(index: 2));
+            break;
+          case 'Contact Us':
+            context.go("/contacts");
+            break;
+        }
       },
-      child: Container(
-        width: 9.w,
-        height: 6.h,
-        padding: EdgeInsets.symmetric(horizontal: 1.66.w, vertical: 1.7.h),
-        decoration: ShapeDecoration(
-          color: darkAccent,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          shadows: const [
-            BoxShadow(
-              color: Color(0x0C000000),
-              blurRadius: 2,
-              offset: Offset(0, 1),
-              spreadRadius: 0,
-            )
-          ],
-        ),
-        child: Center(
-          child: AutoSizeText(
-            'Account',
-            maxLines: 1,
-            minFontSize: 0,
-            style: lightButtonTextStyle.copyWith(
-              fontSize: height(context) * 12 / 814,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // Function to create styled text widgets
-    Widget text(String text) {
-      return AutoSizeText(
+      child: AutoSizeText(
         text,
         minFontSize: 0,
         maxLines: 1,
         style: lightHeaderTextStyle.copyWith(
-            fontSize: height(context) * 18 / 814 > width(context) * 18 / 1440
-                ? width(context) * 18 / 1440
-                : height(context) * 18 / 814),
-      );
-    }
+          fontSize: height(context) * 18 / 814 > width(context) * 18 / 1440
+              ? width(context) * 18 / 1440
+              : height(context) * 18 / 814,
+        ),
+      ),
+    );
+  }
 
-    return LayoutBuilder(builder: (context, _) {
-      return Center(
-        child: Row(
-          children: [
-            SizedBox(width: 5.w),
-            Material(
-              color: Colors.transparent,
-              shadowColor: Colors.transparent,
-              child: Container(
-                height: 13.22.h,
-                width: 93.75.w,
-                decoration: ShapeDecoration(
-                  color: headerColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(29),
-                  ),
-                ),
-                // Header items
-                child: Row(
-                  children: [
-                    Padding(
-                      padding:
-                          EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
-                      child: Image.asset(
-                        'lib/assets/images/internhs-header.png',
-                        height: 13.22.h,
-                      ),
-                    ),
-                    const Spacer(),
-                    GestureDetector(
-                      onTap: () {
-                        // Navigate to LandingPage
-                        Navigator.push(
-                          context,
-                          PageRouteBuilder(
-                            pageBuilder: (context, animation1, animation2) =>
-                                LandingAgent(index: 0),
-                            transitionDuration: Duration.zero,
-                            reverseTransitionDuration: Duration.zero,
-                          ),
-                        );
-                      },
-                      child: text("Home"),
-                    ),
-                    SizedBox(width: 5.w),
-                    GestureDetector(
-                      onTap: () {
-                        // Navigate to OpportunitiesPage
-                        Navigator.push(
-                          context,
-                          PageRouteBuilder(
-                            pageBuilder: (context, animation1, animation2) =>
-                                const OpportunitiesPage(),
-                            transitionDuration: Duration.zero,
-                            reverseTransitionDuration: Duration.zero,
-                          ),
-                        );
-                      },
-                      child: text("Opportunities"),
-                    ),
-                    SizedBox(width: 5.w),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          PageRouteBuilder(
-                            pageBuilder: (context, animation1, animation2) =>
-                                LandingAgent(index: 1),
-                            transitionDuration: Duration.zero,
-                            reverseTransitionDuration: Duration.zero,
-                          ),
-                        );
-                      },
-                      child: text("Pricing"),
-                    ),
-                    SizedBox(width: 5.w),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          PageRouteBuilder(
-                            pageBuilder: (context, animation1, animation2) =>
-                                LandingAgent(index: 2),
-                            transitionDuration: Duration.zero,
-                            reverseTransitionDuration: Duration.zero,
-                          ),
-                        );
-                      },
-                      child: text("Our Story"),
-                    ),
-                    SizedBox(width: 5.w),
-                    GestureDetector(
-                      onTap: () {
-                        context.go("/contacts");
-                      },
-                      child: text("Contact Us"),
-                    ),
-                    SizedBox(width: 5.w),
-                    _auth.currentUser != null
-                        ? buildAccountButton()
-                        : buildLoginButton(),
-                    SizedBox(width: 5.w),
-                  ],
-                ),
-              ),
-            ),
-          ],
+  // Function to handle navigation with error handling
+  void navigateToPage(Widget page) {
+    try {
+      Navigator.push(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (context, animation1, animation2) => page,
+          transitionDuration: Duration.zero,
+          reverseTransitionDuration: Duration.zero,
         ),
       );
-    });
+    } catch (e) {
+      // Handle navigation error
+      debugPrint('Navigation error: $e');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Center(
+          child: Row(
+            children: [
+              SizedBox(width: 5.w),
+              Material(
+                color: Colors.transparent,
+                shadowColor: Colors.transparent,
+                child: Container(
+                  height: 13.22.h,
+                  width: 93.75.w,
+                  decoration: ShapeDecoration(
+                    color: headerColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(29),
+                    ),
+                  ),
+                  // Header items
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding:
+                            EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
+                        child: Image.asset(
+                          'lib/assets/images/internhs-header.png',
+                          height: 13.22.h,
+                        ),
+                      ),
+                      const Spacer(),
+                      buildHeaderText("Home"),
+                      SizedBox(width: 5.w),
+                      buildHeaderText("Opportunities"),
+                      SizedBox(width: 5.w),
+                      buildHeaderText("Pricing"),
+                      SizedBox(width: 5.w),
+                      buildHeaderText("Our Story"),
+                      SizedBox(width: 5.w),
+                      buildHeaderText("Contact Us"),
+                      SizedBox(width: 5.w),
+                      _auth.currentUser != null
+                          ? buildNavigationButton(
+                              'Account', const AccountPage())
+                          : buildNavigationButton('Login', const LoginPage()),
+                      SizedBox(width: 5.w),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }
