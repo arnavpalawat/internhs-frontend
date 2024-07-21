@@ -6,17 +6,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:internhs/screens/authentication_flow/login_screen.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../constants/colors.dart';
+import '../constants/device.dart';
+import 'api_service.dart';
 import 'job.dart';
 import 'tinder_card.dart';
 
 class TinderSwiper extends StatefulWidget {
-  List<Job>? jobs;
-  final Function() onSwipeCallback; // Callback function
+  final List<Job>? jobs;
 
-  TinderSwiper({super.key, required this.jobs, required this.onSwipeCallback});
+  TinderSwiper({
+    super.key,
+    required this.jobs,
+  });
 
   @override
   State<TinderSwiper> createState() => _TinderSwiperState();
@@ -25,11 +30,14 @@ class TinderSwiper extends StatefulWidget {
 class _TinderSwiperState extends State<TinderSwiper> {
   final CardSwiperController controller = CardSwiperController();
   bool disable = false;
-
+  List<Job> recommendedJobs = [];
+  bool recommendLoading = true;
+  int cardsGoneThrough = 0;
   @override
   void initState() {
     super.initState();
     RawKeyboard.instance.addListener(_keyboardCallback);
+    fetchRecommendations();
   }
 
   @override
@@ -49,6 +57,37 @@ class _TinderSwiperState extends State<TinderSwiper> {
           widget.jobs;
         });
       });
+    }
+  }
+
+  Future<void> fetchRecommendations() async {
+    List<String> recommendedIds = [];
+    List<Job> newRecommendedJobs = [];
+    try {
+      ApiService api = ApiService();
+      recommendedIds = await api.getRecommendations(
+          uid: FirebaseAuth.instance.currentUser!.uid);
+
+      for (String id in recommendedIds) {
+        try {
+          if (!recommendedJobs.any((job) => job.id == id)) {
+            Job job = widget.jobs!.singleWhere((element) => id == element.id);
+            newRecommendedJobs.add(job);
+          }
+        } catch (e) {
+          print("Job with id $id not found in jobs list");
+        }
+      }
+
+      setState(() {
+        recommendedJobs.addAll(newRecommendedJobs);
+        recommendLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        recommendLoading = false;
+      });
+      print("Error fetching recommendations: $e");
     }
   }
 
@@ -142,13 +181,18 @@ class _TinderSwiperState extends State<TinderSwiper> {
         onUpSwipe(index);
         break;
     }
-    setState(() {
-      widget.onSwipeCallback(); // Call the callback on each swipe
-    });
+    print("cg $cardsGoneThrough");
+    print("rj ${recommendedJobs.length}");
+
+    if (recommendedJobs.length - cardsGoneThrough <= 6 &&
+        FirebaseAuth.instance.currentUser != null) {
+      fetchRecommendations();
+    }
   }
 
   bool onSwipe(
       int previousIndex, int? currentIndex, CardSwiperDirection direction) {
+    cardsGoneThrough++;
     if (currentIndex == null || currentIndex >= widget.jobs!.length) {
       setState(() {
         disable = true;
@@ -164,79 +208,44 @@ class _TinderSwiperState extends State<TinderSwiper> {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, _) {
-      return CardSwiper(
-        isLoop: false,
-        controller: controller,
-        cardsCount: widget.jobs != null && widget.jobs!.isNotEmpty
-            ? widget.jobs!.length
-            : 1,
-        onSwipe: onSwipe,
-        numberOfCardsDisplayed: widget.jobs != null && widget.jobs!.isNotEmpty
-            ? (widget.jobs!.length >= 3 ? 3 : widget.jobs!.length)
-            : 1,
-        backCardOffset: Offset(2.w, 4.h),
-        padding: EdgeInsets.fromLTRB(1.67.w, 2.96.h, 1.67.w, 2.96.h),
-        isDisabled: disable,
-        cardBuilder: (context, index, horizontalThresholdPercentage,
-            verticalThresholdPercentage) {
-          if (widget.jobs != null &&
-              widget.jobs!.isNotEmpty &&
-              index < widget.jobs!.length) {
-            return TinderCard(widget.jobs?[index]);
-          } else {
-            return Container(
-              width: 35.w,
-              clipBehavior: Clip.hardEdge,
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(Radius.circular(10)),
-                color: lightBackgroundColor,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.2),
-                    spreadRadius: 3,
-                    blurRadius: 7,
-                    offset: const Offset(0, 3),
+      return FirebaseAuth.instance.currentUser != null
+          ? recommendedJobs.isNotEmpty
+              ? CardSwiper(
+                  isLoop: false,
+                  controller: controller,
+                  cardsCount: recommendedJobs.length,
+                  onSwipe: onSwipe,
+                  numberOfCardsDisplayed: 3,
+                  backCardOffset: Offset(2.w, 4.h),
+                  padding: EdgeInsets.fromLTRB(1.67.w, 2.96.h, 1.67.w, 2.96.h),
+                  isDisabled: disable,
+                  cardBuilder: (context, index, horizontalThresholdPercentage,
+                      verticalThresholdPercentage) {
+                    return TinderCard(recommendedJobs[index]);
+                  },
+                )
+              : Center(
+                  child: LoadingAnimationWidget.twoRotatingArc(
+                    color: lightBackgroundColor,
+                    size: height(context) * 20 / 814 > width(context) * 20 / 814
+                        ? width(context) * 20 / 814
+                        : height(context) * 20 / 814,
                   ),
-                ],
-              ),
-              alignment: Alignment.center,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Flexible(
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: headerTextColors,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsets.fromLTRB(1.11.w, 1.97.h, 1.11.w, 1.97.h),
-                    child: const Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "No more available Internships",
-                          style: TextStyle(
-                            color: darkTextColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+                )
+          : CardSwiper(
+              isLoop: false,
+              controller: controller,
+              cardsCount: widget.jobs!.length,
+              onSwipe: onSwipe,
+              numberOfCardsDisplayed: 3,
+              backCardOffset: Offset(2.w, 4.h),
+              padding: EdgeInsets.fromLTRB(1.67.w, 2.96.h, 1.67.w, 2.96.h),
+              isDisabled: disable,
+              cardBuilder: (context, index, horizontalThresholdPercentage,
+                  verticalThresholdPercentage) {
+                return TinderCard(recommendedJobs[index]);
+              },
             );
-          }
-        },
-      );
     });
   }
 }
