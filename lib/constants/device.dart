@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 
 /// Device Dimensions
@@ -12,3 +13,5 @@ double height(BuildContext context) {
 }
 
 int landingAgentIndex = 0;
+
+final FirebaseAuth auth = FirebaseAuth.instance;

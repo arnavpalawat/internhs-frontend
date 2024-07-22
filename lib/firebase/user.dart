@@ -38,5 +38,15 @@ class User {
       'email': email,
       'uid': uid,
     });
+    await users
+        .doc(uid)
+        .collection("unliked")
+        .doc("01888366524118fe")
+        .set({'jobId': "01888366524118fe"});
+    await users
+        .doc(uid)
+        .collection("wishlisted")
+        .doc("01888366524118fe")
+        .set({'jobId': "01888366524118fe"});
   }
 }

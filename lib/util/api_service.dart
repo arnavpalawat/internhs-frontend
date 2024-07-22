@@ -1,10 +1,11 @@
 import 'dart:async'; // Import this for Stopwatch
 import 'dart:convert';
 
-import 'package:http/http.dart' as http;
+import 'package:flutter/foundation.dart';
+import "package:http/http.dart" as http;
 
 class ApiService {
-  static const baseUrl = "http://127.0.0.1:5000";
+  static const baseUrl = "http://127.0.0.1:8000";
 
   Future<List<String>> getRecommendations({required String uid}) async {
     const apiUrl = '$baseUrl/server/recommend';
@@ -18,7 +19,9 @@ class ApiService {
         body: jsonEncode({'uid': uid}),
       );
 
-      print(response.body);
+      if (kDebugMode) {
+        print(response.body);
+      }
 
       if (response.statusCode == 200) {
         // Assuming the response body contains a JSON object with a 'recommendedIds' key
@@ -31,14 +34,20 @@ class ApiService {
             .toList();
         return stringList;
       } else {
-        print(
-            'Failed to recommend jobs: ${response.statusCode} - ${response.body}');
+        if (kDebugMode) {
+          print(
+              'Failed to recommend jobs: ${response.statusCode} - ${response.body}');
+        }
         throw Exception('Failed to recommend jobs');
       }
     } catch (e, stacktrace) {
-      print('Error recommending jobs: $e');
-      print('Stacktrace: $stacktrace');
-      throw e;
+      if (kDebugMode) {
+        print('Error recommending jobs: $e');
+      }
+      if (kDebugMode) {
+        print('Stacktrace: $stacktrace');
+      }
+      rethrow;
     }
   }
 
@@ -66,14 +75,20 @@ class ApiService {
       if (response.statusCode == 200) {
         return json.decode(response.body);
       } else {
-        print(
-            'Failed to scrape jobs: ${response.statusCode} - ${response.body}');
+        if (kDebugMode) {
+          print(
+              'Failed to scrape jobs: ${response.statusCode} - ${response.body}');
+        }
         throw Exception('Failed to scrape jobs');
       }
     } catch (e, stacktrace) {
-      print('Error scraping jobs: $e');
-      print('Stacktrace: $stacktrace');
-      throw e;
+      if (kDebugMode) {
+        print('Error scraping jobs: $e');
+      }
+      if (kDebugMode) {
+        print('Stacktrace: $stacktrace');
+      }
+      rethrow;
     }
   }
 }

@@ -1,7 +1,6 @@
 import 'dart:js' as js;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
@@ -67,7 +66,7 @@ class _TinderSwiperState extends State<TinderSwiper> {
     try {
       ApiService api = ApiService();
       recommendedIds = await api.getRecommendations(
-        uid: FirebaseAuth.instance.currentUser!.uid,
+        uid: auth.currentUser!.uid,
       );
 
       for (String id in recommendedIds) {
@@ -114,22 +113,24 @@ class _TinderSwiperState extends State<TinderSwiper> {
 
   /// Handles right swipe action to wishlist a job
   Future<void> onRightSwipe(int index) async {
-    if (FirebaseAuth.instance.currentUser == null) {
+    if (auth.currentUser == null) {
       Navigator.pushNamed(context, '/login');
     } else {
       CollectionReference users = FirebaseFirestore.instance.collection('user');
-      String uid = FirebaseAuth.instance.currentUser!.uid;
-      DocumentReference docRef =
-          users.doc(uid).collection("wishlisted").doc(widget.jobs?[index].id);
+      String uid = auth.currentUser!.uid;
+      DocumentReference docRef = users
+          .doc(uid)
+          .collection("wishlisted")
+          .doc(recommendedJobs[index].id);
 
       await docRef
-          .set({'jobId': widget.jobs?[index].id}, SetOptions(merge: true));
+          .set({'jobId': recommendedJobs[index].id}, SetOptions(merge: true));
     }
   }
 
   /// Handles left swipe action to unlike a job
   Future<void> onLeftSwipe(int index) async {
-    if (FirebaseAuth.instance.currentUser == null) {
+    if (auth.currentUser == null) {
       Navigator.push(
         context,
         PageRouteBuilder(
@@ -140,33 +141,38 @@ class _TinderSwiperState extends State<TinderSwiper> {
       );
     } else {
       CollectionReference users = FirebaseFirestore.instance.collection('user');
-      String uid = FirebaseAuth.instance.currentUser!.uid;
+      String uid = auth.currentUser!.uid;
       DocumentReference docRef =
-          users.doc(uid).collection("unliked").doc(widget.jobs?[index].id);
+          users.doc(uid).collection("unliked").doc(recommendedJobs[index].id);
 
-      await docRef
-          .set({'jobId': widget.jobs?[index].id}, SetOptions(merge: true));
+      await docRef.set({'jobId': recommendedJobs[index].id},
+          SetOptions(merge: true)).whenComplete(
+        () => print("unliked"),
+      );
     }
   }
 
   /// Handles up swipe action to open job link and wishlist the job
   Future<void> onUpSwipe(int index) async {
-    js.context.callMethod('open', [widget.jobs![index].link ?? "indeed.com"]);
-    if (FirebaseAuth.instance.currentUser != null) {
+    js.context
+        .callMethod('open', [recommendedJobs[index].link ?? "indeed.com"]);
+    if (auth.currentUser != null) {
       CollectionReference users = FirebaseFirestore.instance.collection('user');
-      String uid = FirebaseAuth.instance.currentUser!.uid;
-      DocumentReference docRef =
-          users.doc(uid).collection("wishlisted").doc(widget.jobs?[index].id);
+      String uid = auth.currentUser!.uid;
+      DocumentReference docRef = users
+          .doc(uid)
+          .collection("wishlisted")
+          .doc(recommendedJobs[index].id);
 
       await docRef
-          .set({'jobId': widget.jobs?[index].id}, SetOptions(merge: true));
+          .set({'jobId': recommendedJobs[index].id}, SetOptions(merge: true));
     }
   }
 
   /// Handles down swipe action to flag a job
   Future<void> onDownSwipe(int index) async {
     CollectionReference jobs = FirebaseFirestore.instance.collection('jobs');
-    String? id = widget.jobs?[index].id;
+    String? id = recommendedJobs[index].id;
     if (id != null) {
       await jobs.doc(id).set({'flagged': true},
           SetOptions(merge: true)).whenComplete(() => print("complete"));
@@ -193,7 +199,7 @@ class _TinderSwiperState extends State<TinderSwiper> {
     print("rj ${recommendedJobs.length}");
 
     if (recommendedJobs.length - cardsGoneThrough <= 6 &&
-        FirebaseAuth.instance.currentUser != null) {
+        auth.currentUser != null) {
       fetchRecommendations();
     }
   }
@@ -217,7 +223,7 @@ class _TinderSwiperState extends State<TinderSwiper> {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, _) {
-      return FirebaseAuth.instance.currentUser != null
+      return auth.currentUser != null
           ? recommendedJobs.isNotEmpty
               ? buildCardSwiper(recommendedJobs.length, recommendedJobs)
               : buildLoadingWidget()

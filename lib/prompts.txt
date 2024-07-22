@@ -1,0 +1,3 @@
+Refactor:
+
+refactor, add comments but DO NOT remove existing comments, modularize, add error handling, simplify, organize, absolutely avoid regression, provide complete code and not partial replacement and do not change or remove any functionality, clean variable names:

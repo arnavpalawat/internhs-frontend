@@ -1,7 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:internhs/constants/device.dart';
 import 'package:internhs/screens/account_page.dart';
 import 'package:internhs/screens/initial_landing_flow/landing_agent.dart';
@@ -20,8 +18,6 @@ class BuildHeader extends StatefulWidget {
 }
 
 class _BuildHeaderState extends State<BuildHeader> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-
   // Function to build navigation button
   Widget buildNavigationButton(String label, Widget targetPage) {
     return GestureDetector(
@@ -77,19 +73,19 @@ class _BuildHeaderState extends State<BuildHeader> {
         // Define navigation based on the text label
         switch (text) {
           case 'Home':
-            navigateToPage(LandingAgent(index: 0));
+            navigateToPage(const LandingAgent(index: 0));
             break;
           case 'Opportunities':
             navigateToPage(const OpportunitiesPage());
             break;
           case 'Pricing':
-            navigateToPage(LandingAgent(index: 1));
+            navigateToPage(const LandingAgent(index: 1));
             break;
           case 'Our Story':
-            navigateToPage(LandingAgent(index: 2));
+            navigateToPage(const LandingAgent(index: 2));
             break;
           case 'Contact Us':
-            context.go("/contacts");
+            navigateToPage(const LandingAgent(index: 3));
             break;
         }
       },
@@ -165,7 +161,7 @@ class _BuildHeaderState extends State<BuildHeader> {
                       SizedBox(width: 5.w),
                       buildHeaderText("Contact Us"),
                       SizedBox(width: 5.w),
-                      _auth.currentUser != null
+                      auth.currentUser != null
                           ? buildNavigationButton(
                               'Account', const AccountPage())
                           : buildNavigationButton('Login', const LoginPage()),

@@ -110,18 +110,18 @@ class _AccountPageState extends State<AccountPage>
       if (user != null) {
         String userId = user.uid;
 
-        if (google) {
-          await GoogleSignIn().signOut();
-        }
-
         await deleteSubcollection(userId, "unliked");
         await deleteSubcollection(userId, "wishlisted");
         await FirebaseFirestore.instance
             .collection("user")
             .doc(userId)
             .delete();
-        await user.delete();
-
+        await user.delete().then(
+              (value) => signOut(),
+            );
+        if (google) {
+          await GoogleSignIn().signOut();
+        }
         Navigator.pushReplacement(
           context,
           PageRouteBuilder(

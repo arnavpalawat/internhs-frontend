@@ -91,6 +91,11 @@ Widget _buildDropdown(BuildContext context) {
     height: 7.h,
     width: 8.w,
     child: DropdownButton<String>(
+      style: blackBodyTextStyle.copyWith(
+        fontSize: height(context) * 16 / 814 > width(context) * 16 / 1440
+            ? width(context) * 16 / 1440
+            : height(context) * 16 / 814,
+      ),
       value: remote,
       onChanged: (String? newValue) {
         if (newValue != null) {
@@ -106,9 +111,9 @@ Widget _buildDropdown(BuildContext context) {
             minFontSize: 0,
             maxLines: 1,
             style: blackBodyTextStyle.copyWith(
-              fontSize: height(context) * 24 / 814 > width(context) * 24 / 1440
-                  ? width(context) * 24 / 1440
-                  : height(context) * 24 / 814,
+              fontSize: height(context) * 16 / 814 > width(context) * 16 / 1440
+                  ? width(context) * 16 / 1440
+                  : height(context) * 16 / 814,
             ),
           ),
         );
@@ -122,22 +127,24 @@ Widget _buildTextField(BuildContext context, String type, double length) {
   return SizedBox(
     width: length.toDouble(),
     height: 3.65.h,
-    child: TextField(
-      controller: _getControllerForType(type),
-      cursorColor: lightBackgroundColor,
-      style: lightButtonTextStyle.copyWith(
-        fontSize: height(context) * 12 / 814 > width(context) * 12 / 1440
-            ? width(context) * 12 / 1440
-            : height(context) * 12 / 814,
-      ),
-      decoration: InputDecoration(
-        filled: true,
-        fillColor: darkAccent,
-        contentPadding:
-            EdgeInsets.symmetric(vertical: 1.8.h, horizontal: 1.38.w),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(29.0),
-          borderSide: BorderSide.none,
+    child: Center(
+      child: TextField(
+        controller: _getControllerForType(type),
+        cursorColor: lightBackgroundColor,
+        style: lightButtonTextStyle.copyWith(
+          fontSize: height(context) * 12 / 814 > width(context) * 12 / 1440
+              ? width(context) * 12 / 1440
+              : height(context) * 12 / 814,
+        ),
+        decoration: InputDecoration(
+          filled: true,
+          fillColor: darkAccent,
+          contentPadding:
+              EdgeInsets.symmetric(vertical: 1.0.h, horizontal: 1.38.w),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(29.0),
+            borderSide: BorderSide.none,
+          ),
         ),
       ),
     ),

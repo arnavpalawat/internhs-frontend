@@ -63,7 +63,12 @@ class _SignUpPageState extends State<SignUpPage> {
           email: email, password: password);
       if (userCredential.user != null) {
         await _addUserToFirestore(userCredential.user!);
-        Navigator.pop(context);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const LoginPage(),
+          ),
+        );
         if (kDebugMode) {
           print(
               "Sign Up Successful: User created with email $email and password $password");
