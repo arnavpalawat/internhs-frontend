@@ -5,6 +5,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:internhs/constants/colors.dart';
 import 'package:internhs/constants/text.dart';
 import 'package:internhs/firebase/user.dart' as db;
+import 'package:internhs/util/loading.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../constants/device.dart';
@@ -25,7 +26,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   bool fieldFilled = false;
   bool obscure = true;
-
+  bool isLoading = false;
   @override
   void initState() {
     _emailController = TextEditingController();
@@ -59,6 +60,9 @@ class _SignUpPageState extends State<SignUpPage> {
   // Method to create a new user
   Future<void> _createUser(String email, String password) async {
     try {
+      setState(() {
+        isLoading = true;
+      });
       final userCredential = await _authInstance.createUserWithEmailAndPassword(
           email: email, password: password);
       if (userCredential.user != null) {
@@ -67,6 +71,12 @@ class _SignUpPageState extends State<SignUpPage> {
           context,
           MaterialPageRoute(
             builder: (context) => const LoginPage(),
+          ),
+        ).whenComplete(
+          () => setState(
+            () {
+              isLoading = false;
+            },
           ),
         );
         if (kDebugMode) {
@@ -149,26 +159,32 @@ class _SignUpPageState extends State<SignUpPage> {
             height: 89.h,
             clipBehavior: Clip.antiAlias,
             decoration: authBoxDecorations,
-            child: Column(
-              children: [
-                _buildHeader(),
-                _buildAvatar(),
-                SizedBox(height: .94.h),
-                _buildTitle(),
-                SizedBox(height: .94.h),
-                _buildLoginLink(),
-                SizedBox(height: .47.h),
-                _buildLoginPlatforms(),
-                SizedBox(height: height(context) * 55 / 840),
-                _buildDivider(context),
-                SizedBox(height: height(context) * 40 / 840),
-                _buildCredentialsText(),
-                SizedBox(height: MediaQuery.of(context).size.height * 16 / 840),
-                _buildAuthFields(),
-                SizedBox(height: MediaQuery.of(context).size.height * 16 / 840),
-                _buildCreateAccountButton(),
-              ],
-            ),
+            child: isLoading
+                ? buildLoadingIndicator(context, darkBackgroundColor)
+                : Column(
+                    children: [
+                      _buildHeader(),
+                      _buildAvatar(),
+                      SizedBox(height: .94.h),
+                      _buildTitle(),
+                      SizedBox(height: .94.h),
+                      _buildLoginLink(),
+                      SizedBox(height: .47.h),
+                      _buildLoginPlatforms(),
+                      SizedBox(height: height(context) * 55 / 840),
+                      _buildDivider(context),
+                      SizedBox(height: height(context) * 40 / 840),
+                      _buildCredentialsText(),
+                      SizedBox(
+                          height:
+                              MediaQuery.of(context).size.height * 16 / 840),
+                      _buildAuthFields(),
+                      SizedBox(
+                          height:
+                              MediaQuery.of(context).size.height * 16 / 840),
+                      _buildCreateAccountButton(),
+                    ],
+                  ),
           ),
         ).animate().fade(duration: const Duration(milliseconds: 1000)).slideY(
               begin: 0.25,

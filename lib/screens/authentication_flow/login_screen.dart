@@ -8,6 +8,7 @@ import 'package:internhs/screens/authentication_flow/sign_up_screen.dart';
 import 'package:internhs/screens/initial_landing_flow/landing_agent.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
+import '../../util/loading.dart';
 import '../opportunities_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -25,6 +26,7 @@ class _LoginPageState extends State<LoginPage> {
 
   bool fieldFilled = false;
   bool obscure = true;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -42,6 +44,9 @@ class _LoginPageState extends State<LoginPage> {
 
   // Method to handle Google Sign-In
   Future<void> _signInWithGoogle() async {
+    setState(() {
+      isLoading = true;
+    });
     GoogleAuthProvider authProvider = GoogleAuthProvider();
     try {
       await _authInstance.signInWithPopup(authProvider);
@@ -50,11 +55,18 @@ class _LoginPageState extends State<LoginPage> {
       }
     } catch (e) {
       _showErrorDialog(e.toString());
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
   // Method to handle Email/Password Sign-In
   Future<void> _loginUser(String email, String password) async {
+    setState(() {
+      isLoading = true;
+    });
     try {
       await _authInstance.signInWithEmailAndPassword(
           email: email, password: password);
@@ -63,6 +75,10 @@ class _LoginPageState extends State<LoginPage> {
       }
     } catch (e) {
       _showErrorDialog(e.toString());
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -132,26 +148,29 @@ class _LoginPageState extends State<LoginPage> {
             height: 89.h,
             clipBehavior: Clip.antiAlias,
             decoration: authBoxDecorations,
-            child: Column(
-              children: [
-                _buildHeader(),
-                _buildAvatar(),
-                _buildTitle(),
-                SizedBox(height: .94.h),
-                _buildSignUpLink(),
-                SizedBox(height: .47.h),
-                GestureDetector(
-                    onTap: _signInWithGoogle, child: _buildLoginPlatforms()),
-                SizedBox(height: height(context) * 55 / 840),
-                _buildDivider(),
-                SizedBox(height: height(context) * 40 / 840),
-                _buildCredentialsText(),
-                SizedBox(height: height(context) * 16 / 840),
-                _buildAuthFields(),
-                SizedBox(height: height(context) * 16 / 840),
-                _buildCreateAccountButton(),
-              ],
-            ),
+            child: isLoading
+                ? buildLoadingIndicator(context, darkBackgroundColor)
+                : Column(
+                    children: [
+                      _buildHeader(),
+                      _buildAvatar(),
+                      _buildTitle(),
+                      SizedBox(height: .94.h),
+                      _buildSignUpLink(),
+                      SizedBox(height: .47.h),
+                      GestureDetector(
+                          onTap: _signInWithGoogle,
+                          child: _buildLoginPlatforms()),
+                      SizedBox(height: height(context) * 55 / 840),
+                      _buildDivider(),
+                      SizedBox(height: height(context) * 40 / 840),
+                      _buildCredentialsText(),
+                      SizedBox(height: height(context) * 16 / 840),
+                      _buildAuthFields(),
+                      SizedBox(height: height(context) * 16 / 840),
+                      _buildCreateAccountButton(),
+                    ],
+                  ),
           ),
         ).animate().fade(duration: const Duration(milliseconds: 1000)).slideY(
               begin: 0.25,
