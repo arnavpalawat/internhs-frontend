@@ -129,6 +129,8 @@ class _LandingPageState extends State<LandingPage>
 }
 
 class AnnouncementText extends StatelessWidget {
+  const AnnouncementText({super.key});
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -182,6 +184,8 @@ class AnnouncementText extends StatelessWidget {
 }
 
 class BodyText extends StatelessWidget {
+  const BodyText({super.key});
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(

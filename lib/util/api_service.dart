@@ -9,7 +9,6 @@ class ApiService {
 
   Future<List<String>> getRecommendations({required String uid}) async {
     const apiUrl = '$baseUrl/server/recommend';
-
     try {
       final response = await http.post(
         Uri.parse(apiUrl),

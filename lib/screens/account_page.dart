@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:internhs/constants/text.dart';
+import 'package:internhs/util/loading.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../constants/colors.dart';
@@ -32,9 +33,11 @@ class _AccountPageState extends State<AccountPage>
     "Search Radius": _radiusController,
     "Age in Hours": _ageController,
   };
+
   bool hovering = false;
   bool google = false;
 
+  bool isLoading = false;
   @override
   void initState() {
     super.initState();
@@ -70,10 +73,16 @@ class _AccountPageState extends State<AccountPage>
   /// Signs out the user and redirects to the landing page
   Future<void> signOut() async {
     try {
+      setState(() {
+        isLoading = true;
+      });
       await FirebaseAuth.instance.signOut().whenComplete(() {
         if (google) {
           GoogleSignIn().signOut();
         }
+        setState(() {
+          isLoading = true;
+        });
         Navigator.pushReplacement(
           context,
           PageRouteBuilder(
@@ -107,8 +116,40 @@ class _AccountPageState extends State<AccountPage>
     }
 
     try {
+      setState(() {
+        isLoading = true;
+      });
+
       if (user != null) {
         String userId = user.uid;
+
+        // Re-authenticate the user
+        AuthCredential credential;
+        if (user.providerData[0].providerId == 'google.com') {
+          // Google Sign-In
+          GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+          if (googleUser != null) {
+            GoogleSignInAuthentication googleAuth =
+                await googleUser.authentication;
+            credential = GoogleAuthProvider.credential(
+              accessToken: googleAuth.accessToken,
+              idToken: googleAuth.idToken,
+            );
+          } else {
+            throw FirebaseAuthException(
+              code: 'ERROR_ABORTED_BY_USER',
+              message: 'Sign-in aborted by user',
+            );
+          }
+        } else {
+          // Email/Password Sign-In
+          String email = user.email!;
+          String password = await _getPasswordFromUser(context);
+          credential =
+              EmailAuthProvider.credential(email: email, password: password);
+        }
+
+        await user.reauthenticateWithCredential(credential);
 
         await deleteSubcollection(userId, "unliked");
         await deleteSubcollection(userId, "wishlisted");
@@ -132,12 +173,41 @@ class _AccountPageState extends State<AccountPage>
           ),
         );
       }
+      setState(() {
+        isLoading = false;
+      });
     } catch (e) {
       print("Failed to delete account: $e");
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Failed to delete account: $e")),
       );
     }
+  }
+
+  Future<String> _getPasswordFromUser(BuildContext context) async {
+    TextEditingController passwordController = TextEditingController();
+    String? password;
+    await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Re-enter Password'),
+        content: TextField(
+          controller: passwordController,
+          obscureText: true,
+          decoration: const InputDecoration(hintText: "Password"),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              password = passwordController.text;
+              Navigator.of(context).pop();
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+    return password ?? '';
   }
 
   /// Builds a custom button widget
@@ -209,30 +279,33 @@ class _AccountPageState extends State<AccountPage>
                 ),
               ),
             ),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (google) _buildChangeEmailButton(context),
-                    _buildChangePasswordButton(context),
-                    _buildSignOutButton(context),
-                    SizedBox(height: 25.h),
-                    GestureDetector(
-                      onTap: () => deleteAccount(context),
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                            vertical: 1.4.h, horizontal: .84.w),
-                        child: buildButton(brightAccent, "Delete"),
+            isLoading
+                ? buildLoadingIndicator(context, darkBackgroundColor)
+                : Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding:
+                          EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (google) _buildChangeEmailButton(context),
+                          _buildChangePasswordButton(context),
+                          _buildSignOutButton(context),
+                          SizedBox(height: 25.h),
+                          GestureDetector(
+                            onTap: () => deleteAccount(context),
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 1.4.h, horizontal: .84.w),
+                              child: buildButton(brightAccent, "Delete"),
+                            ),
+                          ),
+                          SizedBox(height: 1.h),
+                        ],
                       ),
                     ),
-                    SizedBox(height: 1.h),
-                  ],
-                ),
-              ),
-            ),
+                  ),
           ],
         ),
       ),
@@ -540,7 +613,7 @@ class _AccountPageState extends State<AccountPage>
                       padding: EdgeInsets.only(left: 5.w),
                       child: const Align(
                         alignment: Alignment.centerLeft,
-                        child: buildPrefs(),
+                        child: BuildPrefs(),
                       ),
                     ),
                     Padding(

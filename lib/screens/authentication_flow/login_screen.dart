@@ -49,10 +49,10 @@ class _LoginPageState extends State<LoginPage> {
     });
     GoogleAuthProvider authProvider = GoogleAuthProvider();
     try {
-      await _authInstance.signInWithPopup(authProvider);
-      if (_authInstance.currentUser != null) {
-        _navigateToOpportunitiesPage();
-      }
+      await _authInstance.signInWithPopup(authProvider).whenComplete(() =>
+          _authInstance.currentUser != null
+              ? _navigateToOpportunitiesPage()
+              : ());
     } catch (e) {
       _showErrorDialog(e.toString());
     } finally {

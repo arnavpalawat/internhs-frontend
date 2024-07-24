@@ -1,7 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:internhs/util/api_service.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:internhs/util/loading.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../constants/colors.dart';
@@ -239,14 +239,14 @@ Widget _buildButton(Color color, String text, BuildContext context) {
   );
 }
 
-class buildPrefs extends StatefulWidget {
-  const buildPrefs({super.key});
+class BuildPrefs extends StatefulWidget {
+  const BuildPrefs({super.key});
 
   @override
-  State<buildPrefs> createState() => _buildPrefsState();
+  State<BuildPrefs> createState() => _BuildPrefsState();
 }
 
-class _buildPrefsState extends State<buildPrefs> {
+class _BuildPrefsState extends State<BuildPrefs> {
   bool loading = false;
 
   /// Handles the "Go!" button press.
@@ -289,14 +289,7 @@ class _buildPrefsState extends State<buildPrefs> {
           ),
         ),
         child: loading
-            ? Center(
-                child: LoadingAnimationWidget.twoRotatingArc(
-                  color: darkTextColor,
-                  size: height(context) * 20 / 814 > width(context) * 20 / 814
-                      ? width(context) * 20 / 814
-                      : height(context) * 20 / 814,
-                ),
-              )
+            ? buildLoadingIndicator(context, darkBackgroundColor)
             : Column(
                 children: [
                   Padding(

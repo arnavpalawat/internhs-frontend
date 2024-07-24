@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:internhs/screens/initial_landing_flow/landing_page.dart';
 import 'package:internhs/screens/initial_landing_flow/our_story_page.dart';
 import 'package:internhs/screens/initial_landing_flow/pricing.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:internhs/util/loading.dart';
 
 import '../../constants/colors.dart';
 import '../../constants/device.dart';
@@ -148,10 +148,7 @@ class PageViewWidget extends StatelessWidget {
         case 3:
           return const WhatWeDoPage();
         default:
-          return LoadingAnimationWidget.twoRotatingArc(
-            color: lightBackgroundColor,
-            size: 15,
-          );
+          return buildLoadingIndicator(context, darkBackgroundColor);
       }
     } catch (e) {
       return Center(

@@ -128,7 +128,7 @@ class _FooterState extends State<Footer> with SingleTickerProviderStateMixin {
   }
 
   void sendEmail() async {
-    final Uri _emailLaunchUri = Uri(
+    final Uri emailLaunchUri = Uri(
       scheme: 'mailto',
       path: 'xyz@email.com',
       queryParameters: {
@@ -137,10 +137,10 @@ class _FooterState extends State<Footer> with SingleTickerProviderStateMixin {
       },
     );
 
-    if (await canLaunch(_emailLaunchUri.toString())) {
-      await launch(_emailLaunchUri.toString());
+    if (await canLaunch(emailLaunchUri.toString())) {
+      await launch(emailLaunchUri.toString());
     } else {
-      throw 'Could not launch $_emailLaunchUri';
+      throw 'Could not launch $emailLaunchUri';
     }
   }
 
@@ -156,7 +156,7 @@ class _FooterState extends State<Footer> with SingleTickerProviderStateMixin {
                 height: 3.h,
               ),
               Center(
-                child: Container(
+                child: SizedBox(
                   width: 70.w,
                   child: const Divider(
                     color: darkTextColor,

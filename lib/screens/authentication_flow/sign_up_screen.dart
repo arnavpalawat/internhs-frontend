@@ -86,6 +86,11 @@ class _SignUpPageState extends State<SignUpPage> {
       }
     } catch (e) {
       _showErrorDialog(e.toString());
+      setState(
+        () {
+          isLoading = false;
+        },
+      );
     }
   }
 

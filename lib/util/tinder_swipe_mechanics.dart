@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:internhs/screens/authentication_flow/login_screen.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:internhs/util/loading.dart';
+import 'package:internhs/util/placeholder.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../constants/colors.dart';
@@ -17,7 +18,7 @@ import 'tinder_card.dart';
 class TinderSwiper extends StatefulWidget {
   final List<Job>? jobs;
 
-  TinderSwiper({
+  const TinderSwiper({
     super.key,
     required this.jobs,
   });
@@ -195,8 +196,6 @@ class _TinderSwiperState extends State<TinderSwiper> {
         onUpSwipe(index);
         break;
     }
-    print("cg $cardsGoneThrough");
-    print("rj ${recommendedJobs.length}");
 
     if (recommendedJobs.length - cardsGoneThrough <= 6 &&
         auth.currentUser != null) {
@@ -226,7 +225,7 @@ class _TinderSwiperState extends State<TinderSwiper> {
       return auth.currentUser != null
           ? recommendedJobs.isNotEmpty
               ? buildCardSwiper(recommendedJobs.length, recommendedJobs)
-              : buildLoadingWidget()
+              : buildLoadingIndicator(context, darkBackgroundColor)
           : buildCardSwiper(widget.jobs!.length, widget.jobs!);
     });
   }
@@ -236,7 +235,7 @@ class _TinderSwiperState extends State<TinderSwiper> {
     return CardSwiper(
       isLoop: false,
       controller: controller,
-      cardsCount: cardCount,
+      cardsCount: !(cardCount >= 1) ? 1 : cardCount,
       onSwipe: onSwipe,
       numberOfCardsDisplayed: 3,
       backCardOffset: Offset(2.w, 4.h),
@@ -244,20 +243,10 @@ class _TinderSwiperState extends State<TinderSwiper> {
       isDisabled: disable,
       cardBuilder: (context, index, horizontalThresholdPercentage,
           verticalThresholdPercentage) {
-        return TinderCard(jobsList[index]);
+        return cardCount != 0
+            ? TinderCard(jobsList[index])
+            : const PlaceholderCard();
       },
-    );
-  }
-
-  /// Builds the loading widget
-  Center buildLoadingWidget() {
-    return Center(
-      child: LoadingAnimationWidget.twoRotatingArc(
-        color: lightBackgroundColor,
-        size: height(context) * 20 / 814 > width(context) * 20 / 814
-            ? width(context) * 20 / 814
-            : height(context) * 20 / 814,
-      ),
     );
   }
 }

@@ -26,7 +26,7 @@ class _PricingPageState extends State<PricingPage> {
         return Container(
           color: lightBackgroundColor,
           height: 100.h,
-          child: Column(
+          child: const Column(
             children: [
               PricingHeader(),
               PricingContent(),
@@ -105,7 +105,7 @@ class PricingContent extends StatelessWidget {
             _buildContentTitle(context),
             _buildContentDescription(context),
             SizedBox(height: 2.5.h),
-            DonationOptions(),
+            const DonationOptions(),
           ],
         ).animate().fade(duration: const Duration(milliseconds: 1000)).slideX(
             begin: -0.25,
@@ -155,7 +155,7 @@ class DonationOptions extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: 50.w,
-      child: Row(
+      child: const Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           DonationOption(
