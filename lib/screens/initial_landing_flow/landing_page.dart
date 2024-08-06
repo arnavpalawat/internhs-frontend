@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_gradient_animation_text/flutter_gradient_animation_text.dart';
 import 'package:internhs/constants/colors.dart';
 import 'package:internhs/constants/device.dart';
 import 'package:internhs/constants/text.dart';
@@ -137,15 +138,17 @@ class AnnouncementText extends StatelessWidget {
       width: 88.w,
       height: 57.h,
       child: RichText(
-        maxLines: 4,
+        maxLines: !isMobile ? 4 : 8,
         text: TextSpan(
-          children: _buildTextSpans(context),
+          children: !isMobile
+              ? _buildDesktopTextSpans(context)
+              : _buildMobileTextSpans(context),
         ),
       ),
     );
   }
 
-  List<TextSpan> _buildTextSpans(BuildContext context) {
+  List<TextSpan> _buildDesktopTextSpans(BuildContext context) {
     double fontSize = _calculateFontSize(context);
 
     return [
@@ -154,7 +157,7 @@ class AnnouncementText extends StatelessWidget {
         style: announcementTextStyle.copyWith(fontSize: fontSize),
       ),
       TextSpan(
-        text: 'initiative ',
+        text: 'with initiative ',
         style: italicAnnouncementTextStyle.copyWith(fontSize: fontSize),
       ),
       TextSpan(
@@ -167,6 +170,33 @@ class AnnouncementText extends StatelessWidget {
       ),
       TextSpan(
         text: 'internship\n',
+        style: italicAnnouncementTextStyle.copyWith(fontSize: fontSize),
+      ),
+      TextSpan(
+        text: 'at a time',
+        style: announcementTextStyle.copyWith(fontSize: fontSize),
+      ),
+    ];
+  }
+
+  List<TextSpan> _buildMobileTextSpans(BuildContext context) {
+    double fontSize = 36;
+
+    return [
+      TextSpan(
+        text: 'Establishing teens with ',
+        style: announcementTextStyle.copyWith(fontSize: fontSize),
+      ),
+      TextSpan(
+        text: 'initiative ',
+        style: italicAnnouncementTextStyle.copyWith(fontSize: fontSize),
+      ),
+      TextSpan(
+        text: 'into competitive workplaces, one ',
+        style: announcementTextStyle.copyWith(fontSize: fontSize),
+      ),
+      TextSpan(
+        text: 'internship ',
         style: italicAnnouncementTextStyle.copyWith(fontSize: fontSize),
       ),
       TextSpan(
@@ -241,14 +271,57 @@ class ButtonRow extends StatelessWidget {
   GestureDetector _buildGetStartedButton(BuildContext context) {
     return GestureDetector(
       onTap: () => _navigateToNextPage(context),
-      child: HoverButton(
-        color: brightAccent,
-        text: "Get Started",
-        animationGS: animationGS,
-        hovering: hovering,
-        onGSHover: onGSHover,
-        onGSExit: onGSExit,
-      ),
+      child: !isMobile
+          ? HoverButton(
+              color: brightAccent,
+              text: "Get Started",
+              animationGS: animationGS,
+              hovering: hovering,
+              onGSHover: onGSHover,
+              onGSExit: onGSExit,
+            )
+          : Container(
+              width: 15.w,
+              height: 6.h,
+              padding: EdgeInsets.symmetric(
+                horizontal: 1.66.w,
+                vertical: 1.93.h,
+              ),
+              decoration: ShapeDecoration(
+                color: brightAccent,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(360),
+                ),
+                shadows: const [
+                  BoxShadow(
+                    color: Color(0x0C000000),
+                    blurRadius: 2,
+                    offset: Offset(0, 1),
+                    spreadRadius: 0,
+                  ),
+                ],
+              ),
+              child: GradientAnimationText(
+                text: Text(
+                  "Get Started",
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: lightButtonTextStyle.copyWith(
+                    fontSize:
+                        height(context) * 24 / 814 > width(context) * 24 / 1440
+                            ? width(context) * 24 / 1440
+                            : height(context) * 24 / 814,
+                  ),
+                ),
+                colors: [
+                  Color(0xFF6C8DCC), // Soft Blue
+                  Color(0xFF8EAADB), // Light Blue
+                  Color(0xFFD0E1FF), // Very Light Blue
+                ],
+                duration: 3.seconds,
+                transform: GradientRotation(0.785398),
+              ),
+            ),
     );
   }
 
@@ -358,16 +431,27 @@ class HoverButton extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          AutoSizeText(
-            text,
-            minFontSize: 0,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: lightButtonTextStyle.copyWith(
-              fontSize: height(context) * 24 / 814 > width(context) * 24 / 1440
-                  ? width(context) * 24 / 1440
-                  : height(context) * 24 / 814,
+          GradientAnimationText(
+            text: Text(
+              text,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: lightButtonTextStyle.copyWith(
+                fontSize:
+                    height(context) * 24 / 814 > width(context) * 24 / 1440
+                        ? width(context) * 24 / 1440
+                        : height(context) * 24 / 814,
+              ),
             ),
+            colors: text == "Get Started"
+                ? [
+                    Color(0xFF6C8DCC), // Soft Blue
+                    Color(0xFF8EAADB), // Light Blue
+                    Color(0xFFD0E1FF), // Very Light Blue
+                  ]
+                : [lightTextColor],
+            duration: 3.seconds,
+            transform: GradientRotation(0.785398),
           ),
           const Spacer(),
           if (text == "Get Started")

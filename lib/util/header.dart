@@ -129,51 +129,218 @@ class _BuildHeaderState extends State<BuildHeader> {
               SizedBox(width: 5.w),
               Material(
                 color: Colors.transparent,
-                shadowColor: Colors.transparent,
                 child: Container(
                   height: 13.22.h,
                   width: 93.75.w,
                   decoration: ShapeDecoration(
+                    shadows: [
+                      BoxShadow(
+                        color: darkTextColor.withOpacity(0.1),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: Offset(0, 3), // changes position of shadow
+                      ),
+                    ],
                     color: headerColor,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(29),
                     ),
                   ),
                   // Header items
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding:
-                            EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
-                        child: Image.asset(
-                          'lib/assets/images/internhs-header.png',
-                          height: 13.22.h,
+                  child: !isMobile
+                      ? Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(
+                                  1.4.w, 2.25.h, 1.4.w, 2.25.h),
+                              child: Image.asset(
+                                'lib/assets/images/internhs-header.png',
+                                height: 13.22.h,
+                              ),
+                            ),
+                            const Spacer(),
+                            buildHeaderText("Home"),
+                            SizedBox(width: 5.w),
+                            buildHeaderText("Opportunities"),
+                            SizedBox(width: 5.w),
+                            buildHeaderText("Pricing"),
+                            SizedBox(width: 5.w),
+                            buildHeaderText("Our Story"),
+                            SizedBox(width: 5.w),
+                            buildHeaderText("Contact Us"),
+                            SizedBox(width: 5.w),
+                            auth.currentUser != null
+                                ? buildNavigationButton(
+                                    'Account', const AccountPage())
+                                : buildNavigationButton(
+                                    'Login', const LoginPage()),
+                            SizedBox(width: 5.w),
+                          ],
+                        )
+                      : Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(
+                                  1.4.w, 2.25.h, 1.4.w, 2.25.h),
+                              child: Image.asset(
+                                'lib/assets/images/internhs-header.png',
+                                height: 13.22.h,
+                              ),
+                            ),
+                            const Spacer(),
+                            IconButton(
+                              icon: Icon(Icons.menu),
+                              onPressed: () =>
+                                  Scaffold.of(context).openDrawer(),
+                            ),
+                            SizedBox(width: 5.w),
+                          ],
                         ),
-                      ),
-                      const Spacer(),
-                      buildHeaderText("Home"),
-                      SizedBox(width: 5.w),
-                      buildHeaderText("Opportunities"),
-                      SizedBox(width: 5.w),
-                      buildHeaderText("Pricing"),
-                      SizedBox(width: 5.w),
-                      buildHeaderText("Our Story"),
-                      SizedBox(width: 5.w),
-                      buildHeaderText("Contact Us"),
-                      SizedBox(width: 5.w),
-                      auth.currentUser != null
-                          ? buildNavigationButton(
-                              'Account', const AccountPage())
-                          : buildNavigationButton('Login', const LoginPage()),
-                      SizedBox(width: 5.w),
-                    ],
-                  ),
                 ),
               ),
             ],
           ),
         );
       },
+    );
+  }
+}
+
+class CustomDrawer extends StatelessWidget {
+  const CustomDrawer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: <Widget>[
+          DrawerHeader(
+            decoration: BoxDecoration(
+              color: headerColor,
+            ),
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
+                  child: Image.asset(
+                    'lib/assets/images/internhs-header.png',
+                    height: 13.22.h,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          ListTile(
+            title: buildHeaderText(context, 'Home'),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const LandingAgent(index: 0)),
+            ),
+          ),
+          ListTile(
+            title: buildHeaderText(context, 'Opportunities'),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const OpportunitiesPage()),
+            ),
+          ),
+          ListTile(
+            title: buildHeaderText(context, 'Pricing'),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const LandingAgent(index: 1)),
+            ),
+          ),
+          ListTile(
+            title: buildHeaderText(context, 'Our Story'),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const LandingAgent(index: 2)),
+            ),
+          ),
+          ListTile(
+            title: buildHeaderText(context, 'Contact Us'),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const LandingAgent(index: 3)),
+            ),
+          ),
+          ListTile(
+            title: auth.currentUser != null
+                ? buildNavigationButton(context, 'Account', const AccountPage())
+                : buildNavigationButton(context, 'Login', const LoginPage()),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Function to create styled text widgets
+  Widget buildHeaderText(BuildContext context, String text) {
+    return AutoSizeText(
+      text,
+      minFontSize: 0,
+      maxLines: 1,
+      style: lightHeaderTextStyle.copyWith(
+        fontSize: height(context) * 18 / 814 > width(context) * 18 / 1440
+            ? width(context) * 18 / 1440
+            : height(context) * 18 / 814,
+      ),
+    );
+  }
+
+  // Function to build navigation button
+  Widget buildNavigationButton(
+      BuildContext context, String label, Widget targetPage) {
+    return GestureDetector(
+      onTap: () {
+        try {
+          Navigator.push(
+            context,
+            PageRouteBuilder(
+              pageBuilder: (context, animation1, animation2) => targetPage,
+              transitionDuration: Duration.zero,
+              reverseTransitionDuration: Duration.zero,
+            ),
+          );
+        } catch (e) {
+          // Handle navigation error
+          debugPrint('Navigation error: $e');
+        }
+      },
+      child: Container(
+        width: 9.w,
+        height: 6.h,
+        padding: EdgeInsets.symmetric(horizontal: 1.66.w, vertical: 1.7.h),
+        decoration: ShapeDecoration(
+          color: darkAccent,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          shadows: const [
+            BoxShadow(
+              color: Color(0x0C000000),
+              blurRadius: 2,
+              offset: Offset(0, 1),
+              spreadRadius: 0,
+            )
+          ],
+        ),
+        child: Center(
+          child: AutoSizeText(
+            label,
+            maxLines: 1,
+            minFontSize: 0,
+            style: lightButtonTextStyle.copyWith(
+              fontSize: height(context) * 12 / 814,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

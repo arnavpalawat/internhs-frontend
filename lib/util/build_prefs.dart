@@ -88,10 +88,11 @@ Widget _buildLabel(BuildContext context, String type) {
 /// Builds the dropdown widget for the "Remote" preference.
 Widget _buildDropdown(BuildContext context) {
   return SizedBox(
-    height: 7.h,
-    width: 8.w,
+    height: 5.h,
+    width: 4.w,
     child: DropdownButton<String>(
       style: blackBodyTextStyle.copyWith(
+        color: darkTextColor,
         fontSize: height(context) * 16 / 814 > width(context) * 16 / 1440
             ? width(context) * 16 / 1440
             : height(context) * 16 / 814,
@@ -111,6 +112,7 @@ Widget _buildDropdown(BuildContext context) {
             minFontSize: 0,
             maxLines: 1,
             style: blackBodyTextStyle.copyWith(
+              color: darkTextColor,
               fontSize: height(context) * 16 / 814 > width(context) * 16 / 1440
                   ? width(context) * 16 / 1440
                   : height(context) * 16 / 814,

@@ -1,11 +1,11 @@
-import 'dart:async'; // Import this for Stopwatch
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import "package:http/http.dart" as http;
 
 class ApiService {
-  static const baseUrl = "http://127.0.0.1:8000";
+  static const baseUrl = "http://0.0.0.0:8080";
 
   Future<List<String>> getRecommendations({required String uid}) async {
     const apiUrl = '$baseUrl/server/recommend';
@@ -23,7 +23,6 @@ class ApiService {
       }
 
       if (response.statusCode == 200) {
-        // Assuming the response body contains a JSON object with a 'recommendedIds' key
         List<String> stringList = response.body
             .replaceAll('[', '')
             .replaceAll(']', '')

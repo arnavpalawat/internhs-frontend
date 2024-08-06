@@ -33,6 +33,7 @@ class _TinderSwiperState extends State<TinderSwiper> {
   List<Job> recommendedJobs = [];
   bool recommendLoading = true;
   int cardsGoneThrough = 0;
+  bool failure = false;
 
   @override
   void initState() {
@@ -87,6 +88,7 @@ class _TinderSwiperState extends State<TinderSwiper> {
       });
     } catch (e) {
       setState(() {
+        failure = true;
         recommendLoading = false;
       });
       print("Error fetching recommendations: $e");
@@ -225,7 +227,9 @@ class _TinderSwiperState extends State<TinderSwiper> {
       return auth.currentUser != null
           ? recommendedJobs.isNotEmpty
               ? buildCardSwiper(recommendedJobs.length, recommendedJobs)
-              : buildLoadingIndicator(context, darkBackgroundColor)
+              : failure
+                  ? buildCardSwiper(widget.jobs!.length, widget.jobs!)
+                  : buildLoadingIndicator(context, darkBackgroundColor)
           : buildCardSwiper(widget.jobs!.length, widget.jobs!);
     });
   }

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 
 /// Device Dimensions
 // Width
@@ -15,3 +16,7 @@ double height(BuildContext context) {
 int landingAgentIndex = 0;
 
 final FirebaseAuth auth = FirebaseAuth.instance;
+
+final isMobile = kIsWeb &&
+    (defaultTargetPlatform == TargetPlatform.iOS ||
+        defaultTargetPlatform == TargetPlatform.android);

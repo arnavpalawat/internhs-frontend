@@ -57,7 +57,8 @@ class DefaultFirebaseOptions {
     appId: '1:23143367938:web:83841d83d65e8ecf156e1b',
     messagingSenderId: '23143367938',
     projectId: 'intern-b54ae',
-    authDomain: 'internhs.com/__/auth/handler',
+    // authDomain: 'intern-b54ae.firebaseapp.com',
+    authDomain: 'internhs.com',
     storageBucket: 'intern-b54ae.appspot.com',
     measurementId: 'G-LPNHNWTG9D',
   );

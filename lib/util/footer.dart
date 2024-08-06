@@ -66,9 +66,9 @@ class _FooterState extends State<Footer> with SingleTickerProviderStateMixin {
       child: Column(
         children: [
           Container(
-            width: 8.1.w + _animationGS.value,
+            width: 7.w + _animationGS.value,
             height: 4.5.h,
-            padding: EdgeInsets.symmetric(horizontal: 1.66.w),
+            padding: EdgeInsets.symmetric(horizontal: 1.w),
             decoration: ShapeDecoration(
               color: darkTextColor,
               shape: RoundedRectangleBorder(
@@ -130,10 +130,10 @@ class _FooterState extends State<Footer> with SingleTickerProviderStateMixin {
   void sendEmail() async {
     final Uri emailLaunchUri = Uri(
       scheme: 'mailto',
-      path: 'xyz@email.com',
+      path: 'admin@internhs.com',
       queryParameters: {
-        'subject': 'Hello from Flutter!',
-        'body': 'This is a test email sent from my Flutter app.',
+        'subject': 'Hello from Internhs!',
+        'body': 'I have xyz Question/Qualm about internhs.',
       },
     );
 
@@ -204,7 +204,7 @@ class _FooterState extends State<Footer> with SingleTickerProviderStateMixin {
                       padding:
                           EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
                       child: AutoSizeText(
-                        "arnavpalawat@gmail.com",
+                        "admin@internhs.com",
                         maxLines: 1,
                         minFontSize: 0,
                         style: italicAnnouncementTextStyle.copyWith(
@@ -238,7 +238,7 @@ class _FooterState extends State<Footer> with SingleTickerProviderStateMixin {
                         text: TextSpan(
                           children: [
                             TextSpan(
-                              text: "Based In: ",
+                              text: "© 2024 internhs inc. ",
                               style: italicAnnouncementTextStyle.copyWith(
                                   fontSize: height(context) * 24 / 814 >
                                           width(context) * 24 / 1440
@@ -246,7 +246,7 @@ class _FooterState extends State<Footer> with SingleTickerProviderStateMixin {
                                       : height(context) * 24 / 814),
                             ),
                             TextSpan(
-                              text: "Westford, MA",
+                              text: "All Rights Reserved. ",
                               style: italicAnnouncementTextStyle.copyWith(
                                   fontSize: height(context) * 24 / 814 >
                                           width(context) * 24 / 1440
