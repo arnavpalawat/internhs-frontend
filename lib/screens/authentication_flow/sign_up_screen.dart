@@ -130,6 +130,7 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: LayoutBuilder(builder: (context, _) {
         return Stack(
           children: [
@@ -160,7 +161,7 @@ class _SignUpPageState extends State<SignUpPage> {
         SizedBox(height: 6.h),
         Center(
           child: Container(
-            width: 56.w,
+            width: isMobile ? 85.w : 56.w,
             height: 89.h,
             clipBehavior: Clip.antiAlias,
             decoration: authBoxDecorations,
@@ -250,9 +251,14 @@ class _SignUpPageState extends State<SignUpPage> {
 
   // Method to get avatar size
   double _getAvatarSize() {
-    return height(context) * 48 / 814 > width(context) * 48 / 1440
-        ? width(context) * 48 / 1440
-        : height(context) * 48 / 814;
+    return isMobile
+        ? (height(context) * 48 / 814 > width(context) * 48 / 1440
+                ? width(context) * 48 / 1440
+                : height(context) * 48 / 814) *
+            2.5
+        : height(context) * 48 / 814 > width(context) * 48 / 1440
+            ? width(context) * 48 / 1440
+            : height(context) * 48 / 814;
   }
 
   // Widget for the title
@@ -261,9 +267,14 @@ class _SignUpPageState extends State<SignUpPage> {
       'Create an account',
       textAlign: TextAlign.center,
       style: authHeadingStyle.copyWith(
-        fontSize: height(context) * 32 / 814 > width(context) * 32 / 1440
-            ? width(context) * 32 / 1440
-            : height(context) * 32 / 814,
+        fontSize: isMobile
+            ? (height(context) * 32 / 814 > width(context) * 32 / 1440
+                    ? width(context) * 32 / 1440
+                    : height(context) * 32 / 814) *
+                2
+            : height(context) * 32 / 814 > width(context) * 32 / 1440
+                ? width(context) * 32 / 1440
+                : height(context) * 32 / 814,
       ),
     );
   }
@@ -314,9 +325,14 @@ class _SignUpPageState extends State<SignUpPage> {
 
   // Method to get font size
   double _getFontSize(double baseSize) {
-    return height(context) * baseSize / 814 > width(context) * baseSize / 1440
-        ? width(context) * baseSize / 1440
-        : height(context) * baseSize / 814;
+    return isMobile
+        ? (height(context) * baseSize / 814 > width(context) * baseSize / 1440
+                ? width(context) * baseSize / 1440
+                : height(context) * baseSize / 814) *
+            2
+        : height(context) * baseSize / 814 > width(context) * baseSize / 1440
+            ? width(context) * baseSize / 1440
+            : height(context) * baseSize / 814;
   }
 
   // Widget for the login platforms
@@ -324,7 +340,9 @@ class _SignUpPageState extends State<SignUpPage> {
     return GestureDetector(
       onTap: _signInWithGoogle,
       child: Container(
-        width: 42.24.w,
+        width: isMobile
+            ? (width(context) * 528 / 1240) * 1.75
+            : width(context) * 528 / 1240,
         height: 8.33.h,
         decoration: BoxDecoration(
           color: lightBackgroundColor,
@@ -441,7 +459,9 @@ class _SignUpPageState extends State<SignUpPage> {
   // Widget for the email field
   SizedBox _buildEmailField() {
     return SizedBox(
-      width: MediaQuery.of(context).size.width * 528 / 1240,
+      width: isMobile
+          ? (width(context) * 528 / 1240) * 1.75
+          : width(context) * 528 / 1240,
       height: MediaQuery.of(context).size.height * 56 / 840,
       child: TextFormField(
         onChanged: (_) => _updateFieldFilledState(),
@@ -454,7 +474,9 @@ class _SignUpPageState extends State<SignUpPage> {
   // Widget for the password field
   SizedBox _buildPasswordField() {
     return SizedBox(
-      width: MediaQuery.of(context).size.width * 528 / 1240,
+      width: isMobile
+          ? (width(context) * 528 / 1240) * 1.75
+          : width(context) * 528 / 1240,
       height: MediaQuery.of(context).size.height * 56 / 840,
       child: TextFormField(
         onChanged: (_) => _updateFieldFilledState(),
@@ -495,7 +517,9 @@ class _SignUpPageState extends State<SignUpPage> {
         _createUser(_emailController.text, _passwordController.text);
       },
       child: Container(
-        width: 42.58.w,
+        width: isMobile
+            ? (width(context) * 528 / 1240) * 1.75
+            : width(context) * 528 / 1240,
         height: 7.62.h,
         clipBehavior: Clip.antiAlias,
         decoration: ShapeDecoration(

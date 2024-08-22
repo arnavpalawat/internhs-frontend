@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import "package:http/http.dart" as http;
 
 class ApiService {
-  static const baseUrl = "internhs-vbgn4.ondigitalocean.app";
+  static const baseUrl = "http://0.0.0.0:8080";
 
   Future<List<String>> getRecommendations({required String uid}) async {
     const apiUrl = '$baseUrl/server/recommend';

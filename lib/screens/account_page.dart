@@ -41,6 +41,9 @@ class _AccountPageState extends State<AccountPage>
   @override
   void initState() {
     super.initState();
+    setState(() {
+      opportunityScreen = 0;
+    });
     signedInWithGoogle();
   }
 
@@ -215,7 +218,7 @@ class _AccountPageState extends State<AccountPage>
     return Column(
       children: [
         Container(
-          width: 50.w,
+          width: isMobile ? 80.w : 50.w,
           height: 6.h,
           padding: EdgeInsets.symmetric(horizontal: 1.66.w),
           decoration: ShapeDecoration(
@@ -255,9 +258,9 @@ class _AccountPageState extends State<AccountPage>
   Widget _buildOperations(BuildContext context) {
     return SizedBox(
       height: 80.h,
-      width: 40.w,
+      width: !isMobile ? 40.w : 85.w,
       child: Container(
-        width: 45.w,
+        width: !isMobile ? 45.w : 85.w,
         height: 71.1.h,
         decoration: ShapeDecoration(
           color: lightTextColor,
@@ -272,8 +275,12 @@ class _AccountPageState extends State<AccountPage>
               child: AutoSizeText(
                 "Operations and Preferences",
                 style: announcementTextStyle.copyWith(
-                  fontSize:
-                      height(context) * 36 / 814 > width(context) * 36 / 1440
+                  fontSize: isMobile
+                      ? (height(context) * 36 / 814 > width(context) * 36 / 1440
+                              ? width(context) * 36 / 1440
+                              : height(context) * 36 / 814) *
+                          2
+                      : height(context) * 36 / 814 > width(context) * 36 / 1440
                           ? width(context) * 36 / 1440
                           : height(context) * 36 / 814,
                 ),
@@ -329,8 +336,12 @@ class _AccountPageState extends State<AccountPage>
                 minFontSize: 0,
                 maxLines: 1,
                 style: blackBodyTextStyle.copyWith(
-                  fontSize:
-                      height(context) * 12 / 814 > width(context) * 12 / 1440
+                  fontSize: isMobile
+                      ? (height(context) * 12 / 814 > width(context) * 12 / 1440
+                              ? width(context) * 12 / 1440
+                              : height(context) * 12 / 814) *
+                          2
+                      : height(context) * 12 / 814 > width(context) * 12 / 1440
                           ? width(context) * 12 / 1440
                           : height(context) * 12 / 814,
                 ),
@@ -351,10 +362,16 @@ class _AccountPageState extends State<AccountPage>
                     icon: Icon(
                       Icons.email_outlined,
                       color: lightTextColor,
-                      size: height(context) * 25 / 814 >
-                              width(context) * 25 / 1440
-                          ? width(context) * 25 / 1440
-                          : height(context) * 25 / 814,
+                      size: isMobile
+                          ? (height(context) * 25 / 814 >
+                                      width(context) * 25 / 1440
+                                  ? width(context) * 25 / 1440
+                                  : height(context) * 25 / 814) *
+                              2
+                          : height(context) * 25 / 814 >
+                                  width(context) * 25 / 1440
+                              ? width(context) * 25 / 1440
+                              : height(context) * 25 / 814,
                     ),
                   ),
                 ),
@@ -385,8 +402,12 @@ class _AccountPageState extends State<AccountPage>
               AutoSizeText(
                 "Change Password",
                 style: blackBodyTextStyle.copyWith(
-                  fontSize:
-                      height(context) * 12 / 814 > width(context) * 12 / 1440
+                  fontSize: isMobile
+                      ? (height(context) * 12 / 814 > width(context) * 12 / 1440
+                              ? width(context) * 12 / 1440
+                              : height(context) * 12 / 814) *
+                          2
+                      : height(context) * 12 / 814 > width(context) * 12 / 1440
                           ? width(context) * 12 / 1440
                           : height(context) * 12 / 814,
                 ),
@@ -407,10 +428,16 @@ class _AccountPageState extends State<AccountPage>
                     icon: Icon(
                       Icons.lock_outline,
                       color: lightTextColor,
-                      size: height(context) * 25 / 814 >
-                              width(context) * 25 / 1440
-                          ? width(context) * 25 / 1440
-                          : height(context) * 25 / 814,
+                      size: isMobile
+                          ? (height(context) * 25 / 814 >
+                                      width(context) * 25 / 1440
+                                  ? width(context) * 25 / 1440
+                                  : height(context) * 25 / 814) *
+                              2
+                          : height(context) * 25 / 814 >
+                                  width(context) * 25 / 1440
+                              ? width(context) * 25 / 1440
+                              : height(context) * 25 / 814,
                     ),
                   ),
                 ),
@@ -463,10 +490,16 @@ class _AccountPageState extends State<AccountPage>
                     icon: Icon(
                       Icons.logout,
                       color: lightTextColor,
-                      size: height(context) * 25 / 814 >
-                              width(context) * 25 / 1440
-                          ? width(context) * 25 / 1440
-                          : height(context) * 25 / 814,
+                      size: isMobile
+                          ? (height(context) * 25 / 814 >
+                                      width(context) * 25 / 1440
+                                  ? width(context) * 25 / 1440
+                                  : height(context) * 25 / 814) *
+                              2
+                          : height(context) * 25 / 814 >
+                                  width(context) * 25 / 1440
+                              ? width(context) * 25 / 1440
+                              : height(context) * 25 / 814,
                     ),
                   ),
                 ),
@@ -596,6 +629,7 @@ class _AccountPageState extends State<AccountPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      endDrawer: const CustomDrawer(),
       body: LayoutBuilder(
         builder: (context, _) {
           return Container(
@@ -609,13 +643,15 @@ class _AccountPageState extends State<AccountPage>
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Padding(
-                      padding: EdgeInsets.only(left: 5.w),
-                      child: const Align(
-                        alignment: Alignment.centerLeft,
-                        child: BuildPrefs(),
-                      ),
-                    ),
+                    !isMobile
+                        ? Padding(
+                            padding: EdgeInsets.only(left: 5.w),
+                            child: const Align(
+                              alignment: Alignment.centerLeft,
+                              child: BuildPrefs(),
+                            ),
+                          )
+                        : Container(),
                     Padding(
                       padding: EdgeInsets.only(right: 5.w),
                       child: Align(

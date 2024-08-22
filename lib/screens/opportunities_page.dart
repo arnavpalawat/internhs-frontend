@@ -40,6 +40,9 @@ class _OpportunitiesPageState extends State<OpportunitiesPage> {
   @override
   void initState() {
     super.initState();
+    setState(() {
+      opportunityScreen = 1;
+    });
     threeMonthsAgo = _calculateThreeMonthsAgo();
     _fetchAllJobs();
   }
@@ -107,6 +110,7 @@ class _OpportunitiesPageState extends State<OpportunitiesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      endDrawer: const CustomDrawer(),
       body: LayoutBuilder(
         builder: (context, constraints) {
           return Container(
@@ -186,19 +190,21 @@ class _OpportunitiesPageState extends State<OpportunitiesPage> {
           alignment: Alignment.centerLeft,
           child: SizedBox(
             height: 85.h,
-            width: 37.w,
+            width: !isMobile ? 37.w : 95.w,
             child: TinderSwiper(
               jobs: jobs,
             ),
           ),
         ),
-        Align(
-          alignment: Alignment.centerRight,
-          child: SizedBox(
-            height: 80.h,
-            child: buildWishlist(jobs),
-          ),
-        ),
+        !isMobile
+            ? Align(
+                alignment: Alignment.centerRight,
+                child: SizedBox(
+                  height: 80.h,
+                  child: buildWishlist(jobs),
+                ),
+              )
+            : const SizedBox(),
       ],
     )
         .animate()
@@ -240,8 +246,14 @@ class _OpportunitiesPageState extends State<OpportunitiesPage> {
                 child: AutoSizeText(
                   "Login to Unlock your \n Personalized Internship Wishlist",
                   style: darkHeaderTextStyle.copyWith(
-                    fontSize:
-                        height(context) * 25 / 814 > width(context) * 25 / 1440
+                    fontSize: isMobile
+                        ? (height(context) * 25 / 814 >
+                                    width(context) * 25 / 1440
+                                ? width(context) * 25 / 1440
+                                : height(context) * 25 / 814) *
+                            2
+                        : height(context) * 25 / 814 >
+                                width(context) * 25 / 1440
                             ? width(context) * 25 / 1440
                             : height(context) * 25 / 814,
                   ),

@@ -25,6 +25,9 @@ class _LandingAgentState extends State<LandingAgent> {
   @override
   void initState() {
     super.initState();
+    setState(() {
+      opportunityScreen = 0;
+    });
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // Animate to the initial page based on widget index
       if (_pageController.hasClients) {
@@ -46,6 +49,7 @@ class _LandingAgentState extends State<LandingAgent> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      endDrawer: const CustomDrawer(),
       body: SizedBox(
         height: double.infinity,
         width: double.infinity,
@@ -117,7 +121,7 @@ class PageViewWidget extends StatelessWidget {
       child: PageView.builder(
         scrollDirection: Axis.vertical,
         controller: pageController,
-        itemCount: 4,
+        itemCount: isMobile ? 1 : 4,
         pageSnapping: false,
         scrollBehavior:
             const CupertinoScrollBehavior().copyWith(overscroll: true),

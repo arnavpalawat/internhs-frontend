@@ -86,7 +86,7 @@ class _LandingPageState extends State<LandingPage>
                 children: [
                   Positioned(
                     left: 35.w,
-                    top: 25.h,
+                    top: isMobile ? 40.h : 25.h,
                     width: 70.w,
                     height: 60.h,
                     child: Image.asset(
@@ -96,6 +96,7 @@ class _LandingPageState extends State<LandingPage>
                   ),
                   Column(
                     children: [
+                      SizedBox(height: 1.h),
                       AnnouncementText(),
                       SizedBox(height: 1.h),
                       BodyText(),
@@ -260,9 +261,62 @@ class ButtonRow extends StatelessWidget {
       width: 88.w,
       child: Row(
         children: [
-          _buildGetStartedButton(context),
+          isMobile
+              ? GestureDetector(
+                  onTap: () => _navigateToNextPage(context),
+                  child: Container(
+                    width: 50.w,
+                    height: 8.9.h,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 1.66.w,
+                      vertical: 1.93.h,
+                    ),
+                    decoration: ShapeDecoration(
+                      color: brightAccent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(360),
+                      ),
+                      shadows: const [
+                        BoxShadow(
+                          color: Color(0x0C000000),
+                          blurRadius: 2,
+                          offset: Offset(0, 1),
+                          spreadRadius: 0,
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        GradientAnimationText(
+                          text: Text(
+                            "Get Started",
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: lightButtonTextStyle.copyWith(
+                              fontSize: height(context) * 48 / 814 >
+                                      width(context) * 48 / 1440
+                                  ? width(context) * 48 / 1440
+                                  : height(context) * 48 / 814,
+                            ),
+                          ),
+                          colors: [
+                            Color(0xFF6C8DCC), // Soft Blue
+                            Color(0xFF8EAADB), // Light Blue
+                            Color(0xFFD0E1FF), // Very Light Blue
+                          ],
+                          duration: 3.seconds,
+                          transform: GradientRotation(0.785398),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              : _buildGetStartedButton(context),
           SizedBox(width: 1.w),
-          _buildOurStoryButton(context),
+          isMobile ? Container() : _buildOurStoryButton(context),
         ],
       ),
     );
@@ -270,59 +324,15 @@ class ButtonRow extends StatelessWidget {
 
   GestureDetector _buildGetStartedButton(BuildContext context) {
     return GestureDetector(
-      onTap: () => _navigateToNextPage(context),
-      child: !isMobile
-          ? HoverButton(
-              color: brightAccent,
-              text: "Get Started",
-              animationGS: animationGS,
-              hovering: hovering,
-              onGSHover: onGSHover,
-              onGSExit: onGSExit,
-            )
-          : Container(
-              width: 15.w,
-              height: 6.h,
-              padding: EdgeInsets.symmetric(
-                horizontal: 1.66.w,
-                vertical: 1.93.h,
-              ),
-              decoration: ShapeDecoration(
-                color: brightAccent,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(360),
-                ),
-                shadows: const [
-                  BoxShadow(
-                    color: Color(0x0C000000),
-                    blurRadius: 2,
-                    offset: Offset(0, 1),
-                    spreadRadius: 0,
-                  ),
-                ],
-              ),
-              child: GradientAnimationText(
-                text: Text(
-                  "Get Started",
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: lightButtonTextStyle.copyWith(
-                    fontSize:
-                        height(context) * 24 / 814 > width(context) * 24 / 1440
-                            ? width(context) * 24 / 1440
-                            : height(context) * 24 / 814,
-                  ),
-                ),
-                colors: [
-                  Color(0xFF6C8DCC), // Soft Blue
-                  Color(0xFF8EAADB), // Light Blue
-                  Color(0xFFD0E1FF), // Very Light Blue
-                ],
-                duration: 3.seconds,
-                transform: GradientRotation(0.785398),
-              ),
-            ),
-    );
+        onTap: () => _navigateToNextPage(context),
+        child: HoverButton(
+          color: brightAccent,
+          text: "Get Started",
+          animationGS: animationGS,
+          hovering: hovering,
+          onGSHover: onGSHover,
+          onGSExit: onGSExit,
+        ));
   }
 
   GestureDetector _buildOurStoryButton(BuildContext context) {

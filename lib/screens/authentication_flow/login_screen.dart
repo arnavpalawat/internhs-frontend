@@ -114,6 +114,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: LayoutBuilder(builder: (context, _) {
         return Stack(
           children: <Widget>[
@@ -144,7 +145,7 @@ class _LoginPageState extends State<LoginPage> {
         SizedBox(height: 6.h),
         Center(
           child: Container(
-            width: 56.w,
+            width: isMobile ? 88.w : 56.w,
             height: 89.h,
             clipBehavior: Clip.antiAlias,
             decoration: authBoxDecorations,
@@ -221,8 +222,8 @@ class _LoginPageState extends State<LoginPage> {
   Center _buildAvatar() {
     return Center(
       child: Container(
-        width: _getAvatarSize(),
-        height: _getAvatarSize(),
+        width: isMobile ? _getAvatarSize() * 2.5 : _getAvatarSize(),
+        height: isMobile ? _getAvatarSize() * 2.5 : _getAvatarSize(),
         decoration: const ShapeDecoration(
           color: Color(0xFFC4C4C4),
           shape: OvalBorder(),
@@ -244,9 +245,14 @@ class _LoginPageState extends State<LoginPage> {
       'Log into an account',
       textAlign: TextAlign.center,
       style: authHeadingStyle.copyWith(
-        fontSize: height(context) * 32 / 814 > width(context) * 32 / 1440
-            ? width(context) * 32 / 1440
-            : height(context) * 32 / 814,
+        fontSize: isMobile
+            ? (height(context) * 32 / 814 > width(context) * 32 / 1440
+                    ? width(context) * 32 / 1440
+                    : height(context) * 32 / 814) *
+                2
+            : (height(context) * 32 / 814 > width(context) * 32 / 1440
+                ? width(context) * 32 / 1440
+                : height(context) * 32 / 814),
       ),
     );
   }
@@ -297,15 +303,22 @@ class _LoginPageState extends State<LoginPage> {
 
   // Get font size based on context dimensions
   double _getFontSize(double baseSize) {
-    return height(context) * baseSize / 814 > width(context) * baseSize / 1440
-        ? width(context) * baseSize / 1440
-        : height(context) * baseSize / 814;
+    return isMobile
+        ? (height(context) * baseSize / 814 > width(context) * baseSize / 1440
+                ? width(context) * baseSize / 1440
+                : height(context) * baseSize / 814) *
+            2
+        : height(context) * baseSize / 814 > width(context) * baseSize / 1440
+            ? width(context) * baseSize / 1440
+            : height(context) * baseSize / 814;
   }
 
   // Build login platforms widget
   Widget _buildLoginPlatforms() {
     return Container(
-      width: 42.24.w,
+      width: isMobile
+          ? (width(context) * 528 / 1240) * 1.75
+          : width(context) * 528 / 1240,
       height: 8.33.h,
       decoration: BoxDecoration(
         color: lightTextColor,
@@ -408,7 +421,9 @@ class _LoginPageState extends State<LoginPage> {
   // Build email field widget
   SizedBox _buildEmailField() {
     return SizedBox(
-      width: width(context) * 528 / 1240,
+      width: isMobile
+          ? (width(context) * 528 / 1240) * 1.75
+          : width(context) * 528 / 1240,
       height: height(context) * 56 / 840,
       child: TextFormField(
         onChanged: (_) => _updateFieldFilledState(),
@@ -421,7 +436,9 @@ class _LoginPageState extends State<LoginPage> {
   // Build password field widget
   SizedBox _buildPasswordField() {
     return SizedBox(
-      width: width(context) * 528 / 1240,
+      width: isMobile
+          ? (width(context) * 528 / 1240) * 1.75
+          : width(context) * 528 / 1240,
       height: height(context) * 56 / 840,
       child: TextFormField(
         onChanged: (_) => _updateFieldFilledState(),
@@ -457,7 +474,9 @@ class _LoginPageState extends State<LoginPage> {
     return GestureDetector(
       onTap: () => _loginUser(_emailController.text, _passwordController.text),
       child: Container(
-        width: 42.58.w,
+        width: isMobile
+            ? (width(context) * 528 / 1240) * 1.75
+            : width(context) * 528 / 1240,
         height: 7.62.h,
         clipBehavior: Clip.antiAlias,
         decoration: ShapeDecoration(

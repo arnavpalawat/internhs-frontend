@@ -20,3 +20,6 @@ final FirebaseAuth auth = FirebaseAuth.instance;
 final isMobile = kIsWeb &&
     (defaultTargetPlatform == TargetPlatform.iOS ||
         defaultTargetPlatform == TargetPlatform.android);
+
+int opportunityScreen =
+    0; // 0 = inactive, 1 = On Ops Screen, 2 = On Wishlist Screen

@@ -32,9 +32,14 @@ class TinderCard extends StatelessWidget {
         output.add(
           Icon(
             Icons.star,
-            size: height(context) * 10 / 814 > width(context) * 10 / 814
-                ? width(context) * 10 / 814
-                : height(context) * 10 / 814,
+            size: isMobile
+                ? (height(context) * 10 / 814 > width(context) * 10 / 814
+                        ? width(context) * 10 / 814
+                        : height(context) * 10 / 814) *
+                    2
+                : height(context) * 10 / 814 > width(context) * 10 / 814
+                    ? width(context) * 10 / 814
+                    : height(context) * 10 / 814,
           ),
         );
         output.add(
@@ -49,9 +54,14 @@ class TinderCard extends StatelessWidget {
         output.add(
           Icon(
             Icons.star_border_outlined,
-            size: height(context) * 10 / 814 > width(context) * 10 / 814
-                ? width(context) * 10 / 814
-                : height(context) * 10 / 814,
+            size: isMobile
+                ? (height(context) * 10 / 814 > width(context) * 10 / 814
+                        ? width(context) * 10 / 814
+                        : height(context) * 10 / 814) *
+                    2
+                : height(context) * 10 / 814 > width(context) * 10 / 814
+                    ? width(context) * 10 / 814
+                    : height(context) * 10 / 814,
           ),
         );
         output.add(
@@ -113,11 +123,18 @@ class TinderCard extends StatelessWidget {
                           maxLines: 1,
                           minFontSize: 0,
                           style: darkHeaderTextStyle.copyWith(
-                              color: darkAccent,
-                              fontSize: height(context) * 25 / 814 >
-                                      width(context) * 25 / 1440
-                                  ? width(context) * 25 / 1440
-                                  : height(context) * 25 / 814),
+                            color: darkAccent,
+                            fontSize: !isMobile
+                                ? height(context) * 25 / 814 >
+                                        width(context) * 25 / 1440
+                                    ? width(context) * 25 / 1440
+                                    : height(context) * 25 / 814
+                                : (height(context) * 25 / 814 >
+                                            width(context) * 25 / 1440
+                                        ? width(context) * 25 / 1440
+                                        : height(context) * 25 / 814) *
+                                    2,
+                          ),
                         ),
                         // Display bookmark icon if job is flagged
                         if (job?.flagged == null || job?.flagged == true)
@@ -129,10 +146,16 @@ class TinderCard extends StatelessWidget {
                               child: Icon(
                                 Icons.bookmark,
                                 color: brightAccent,
-                                size: height(context) * 20 / 814 >
-                                        width(context) * 20 / 1440
-                                    ? width(context) * 20 / 1440
-                                    : height(context) * 20 / 814,
+                                size: !isMobile
+                                    ? (height(context) * 20 / 814 >
+                                            width(context) * 20 / 1440
+                                        ? width(context) * 20 / 1440
+                                        : height(context) * 20 / 814)
+                                    : (height(context) * 20 / 814 >
+                                                width(context) * 20 / 1440
+                                            ? width(context) * 20 / 1440
+                                            : height(context) * 20 / 814) *
+                                        2,
                               ),
                             ),
                           )
@@ -147,10 +170,17 @@ class TinderCard extends StatelessWidget {
                     minFontSize: 0,
                     maxLines: 1,
                     style: darkAccentHeaderTextStyle.copyWith(
-                        fontSize: height(context) * 25 / 814 >
-                                width(context) * 25 / 1440
-                            ? width(context) * 25 / 1440
-                            : height(context) * 25 / 814),
+                      fontSize: !isMobile
+                          ? height(context) * 25 / 814 >
+                                  width(context) * 25 / 1440
+                              ? width(context) * 25 / 1440
+                              : height(context) * 25 / 814
+                          : (height(context) * 25 / 814 >
+                                      width(context) * 25 / 1440
+                                  ? width(context) * 25 / 1440
+                                  : height(context) * 25 / 814) *
+                              2,
+                    ),
                   ),
                   SizedBox(height: .61.h),
                   Row(children: buildPrestige()),
@@ -159,9 +189,18 @@ class TinderCard extends StatelessWidget {
                   Text(
                     job?.description?.toString() ?? "",
                     style: blackBodyTextStyle.copyWith(
-                      fontSize: height(context) * 20 / 814,
+                      fontSize: !isMobile
+                          ? (height(context) * 20 / 814 >
+                                  width(context) * 20 / 1440
+                              ? width(context) * 20 / 1440
+                              : height(context) * 20 / 814)
+                          : (height(context) * 20 / 814 >
+                                      width(context) * 20 / 1440
+                                  ? width(context) * 20 / 1440
+                                  : height(context) * 20 / 814) *
+                              2,
                     ),
-                    maxLines: 23,
+                    maxLines: !isMobile ? 23 : 33,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ],

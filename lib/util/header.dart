@@ -4,6 +4,7 @@ import 'package:internhs/constants/device.dart';
 import 'package:internhs/screens/account_page.dart';
 import 'package:internhs/screens/initial_landing_flow/landing_agent.dart';
 import 'package:internhs/screens/opportunities_page.dart';
+import 'package:internhs/screens/wishlist_page.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../constants/colors.dart';
@@ -138,7 +139,8 @@ class _BuildHeaderState extends State<BuildHeader> {
                         color: darkTextColor.withOpacity(0.1),
                         spreadRadius: 5,
                         blurRadius: 7,
-                        offset: Offset(0, 3), // changes position of shadow
+                        offset:
+                            const Offset(0, 3), // changes position of shadow
                       ),
                     ],
                     color: headerColor,
@@ -188,10 +190,30 @@ class _BuildHeaderState extends State<BuildHeader> {
                               ),
                             ),
                             const Spacer(),
+                            opportunityScreen == 1 || opportunityScreen == 2
+                                ? IconButton(
+                                    icon: const Icon(
+                                      Icons.favorite,
+                                      color: brightAccent,
+                                    ),
+                                    onPressed: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            opportunityScreen == 1
+                                                ? const WishlistPage()
+                                                : const OpportunitiesPage(),
+                                      ),
+                                    ),
+                                  )
+                                : const SizedBox(),
+                            opportunityScreen == 0
+                                ? SizedBox(width: 5.w)
+                                : const SizedBox(),
                             IconButton(
-                              icon: Icon(Icons.menu),
+                              icon: const Icon(Icons.menu),
                               onPressed: () =>
-                                  Scaffold.of(context).openDrawer(),
+                                  Scaffold.of(context).openEndDrawer(),
                             ),
                             SizedBox(width: 5.w),
                           ],
@@ -216,10 +238,11 @@ class CustomDrawer extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: <Widget>[
           DrawerHeader(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: headerColor,
             ),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Padding(
                   padding: EdgeInsets.fromLTRB(1.4.w, 2.25.h, 1.4.w, 2.25.h),
@@ -247,34 +270,14 @@ class CustomDrawer extends StatelessWidget {
                   builder: (context) => const OpportunitiesPage()),
             ),
           ),
-          ListTile(
-            title: buildHeaderText(context, 'Pricing'),
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const LandingAgent(index: 1)),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: ListTile(
+              title: auth.currentUser != null
+                  ? buildNavigationButton(
+                      context, 'Account', const AccountPage())
+                  : buildNavigationButton(context, 'Login', const LoginPage()),
             ),
-          ),
-          ListTile(
-            title: buildHeaderText(context, 'Our Story'),
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const LandingAgent(index: 2)),
-            ),
-          ),
-          ListTile(
-            title: buildHeaderText(context, 'Contact Us'),
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const LandingAgent(index: 3)),
-            ),
-          ),
-          ListTile(
-            title: auth.currentUser != null
-                ? buildNavigationButton(context, 'Account', const AccountPage())
-                : buildNavigationButton(context, 'Login', const LoginPage()),
           ),
         ],
       ),
@@ -287,11 +290,16 @@ class CustomDrawer extends StatelessWidget {
       text,
       minFontSize: 0,
       maxLines: 1,
-      style: lightHeaderTextStyle.copyWith(
-        fontSize: height(context) * 18 / 814 > width(context) * 18 / 1440
-            ? width(context) * 18 / 1440
-            : height(context) * 18 / 814,
-      ),
+      style: isMobile
+          ? darkHeaderTextStyle.copyWith(
+              fontSize: height(context) * 48 / 814 > width(context) * 48 / 1440
+                  ? width(context) * 48 / 1440
+                  : height(context) * 48 / 814)
+          : lightHeaderTextStyle.copyWith(
+              fontSize: height(context) * 18 / 814 > width(context) * 18 / 1440
+                  ? width(context) * 18 / 1440
+                  : height(context) * 18 / 814,
+            ),
     );
   }
 
