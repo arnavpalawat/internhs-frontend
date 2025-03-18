@@ -142,7 +142,9 @@ class FounderImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 24.5.h,
-      child: Image.asset("lib/assets/images/arnav_linkedin.png"),
+      child: ClipOval(
+        child: Image.asset("lib/assets/images/arnav_linkedin.png"),
+      ),
     );
   }
 }
